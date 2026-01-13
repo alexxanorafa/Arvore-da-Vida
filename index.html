@@ -10,7 +10,6 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=MedievalSharp&display=swap');
         
-        /* Fontes para elementos específicos */
         .symbol, .sefirah {
             font-family: 'MedievalSharp', cursive;
         }
@@ -29,18 +28,16 @@
         </div>
         <nav class="menu" id="menu">
             <ul>
-                <!-- Seção principal -->
                 <li class="menu-section">Kabbalah Interativa</li>
                 <li><a href="#" class="menu-item" id="game-modes-btn">Modos de Jogo</a></li>
                 <li><a href="#" class="menu-item" id="difficulty-btn">Nível de Dificuldade</a></li>
                 <li><a href="#" class="menu-item" id="stats-btn">Estatísticas e Progresso</a></li>
                 <li><a href="#" class="menu-item" id="practice-btn">Modo de Prática</a></li>
                 
-                <!-- Separador -->
                 <li class="menu-divider"></li>
                 <li class="menu-section">Coleção de Jogos</li>
                 
-                <!-- Links originais mantidos -->
+                <!-- Links mantidos -->
                 <li><a href="https://alexxanorafa.github.io/Alquimia-dos-Sentimentos/" class="menu-item">Alquimia dos Sentimentos</a></li>
                 <li><a href="https://alexxanorafa.github.io/Almas-Conectadas/" class="menu-item">Almas Conectadas</a></li>
                 <li><a href="https://alexxanorafa.github.io/Aneis_da_Sabedoria/" class="menu-item">Anéis da Sabedoria</a></li>
@@ -84,7 +81,6 @@
     </header>
     
     <main id="game-container">
-        <!-- Título e introdução -->
         <div style="text-align: center; margin-bottom: 30px;">
             <h1 style="font-family: 'Cinzel', serif; color: #d4b192; font-size: 2.5em; margin-bottom: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
                 Kabbalah Interativa
@@ -95,15 +91,12 @@
             </p>
         </div>
 
-        <!-- Botão Iniciar refinado -->
         <button id="start-btn" class="btn">Iniciar Jornada</button>
 
-        <!-- Painel da Questão -->
         <div id="question-panel" class="panel hidden">
             <h2 id="current-question"></h2>
             <div id="current-symbol" class="symbol"></div>
             
-            <!-- Sistema de Ajuda com ícones mínimos -->
             <div class="question-controls">
                 <button id="help-25-btn" class="help-btn">
                     <span style="font-weight: 600;">25% Ajuda</span>
@@ -128,21 +121,19 @@
             </p>
         </div>
 
-        <!-- Árvore da Vida -->
         <div class="tree-of-life">
-            <div class="sefirah" id="keter">Keter<br>1</div>
-            <div class="sefirah" id="chokhmah">Chokhmah<br>2</div>
-            <div class="sefirah" id="binah">Binah<br>3</div>
-            <div class="sefirah" id="chesed">Chesed<br>4</div>
-            <div class="sefirah" id="gevurah">Gevurah<br>5</div>
-            <div class="sefirah" id="tiferet">Tiferet<br>6</div>
-            <div class="sefirah" id="netzach">Netzach<br>7</div>
-            <div class="sefirah" id="hod">Hod<br>8</div>
-            <div class="sefirah" id="yesod">Yesod<br>9</div>
-            <div class="sefirah" id="malkuth">Malkuth<br>10</div>
+            <div class="sefirah" id="keter">Keter</div>
+            <div class="sefirah" id="chokhmah">Chokhmah</div>
+            <div class="sefirah" id="binah">Binah</div>
+            <div class="sefirah" id="chesed">Chesed</div>
+            <div class="sefirah" id="gevurah">Gevurah</div>
+            <div class="sefirah" id="tiferet">Tiferet</div>
+            <div class="sefirah" id="netzach">Netzach</div>
+            <div class="sefirah" id="hod">Hod</div>
+            <div class="sefirah" id="yesod">Yesod</div>
+            <div class="sefirah" id="malkuth">Malkuth</div>
         </div>
 
-        <!-- Controles do Jogo -->
         <div class="game-controls">
             <div class="controls-left">
                 <div id="score">Pontuação: <span>0</span></div>
@@ -161,35 +152,29 @@
             </div>
         </div>
         
-        <!-- Instruções e informações -->
+        <!-- INSTRUÇÕES CORRIGIDAS - SEM MENCIONAR TECLAS 1-0 -->
         <div style="margin-top: 30px; text-align: center; font-size: 0.9em; opacity: 0.6;">
             <p>📖 <strong>Instruções:</strong> Associe cada letra hebraica à Sefirah correta na Árvore da Vida.</p>
             <p>🎯 <strong>Dificuldade:</strong> Ajuste o nível para alterar a visibilidade das informações.</p>
             <p>💡 <strong>Ajuda:</strong> Use os botões para remover opções incorretas (menos ajuda = mais pontos!).</p>
-            <p>⌨️ <strong>Teclas:</strong> Use 1-0 para respostas rápidas | Espaço para pausar | Ctrl+1/2/3 para ajuda</p>
+            <p>⌨️ <strong>Teclas:</strong> Use Q-P para Sefirot superiores, A-L para inferiores | Espaço para pausar</p>
         </div>
     </main>
 
-    <!-- HUD Flutuante -->
     <div id="floating-hud" class="hidden">
         <div class="hud-item" id="hud-score">0</div>
         <div class="hud-item" id="hud-combo">1x</div>
         <div class="hud-item" id="hud-lives">●●●</div>
     </div>
 
-    <!-- Modal -->
     <div id="game-modal" class="modal hidden">
-        <div class="modal-content">
-            <!-- Conteúdo injetado via JS -->
-        </div>
+        <div class="modal-content"></div>
     </div>
 
-    <!-- Toast Notifications -->
     <div id="toast-container"></div>
 
     <script src="script.js"></script>
     
-    <!-- Efeitos sonoros básicos (opcional) -->
     <audio id="sound-correct" preload="auto">
         <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEAQB8AAEAfAAABAAgAZGF0YQ" type="audio/wav">
     </audio>
