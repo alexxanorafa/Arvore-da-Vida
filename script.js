@@ -1,4 +1,4 @@
-// ========== CÓDIGO DO MENU ORIGINAL (MANTIDO) ==========
+// ========== CÓDIGO DO MENU ORIGINAL ==========
 document.addEventListener("DOMContentLoaded", function() {
     const menuIcon = document.getElementById("menuIcon");
     const menu = document.getElementById("menu");
@@ -17,22 +17,11 @@ document.addEventListener("DOMContentLoaded", function() {
             menuIcon.classList.remove("active");
         }
     });
-
-    // Animar itens do menu
-    document.querySelectorAll(".menu-item").forEach(item => {
-        item.addEventListener("mouseenter", function() {
-            this.style.transform = "translateY(-3px)";
-        });
-        
-        item.addEventListener("mouseleave", function() {
-            this.style.transform = "translateY(0)";
-        });
-    });
 });
 
 class KabbalahGame {
     constructor() {
-        // Dados originais mantidos
+        // Dados das Sefirot
         this.questions = [
             { 
                 letter: 'א', 
@@ -106,16 +95,15 @@ class KabbalahGame {
             }
         ];
 
-        // Configurações expandidas
+        // Configurações do jogo
         this.config = {
-            mode: 'normal', // normal, practice, timed, memory
-            difficulty: 'medium', // easy, medium, hard
+            mode: 'normal',
+            difficulty: 'medium',
             lives: 3,
+            helpLevel: 0, // 0 = sem ajuda, 1 = 25%, 2 = 50%, 3 = 75%
             timeLimit: null,
             comboEnabled: true,
-            hintsEnabled: true,
-            autoHideHUD: true,
-            showFloatingHUD: true
+            showAnimations: true
         };
 
         // Estado do jogo
@@ -132,20 +120,24 @@ class KabbalahGame {
             timeElapsed: 0,
             timer: null,
             questionsHistory: [],
-            mistakes: {}
+            mistakes: {},
+            helpUsed: false,
+            currentHelpLevel: 0,
+            helpAvailable: true
         };
 
-        // Progresso do usuário
+        // Progresso do jogador
         this.progress = {
             totalGames: 0,
             bestScore: 0,
             totalCorrect: 0,
             totalQuestions: 0,
             accuracy: 0,
-            playTime: 0
+            playTime: 0,
+            helpUsage: { 25: 0, 50: 0, 75: 0 }
         };
 
-        // Cache de elementos
+        // Cache de elementos DOM
         this.elements = {};
 
         this.init();
@@ -169,15 +161,16 @@ class KabbalahGame {
             currentQuestion: document.getElementById('current-question'),
             currentSymbol: document.getElementById('current-symbol'),
             score: document.querySelector('#score span'),
-            lives: document.getElementById('lives'),
+            lives: document.querySelector('#lives span'),
             combo: document.querySelector('#combo span'),
             currentQ: document.getElementById('current-q'),
+            helpLevel: document.querySelector('#help-level span'),
             
-            // Novos botões
-            hintBtn: document.getElementById('hint-btn'),
+            // Botões de ajuda
+            help25Btn: document.getElementById('help-25-btn'),
+            help50Btn: document.getElementById('help-50-btn'),
+            help75Btn: document.getElementById('help-75-btn'),
             skipBtn: document.getElementById('skip-btn'),
-            pauseBtn: document.getElementById('pause-btn'),
-            modeBtn: document.getElementById('mode-btn'),
             
             // HUD flutuante
             floatingHUD: document.getElementById('floating-hud'),
@@ -196,20 +189,23 @@ class KabbalahGame {
             gameModesBtn: document.getElementById('game-modes-btn'),
             difficultyBtn: document.getElementById('difficulty-btn'),
             statsBtn: document.getElementById('stats-btn'),
-            practiceBtn: document.getElementById('practice-btn')
+            practiceBtn: document.getElementById('practice-btn'),
+            
+            // Elementos de árvore
+            treeOfLife: document.querySelector('.tree-of-life')
         };
     }
 
     setupEventListeners() {
-        // Botões originais
+        // Botões principais
         this.elements.startBtn.addEventListener('click', () => this.startGame());
         this.elements.restartBtn.addEventListener('click', () => this.resetGame());
 
-        // Novos botões
-        this.elements.hintBtn.addEventListener('click', () => this.useHint());
+        // Botões de ajuda com feedback visual
+        this.elements.help25Btn.addEventListener('click', () => this.useHelp(25));
+        this.elements.help50Btn.addEventListener('click', () => this.useHelp(50));
+        this.elements.help75Btn.addEventListener('click', () => this.useHelp(75));
         this.elements.skipBtn.addEventListener('click', () => this.skipQuestion());
-        this.elements.pauseBtn.addEventListener('click', () => this.togglePause());
-        this.elements.modeBtn.addEventListener('click', () => this.showModeSelector());
 
         // Menu items
         this.elements.gameModesBtn.addEventListener('click', (e) => {
@@ -233,7 +229,7 @@ class KabbalahGame {
             this.startGame();
         });
 
-        // Sefirot (clique)
+        // Eventos das Sefirot
         this.elements.sefirot.forEach(sefirah => {
             sefirah.addEventListener('click', (e) => {
                 if (this.state.isPlaying && !this.state.isPaused) {
@@ -245,7 +241,7 @@ class KabbalahGame {
         // Teclado
         document.addEventListener('keydown', (e) => this.handleKeyboard(e));
 
-        // Fechar modal com ESC ou clique fora
+        // Fechar modal
         this.elements.modal.addEventListener('click', (e) => {
             if (e.target === this.elements.modal) {
                 this.hideModal();
@@ -253,8 +249,19 @@ class KabbalahGame {
         });
 
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.elements.modal.classList.contains('active')) {
-                this.hideModal();
+            if (e.key === 'Escape') {
+                if (this.elements.modal.classList.contains('active')) {
+                    this.hideModal();
+                } else if (this.state.isPlaying && !this.state.isPaused) {
+                    this.togglePause();
+                }
+            }
+        });
+
+        // Pause no jogo quando janela perde foco
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && this.state.isPlaying && !this.state.isPaused) {
+                this.togglePause();
             }
         });
     }
@@ -265,17 +272,19 @@ class KabbalahGame {
         this.elements.currentSymbol.addEventListener('dragstart', (e) => {
             if (!this.state.isPlaying) return;
             e.dataTransfer.setData('text/plain', 'symbol');
-            this.elements.currentSymbol.style.opacity = '0.5';
+            this.elements.currentSymbol.style.opacity = '0.7';
+            this.elements.currentSymbol.style.transform = 'scale(1.1)';
         });
 
         this.elements.currentSymbol.addEventListener('dragend', () => {
             this.elements.currentSymbol.style.opacity = '1';
+            this.elements.currentSymbol.style.transform = 'scale(1)';
         });
 
         this.elements.sefirot.forEach(sefirah => {
             sefirah.addEventListener('dragover', (e) => {
                 e.preventDefault();
-                if (!this.state.isPlaying) return;
+                if (!this.state.isPlaying || sefirah.classList.contains('hidden-option')) return;
                 sefirah.classList.add('highlight');
             });
 
@@ -286,9 +295,104 @@ class KabbalahGame {
             sefirah.addEventListener('drop', (e) => {
                 e.preventDefault();
                 sefirah.classList.remove('highlight');
-                if (!this.state.isPlaying) return;
+                if (!this.state.isPlaying || sefirah.classList.contains('hidden-option')) return;
                 this.checkAnswer(sefirah.id);
             });
+        });
+    }
+
+    // ========== SISTEMA DE AJUDA MELHORADO ==========
+    useHelp(percentage) {
+        if (!this.state.isPlaying || this.state.isPaused || this.state.helpUsed || !this.state.helpAvailable) {
+            return;
+        }
+        
+        const question = this.questions[this.state.currentQuestion];
+        const incorrectSefirot = Array.from(this.elements.sefirot)
+            .filter(s => s.id !== question.sefirah);
+        
+        if (incorrectSefirot.length === 0) return;
+        
+        // Criar efeito visual
+        this.createHelpEffect(percentage);
+        
+        // Embaralhar opções incorretas
+        const shuffled = [...incorrectSefirot].sort(() => Math.random() - 0.5);
+        
+        // Calcular quantas opções esconder
+        const hideCount = Math.max(1, Math.floor(incorrectSefirot.length * (percentage / 100)));
+        
+        // Esconder opções com animação
+        for (let i = 0; i < hideCount; i++) {
+            setTimeout(() => {
+                shuffled[i].classList.add('hidden-option');
+                shuffled[i].style.animation = 'fadeOut 0.5s ease';
+            }, i * 100);
+        }
+        
+        // Destacar opções restantes
+        const remaining = Array.from(this.elements.sefirot)
+            .filter(s => !s.classList.contains('hidden-option') && s.id !== question.sefirah);
+        
+        remaining.forEach(sefirah => {
+            sefirah.classList.add('help-highlight');
+            setTimeout(() => sefirah.classList.remove('help-highlight'), 2000);
+        });
+        
+        // Registrar ajuda usada
+        this.state.helpUsed = true;
+        this.state.currentHelpLevel = percentage;
+        this.progress.helpUsage[percentage]++;
+        
+        // Atualizar botões de ajuda
+        this.updateHelpButtons();
+        
+        // Feedback visual e sonoro
+        this.showToast(`Ajuda ativada: ${percentage}% das opções incorretas removidas`, 'info');
+        this.playSound('help');
+    }
+
+    createHelpEffect(percentage) {
+        const effect = document.createElement('div');
+        effect.className = 'help-effect';
+        effect.style.width = '100px';
+        effect.style.height = '100px';
+        effect.style.left = '50%';
+        effect.style.top = '50%';
+        effect.style.transform = 'translate(-50%, -50%)';
+        
+        this.elements.treeOfLife.appendChild(effect);
+        
+        setTimeout(() => effect.remove(), 1000);
+    }
+
+    resetHelpOptions() {
+        this.elements.sefirot.forEach(sefirah => {
+            sefirah.classList.remove('hidden-option', 'help-highlight');
+            sefirah.style.animation = '';
+        });
+        this.state.helpUsed = false;
+        this.state.currentHelpLevel = 0;
+        this.updateHelpButtons();
+    }
+
+    updateHelpButtons() {
+        const helpButtons = [
+            this.elements.help25Btn,
+            this.elements.help50Btn,
+            this.elements.help75Btn
+        ];
+        
+        helpButtons.forEach(btn => {
+            if (this.state.helpUsed || !this.state.helpAvailable) {
+                btn.classList.add('disabled');
+                btn.style.cursor = 'not-allowed';
+                btn.title = this.state.helpUsed ? 'Ajuda já usada nesta questão' : 'Ajuda não disponível';
+            } else {
+                btn.classList.remove('disabled');
+                btn.style.cursor = 'pointer';
+                btn.title = '';
+            }
         });
     }
 
@@ -296,10 +400,12 @@ class KabbalahGame {
     startGame() {
         this.state.isPlaying = true;
         this.state.isPaused = false;
+        this.state.helpAvailable = true;
+        
         this.elements.startBtn.classList.add('hidden');
         this.elements.questionPanel.classList.remove('hidden');
         
-        if (this.config.showFloatingHUD) {
+        if (this.config.showAnimations) {
             this.elements.floatingHUD.classList.remove('hidden');
         }
         
@@ -307,29 +413,21 @@ class KabbalahGame {
         this.showQuestion();
         this.startTimer();
         this.updateUI();
-        this.showToast('Jogo iniciado! Use teclas 1-0 para jogar rápido.', 'info');
         
-        // Auto-hide HUD após 5 segundos
-        if (this.config.autoHideHUD) {
-            setTimeout(() => {
-                if (this.state.isPlaying && !this.state.isPaused) {
-                    this.elements.floatingHUD.style.opacity = '0.3';
-                }
-            }, 5000);
-        }
+        this.showToast('Jogo iniciado! Use as teclas 1-0 para respostas rápidas.', 'info');
+        this.playSound('start');
     }
 
     shuffleQuestions() {
-        // Sistema de repetição de questões difíceis
         let weightedQuestions = [...this.questions];
         
+        // Adicionar questões baseadas em erros anteriores
         Object.keys(this.state.mistakes).forEach(sefirah => {
             const mistakeCount = this.state.mistakes[sefirah];
             const question = this.questions.find(q => q.sefirah === sefirah);
             
             if (question && mistakeCount > 0) {
-                // Adiciona questões baseado no número de erros
-                for (let i = 0; i < Math.min(mistakeCount, 3); i++) {
+                for (let i = 0; i < Math.min(mistakeCount, 2); i++) {
                     weightedQuestions.push({...question});
                 }
             }
@@ -346,20 +444,23 @@ class KabbalahGame {
 
         const question = this.questions[this.state.currentQuestion];
         this.elements.currentQuestion.textContent = 
-            `Associe a letra ${question.letter} ao seu conceito correspondente:`;
+            `Associe a letra ${question.letter} (Número ${question.number}) à Sefirah correspondente:`;
         this.elements.currentSymbol.textContent = question.letter;
         
-        // Atualizar contador de questões
         this.elements.currentQ.textContent = this.state.currentQuestion + 1;
         
-        // Restaurar opacidade do HUD
-        if (this.config.autoHideHUD) {
-            this.elements.floatingHUD.style.opacity = '0.8';
+        // Resetar opções de ajuda
+        this.resetHelpOptions();
+        
+        // Aplicar configurações de dificuldade
+        this.applyDifficulty();
+        
+        // Animar entrada da questão
+        if (this.config.showAnimations) {
+            this.elements.currentSymbol.style.animation = 'pulse 0.5s ease';
             setTimeout(() => {
-                if (this.state.isPlaying && !this.state.isPaused) {
-                    this.elements.floatingHUD.style.opacity = '0.3';
-                }
-            }, 3000);
+                this.elements.currentSymbol.style.animation = '';
+            }, 500);
         }
     }
 
@@ -375,11 +476,16 @@ class KabbalahGame {
             question: question.letter,
             answer: sefirahId,
             correct: isCorrect,
-            time: new Date()
+            time: new Date(),
+            helpUsed: this.state.helpUsed,
+            helpLevel: this.state.currentHelpLevel
         });
 
-        // Efeito visual
-        element.classList.add(isCorrect ? 'correct' : 'incorrect');
+        // Efeitos visuais
+        if (this.config.showAnimations) {
+            element.classList.add(isCorrect ? 'correct' : 'incorrect');
+            this.playSound(isCorrect ? 'correct' : 'incorrect');
+        }
 
         if (isCorrect) {
             this.handleCorrectAnswer();
@@ -394,20 +500,42 @@ class KabbalahGame {
     }
 
     handleCorrectAnswer() {
-        // Calcular pontos
-        let points = 100;
+        // Calcular pontos base
+        let basePoints = 100;
         
-        if (this.config.comboEnabled && this.state.combo > 1) {
-            points += (this.state.combo - 1) * 15;
+        // Modificar por dificuldade
+        switch(this.config.difficulty) {
+            case 'easy':
+                basePoints = 80;
+                break;
+            case 'hard':
+                basePoints = 150;
+                break;
         }
         
-        if (this.config.difficulty === 'hard') {
-            points *= 1.5;
-        } else if (this.config.difficulty === 'easy') {
-            points *= 0.8;
+        // Reduzir pontos se usou ajuda
+        let helpMultiplier = 1;
+        if (this.state.helpUsed) {
+            switch(this.state.currentHelpLevel) {
+                case 25:
+                    helpMultiplier = 0.75;
+                    break;
+                case 50:
+                    helpMultiplier = 0.5;
+                    break;
+                case 75:
+                    helpMultiplier = 0.25;
+                    break;
+            }
+        }
+        
+        // Aplicar combo
+        let points = Math.floor(basePoints * helpMultiplier);
+        if (this.config.comboEnabled && this.state.combo > 1) {
+            points += Math.floor((this.state.combo - 1) * 25 * helpMultiplier);
         }
 
-        this.state.score += Math.floor(points);
+        this.state.score += points;
         this.state.correctAnswers++;
         this.state.combo++;
         this.state.maxCombo = Math.max(this.state.maxCombo, this.state.combo);
@@ -416,7 +544,10 @@ class KabbalahGame {
         this.updateUI();
         
         // Feedback
-        let message = `+${Math.floor(points)} pontos`;
+        let message = `+${points} pontos`;
+        if (this.state.helpUsed) {
+            message += ` (com ${this.state.currentHelpLevel}% de ajuda)`;
+        }
         if (this.state.combo > 2) {
             message += ` | Combo ${this.state.combo}x!`;
         }
@@ -432,15 +563,20 @@ class KabbalahGame {
             } else {
                 this.endGame();
             }
-        }, 1000);
+        }, 1200);
     }
 
     handleWrongAnswer(sefirahId) {
         this.state.combo = 1;
         this.state.lives--;
         
-        // Penalidade
-        this.state.score = Math.max(0, this.state.score - 50);
+        // Penalidade base
+        let penalty = 50;
+        if (this.state.helpUsed) {
+            penalty = Math.floor(penalty * (1 - (this.state.currentHelpLevel / 100)));
+        }
+        
+        this.state.score = Math.max(0, this.state.score - penalty);
 
         // Mostrar resposta correta
         const correctId = this.questions[this.state.currentQuestion].sefirah;
@@ -449,7 +585,7 @@ class KabbalahGame {
 
         // Atualizar UI
         this.updateUI();
-        this.showToast('Resposta incorreta! -50 pontos', 'error');
+        this.showToast(`Resposta incorreta! -${penalty} pontos`, 'error');
 
         // Verificar game over
         setTimeout(() => {
@@ -468,31 +604,14 @@ class KabbalahGame {
         }, 1500);
     }
 
-    clearAnswerEffects() {
-        this.elements.sefirot.forEach(sefirah => {
-            sefirah.classList.remove('correct', 'incorrect');
-        });
-    }
-
-    // ========== NOVAS FUNCIONALIDADES ==========
-    useHint() {
-        if (!this.state.isPlaying || this.state.isPaused) return;
-        
-        const question = this.questions[this.state.currentQuestion];
-        this.state.score = Math.max(0, this.state.score - 25);
-        
-        this.updateUI();
-        this.showToast(`Dica: ${question.hint} (-25 pontos)`, 'info');
-    }
-
     skipQuestion() {
         if (!this.state.isPlaying || this.state.isPaused) return;
         
-        this.state.score = Math.max(0, this.state.score - 50);
+        this.state.score = Math.max(0, this.state.score - 75);
         this.state.combo = 1;
         
         this.updateUI();
-        this.showToast('Questão pulada! (-50 pontos)', 'warning');
+        this.showToast('Questão pulada! -75 pontos', 'warning');
         
         this.state.currentQuestion++;
         if (this.state.currentQuestion < this.state.totalQuestions) {
@@ -502,20 +621,77 @@ class KabbalahGame {
         }
     }
 
-    togglePause() {
-        if (!this.state.isPlaying) return;
+    clearAnswerEffects() {
+        this.elements.sefirot.forEach(sefirah => {
+            sefirah.classList.remove('correct', 'incorrect');
+        });
+    }
+
+    // ========== DIFICULDADE ==========
+    applyDifficulty() {
+        // Remover classes anteriores
+        document.body.classList.remove('difficulty-easy', 'difficulty-medium', 'difficulty-hard');
         
-        this.state.isPaused = !this.state.isPaused;
+        // Adicionar classe atual
+        document.body.classList.add(`difficulty-${this.config.difficulty}`);
         
-        if (this.state.isPaused) {
-            clearInterval(this.state.timer);
-            this.showModal('pause');
-        } else {
-            this.startTimer();
-            this.hideModal();
-        }
-        
-        this.elements.floatingHUD.style.opacity = this.state.isPaused ? '1' : '0.8';
+        // Ajustar visibilidade baseado na dificuldade
+        this.elements.sefirot.forEach(sefirah => {
+            const name = this.getSefirahName(sefirah.id);
+            const number = this.getSefirahNumber(sefirah.id);
+            
+            switch(this.config.difficulty) {
+                case 'easy':
+                    // Nomes e números sempre visíveis
+                    sefirah.innerHTML = `${name}<br><small>${number}</small>`;
+                    sefirah.style.fontSize = '0.9em';
+                    sefirah.classList.remove('faded');
+                    break;
+                case 'hard':
+                    // Apenas números, nomes esmaecidos
+                    sefirah.innerHTML = number;
+                    sefirah.style.fontSize = '1.2em';
+                    sefirah.classList.add('faded');
+                    break;
+                default:
+                    // Médio: nomes e números
+                    sefirah.innerHTML = `${name}<br>${number}`;
+                    sefirah.style.fontSize = '0.85em';
+                    sefirah.classList.remove('faded');
+            }
+        });
+    }
+
+    getSefirahName(id) {
+        const names = {
+            'keter': 'Keter',
+            'chokhmah': 'Chokhmah',
+            'binah': 'Binah',
+            'chesed': 'Chesed',
+            'gevurah': 'Gevurah',
+            'tiferet': 'Tiferet',
+            'netzach': 'Netzach',
+            'hod': 'Hod',
+            'yesod': 'Yesod',
+            'malkuth': 'Malkuth'
+        };
+        return names[id] || id;
+    }
+
+    getSefirahNumber(id) {
+        const numbers = {
+            'keter': '1',
+            'chokhmah': '2',
+            'binah': '3',
+            'chesed': '4',
+            'gevurah': '5',
+            'tiferet': '6',
+            'netzach': '7',
+            'hod': '8',
+            'yesod': '9',
+            'malkuth': '10'
+        };
+        return numbers[id] || '';
     }
 
     setMode(mode) {
@@ -525,7 +701,7 @@ class KabbalahGame {
             case 'practice':
                 this.config.lives = Infinity;
                 this.config.comboEnabled = false;
-                this.showToast('Modo Prática: Sem vidas limitadas', 'info');
+                this.showToast('Modo Prática ativado', 'info');
                 break;
             case 'timed':
                 this.config.timeLimit = 60;
@@ -542,8 +718,13 @@ class KabbalahGame {
 
     setDifficulty(difficulty) {
         this.config.difficulty = difficulty;
-        this.showToast(`Dificuldade: ${difficulty === 'easy' ? 'Fácil' : 
-                                      difficulty === 'hard' ? 'Difícil' : 'Médio'}`, 'info');
+        this.applyDifficulty();
+        const diffNames = {
+            'easy': 'Fácil',
+            'medium': 'Médio', 
+            'hard': 'Difícil'
+        };
+        this.showToast(`Dificuldade: ${diffNames[difficulty]}`, 'info');
     }
 
     // ========== TIMER ==========
@@ -554,7 +735,6 @@ class KabbalahGame {
             if (this.state.isPlaying && !this.state.isPaused) {
                 this.state.timeElapsed++;
                 
-                // Verificar limite de tempo
                 if (this.config.timeLimit && this.state.timeElapsed >= this.config.timeLimit) {
                     this.endGame();
                 }
@@ -569,12 +749,22 @@ class KabbalahGame {
         
         // Calcular estatísticas
         const accuracy = (this.state.correctAnswers / this.state.totalQuestions) * 100;
-        const grade = accuracy === 100 ? '🎉 PERFEITO!' :
-                     accuracy >= 90 ? '🌟 EXCELENTE!' :
-                     accuracy >= 70 ? '👍 MUITO BOM!' :
-                     accuracy >= 50 ? '✅ BOM!' : '💪 CONTINUE PRATICANDO!';
+        const grade = accuracy === 100 ? 'PERFEITO' :
+                     accuracy >= 90 ? 'EXCELENTE' :
+                     accuracy >= 70 ? 'MUITO BOM' :
+                     accuracy >= 50 ? 'BOM' : 'CONTINUE PRATICANDO';
         
         // Atualizar progresso
+        this.updateProgress(accuracy);
+        
+        // Mostrar resultados
+        this.showResults(accuracy, grade);
+        
+        this.elements.floatingHUD.classList.add('hidden');
+        this.playSound('gameOver');
+    }
+
+    updateProgress(accuracy) {
         this.progress.totalGames++;
         this.progress.totalCorrect += this.state.correctAnswers;
         this.progress.totalQuestions += this.state.totalQuestions;
@@ -589,30 +779,35 @@ class KabbalahGame {
             : 0;
         
         this.saveProgress();
-        
-        // Mostrar resultados
+    }
+
+    showResults(accuracy, grade) {
         const results = `
-            <h3>Jogo Concluído!</h3>
+            <h3>Jogo Concluído</h3>
             <div class="results">
                 <div class="result-item">
-                    <span class="label">Pontuação:</span>
+                    <span class="label">Pontuação Final</span>
                     <span class="value">${this.state.score}</span>
                 </div>
                 <div class="result-item">
-                    <span class="label">Acertos:</span>
+                    <span class="label">Acertos</span>
                     <span class="value">${this.state.correctAnswers}/${this.state.totalQuestions}</span>
                 </div>
                 <div class="result-item">
-                    <span class="label">Precisão:</span>
+                    <span class="label">Precisão</span>
                     <span class="value">${Math.round(accuracy)}%</span>
                 </div>
                 <div class="result-item">
-                    <span class="label">Combo Máx:</span>
+                    <span class="label">Combo Máximo</span>
                     <span class="value">${this.state.maxCombo}x</span>
                 </div>
                 <div class="result-item">
-                    <span class="label">Tempo:</span>
+                    <span class="label">Tempo</span>
                     <span class="value">${this.formatTime(this.state.timeElapsed)}</span>
+                </div>
+                <div class="result-item">
+                    <span class="label">Dificuldade</span>
+                    <span class="value">${this.config.difficulty === 'easy' ? 'Fácil' : this.config.difficulty === 'hard' ? 'Difícil' : 'Médio'}</span>
                 </div>
             </div>
             <div class="grade">${grade}</div>
@@ -623,7 +818,6 @@ class KabbalahGame {
         `;
         
         this.showModal('results', results);
-        this.elements.floatingHUD.classList.add('hidden');
     }
 
     // ========== UI & MODAIS ==========
@@ -635,20 +829,17 @@ class KabbalahGame {
                 content = `
                     <h3>Modos de Jogo</h3>
                     <div class="mode-options">
-                        <button class="mode-btn" data-mode="normal">
-                            <span class="mode-icon">🔗</span>
+                        <button class="mode-btn ${this.config.mode === 'normal' ? 'active' : ''}" data-mode="normal">
                             <span class="mode-name">Normal</span>
-                            <span class="mode-desc">10 questões, 3 vidas</span>
+                            <span class="mode-desc">10 questões, 3 vidas, sistema de combos</span>
                         </button>
-                        <button class="mode-btn" data-mode="practice">
-                            <span class="mode-icon">📚</span>
+                        <button class="mode-btn ${this.config.mode === 'practice' ? 'active' : ''}" data-mode="practice">
                             <span class="mode-name">Prática Livre</span>
-                            <span class="mode-desc">Sem vidas, sem pressão</span>
+                            <span class="mode-desc">Sem vidas limitadas, sem pressão</span>
                         </button>
-                        <button class="mode-btn" data-mode="timed">
-                            <span class="mode-icon">⏱️</span>
+                        <button class="mode-btn ${this.config.mode === 'timed' ? 'active' : ''}" data-mode="timed">
                             <span class="mode-name">Contra-Relógio</span>
-                            <span class="mode-desc">60 segundos, máximo acertos</span>
+                            <span class="mode-desc">60 segundos para máximo de acertos</span>
                         </button>
                     </div>
                 `;
@@ -656,45 +847,63 @@ class KabbalahGame {
                 
             case 'difficulty':
                 content = `
-                    <h3>Dificuldade</h3>
+                    <h3>Nível de Dificuldade</h3>
                     <div class="difficulty-options">
-                        <button class="diff-btn" data-diff="easy">
+                        <button class="diff-btn ${this.config.difficulty === 'easy' ? 'active' : ''}" data-diff="easy">
                             <span class="diff-name">Fácil</span>
-                            <span class="diff-desc">Nomes sempre visíveis</span>
+                            <span class="diff-desc">Nomes e números visíveis, menos pontos</span>
                         </button>
-                        <button class="diff-btn active" data-diff="medium">
+                        <button class="diff-btn ${this.config.difficulty === 'medium' ? 'active' : ''}" data-diff="medium">
                             <span class="diff-name">Médio</span>
-                            <span class="diff-desc">Nomes por 5 segundos</span>
+                            <span class="diff-desc">Equilíbrio entre desafio e pontuação</span>
                         </button>
-                        <button class="diff-btn" data-diff="hard">
+                        <button class="diff-btn ${this.config.difficulty === 'hard' ? 'active' : ''}" data-diff="hard">
                             <span class="diff-name">Difícil</span>
-                            <span class="diff-desc">Apenas números, -50 por erro</span>
+                            <span class="diff-desc">Apenas números, mais pontos por acerto</span>
                         </button>
                     </div>
                 `;
                 break;
                 
             case 'stats':
+                const help25Usage = this.progress.helpUsage[25] || 0;
+                const help50Usage = this.progress.helpUsage[50] || 0;
+                const help75Usage = this.progress.helpUsage[75] || 0;
+                const totalHelp = help25Usage + help50Usage + help75Usage;
+                
                 content = `
                     <h3>Estatísticas</h3>
                     <div class="stats">
                         <div class="stat-item">
-                            <span class="stat-label">Jogos Completos:</span>
+                            <span class="stat-label">Jogos Completos</span>
                             <span class="stat-value">${this.progress.totalGames}</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-label">Melhor Pontuação:</span>
+                            <span class="stat-label">Melhor Pontuação</span>
                             <span class="stat-value">${this.progress.bestScore}</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-label">Precisão Geral:</span>
+                            <span class="stat-label">Precisão Geral</span>
                             <span class="stat-value">${this.progress.accuracy}%</span>
                         </div>
                         <div class="stat-item">
-                            <span class="stat-label">Tempo Total:</span>
+                            <span class="stat-label">Tempo Total</span>
                             <span class="stat-value">${this.formatTime(this.progress.playTime)}</span>
                         </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Ajuda Usada</span>
+                            <span class="stat-value">${totalHelp}x</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Erros Mais Comuns</span>
+                            <span class="stat-value">${Object.keys(this.state.mistakes).length}</span>
+                        </div>
                     </div>
+                    ${totalHelp > 0 ? `
+                        <div class="help-info">
+                            <p><strong>Uso de ajuda:</strong> 25%: ${help25Usage}x | 50%: ${help50Usage}x | 75%: ${help75Usage}x</p>
+                        </div>
+                    ` : ''}
                 `;
                 break;
                 
@@ -702,14 +911,26 @@ class KabbalahGame {
                 content = `
                     <h3>Jogo Pausado</h3>
                     <div class="pause-stats">
-                        <div>Pontuação: ${this.state.score}</div>
-                        <div>Vidas: ${this.state.lives}</div>
-                        <div>Combo: ${this.state.combo}x</div>
-                        <div>Questão: ${this.state.currentQuestion + 1}/${this.state.totalQuestions}</div>
+                        <div class="stat-item">
+                            <span class="label">Pontuação Atual</span>
+                            <span class="value">${this.state.score}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="label">Vidas Restantes</span>
+                            <span class="value">${this.state.lives}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="label">Combo Atual</span>
+                            <span class="value">${this.state.combo}x</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="label">Questão</span>
+                            <span class="value">${this.state.currentQuestion + 1}/${this.state.totalQuestions}</span>
+                        </div>
                     </div>
                     <div class="actions">
-                        <button class="btn primary" onclick="game.togglePause()">Continuar</button>
-                        <button class="btn" onclick="game.resetGame(); game.hideModal();">Reiniciar</button>
+                        <button class="btn primary" onclick="game.togglePause()">Continuar Jogo</button>
+                        <button class="btn" onclick="game.resetGame(); game.hideModal();">Reiniciar Jogo</button>
                         <button class="btn" onclick="game.endGame()">Terminar Jogo</button>
                     </div>
                 `;
@@ -748,35 +969,45 @@ class KabbalahGame {
         this.elements.modal.classList.remove('active');
     }
 
-    showModeSelector() {
-        this.showModal('modes');
+    togglePause() {
+        if (!this.state.isPlaying) return;
+        
+        this.state.isPaused = !this.state.isPaused;
+        
+        if (this.state.isPaused) {
+            clearInterval(this.state.timer);
+            this.showModal('pause');
+        } else {
+            this.startTimer();
+            this.hideModal();
+        }
     }
 
     // ========== ATUALIZAÇÃO DE UI ==========
     updateUI() {
-        // Atualizar elementos principais
+        // Pontuação
         this.elements.score.textContent = this.state.score;
         this.elements.combo.textContent = `${this.state.combo}x`;
         
-        // Atualizar vidas
-        let livesHTML = '';
-        const maxLives = this.config.mode === 'practice' ? 0 : 3;
-        
+        // Vidas
+        let livesText = '';
         if (this.config.mode === 'practice') {
-            livesHTML = '∞';
+            livesText = '∞';
         } else {
-            for (let i = 0; i < maxLives; i++) {
-                livesHTML += i < this.state.lives ? '❤️' : '🤍';
+            for (let i = 0; i < 3; i++) {
+                livesText += i < this.state.lives ? '●' : '○';
             }
         }
+        this.elements.lives.textContent = livesText;
         
-        this.elements.lives.innerHTML = livesHTML;
+        // Nível de ajuda atual
+        this.elements.helpLevel.textContent = this.state.helpUsed ? `${this.state.currentHelpLevel}%` : '0%';
         
-        // Atualizar HUD flutuante
+        // HUD flutuante
         if (this.elements.floatingHUD && !this.elements.floatingHUD.classList.contains('hidden')) {
             this.elements.hudScore.textContent = this.state.score;
             this.elements.hudCombo.textContent = `${this.state.combo}x`;
-            this.elements.hudLives.innerHTML = livesHTML;
+            this.elements.hudLives.textContent = livesText;
         }
     }
 
@@ -796,19 +1027,35 @@ class KabbalahGame {
             this.checkAnswer('malkuth');
         }
         
-        // Teclas de controle
-        else if (e.key === ' ' || e.key === 'h') {
+        // Teclas de ajuda (Ctrl + número)
+        else if (e.ctrlKey) {
             e.preventDefault();
-            this.useHint();
-        } else if (e.key === 's') {
+            switch(e.key) {
+                case '1':
+                    this.useHelp(25);
+                    break;
+                case '2':
+                    this.useHelp(50);
+                    break;
+                case '3':
+                    this.useHelp(75);
+                    break;
+            }
+        }
+        
+        // Teclas de controle
+        else if (e.key === 's' || e.key === 'S') {
             e.preventDefault();
             this.skipQuestion();
-        } else if (e.key === 'p' || e.key === 'Escape') {
+        } else if (e.key === ' ' || e.key === 'p' || e.key === 'P') {
             e.preventDefault();
             this.togglePause();
-        } else if (e.key === 'm') {
+        } else if (e.key === 'm' || e.key === 'M') {
             e.preventDefault();
-            this.showModeSelector();
+            this.showModal('modes');
+        } else if (e.key === 'd' || e.key === 'D') {
+            e.preventDefault();
+            this.showModal('difficulty');
         }
     }
 
@@ -831,6 +1078,44 @@ class KabbalahGame {
         }, 3000);
     }
 
+    playSound(type) {
+        // Implementação básica de sons (pode ser expandida)
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            switch(type) {
+                case 'correct':
+                    oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                    break;
+                case 'incorrect':
+                    oscillator.frequency.setValueAtTime(220, audioContext.currentTime); // A3
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.5);
+                    break;
+                case 'help':
+                    oscillator.frequency.setValueAtTime(392, audioContext.currentTime); // G4
+                    gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                    oscillator.start();
+                    oscillator.stop(audioContext.currentTime + 0.2);
+                    break;
+            }
+        } catch (e) {
+            // Fallback silencioso se Web Audio API não estiver disponível
+        }
+    }
+
     formatTime(seconds) {
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
@@ -851,35 +1136,77 @@ class KabbalahGame {
             timeElapsed: 0,
             timer: null,
             questionsHistory: [],
-            mistakes: {...this.state.mistakes}
+            mistakes: {...this.state.mistakes},
+            helpUsed: false,
+            currentHelpLevel: 0,
+            helpAvailable: true
         };
+        
+        // Resetar Sefirot
+        this.elements.sefirot.forEach(sefirah => {
+            const name = this.getSefirahName(sefirah.id);
+            const number = this.getSefirahNumber(sefirah.id);
+            sefirah.innerHTML = `${name}<br>${number}`;
+            sefirah.style.fontSize = '';
+            sefirah.classList.remove('hidden-option', 'help-highlight', 'faded');
+            sefirah.style.animation = '';
+        });
         
         this.elements.startBtn.classList.remove('hidden');
         this.elements.questionPanel.classList.add('hidden');
         this.elements.floatingHUD.classList.add('hidden');
         this.clearAnswerEffects();
         this.updateUI();
+        this.updateHelpButtons();
+        
+        // Resetar configurações visuais
+        document.body.classList.remove('difficulty-easy', 'difficulty-medium', 'difficulty-hard');
+        document.body.classList.add(`difficulty-${this.config.difficulty}`);
     }
 
     showWelcomeScreen() {
         this.resetGame();
         this.hideModal();
+        this.showToast('Bem-vindo à Kabbalah Interativa!', 'info');
     }
 
     // ========== PROGRESSO ==========
     loadProgress() {
-        const saved = localStorage.getItem('kabbalah_progress');
-        if (saved) {
-            this.progress = JSON.parse(saved);
+        try {
+            const saved = localStorage.getItem('kabbalah_progress_v2');
+            if (saved) {
+                this.progress = JSON.parse(saved);
+            }
+        } catch (e) {
+            console.warn('Não foi possível carregar o progresso:', e);
         }
     }
 
     saveProgress() {
-        localStorage.setItem('kabbalah_progress', JSON.stringify(this.progress));
+        try {
+            localStorage.setItem('kabbalah_progress_v2', JSON.stringify(this.progress));
+        } catch (e) {
+            console.warn('Não foi possível salvar o progresso:', e);
+        }
     }
 }
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', () => {
     window.game = new KabbalahGame();
+    
+    // Adicionar informações de ajuda
+    const helpInfo = document.createElement('div');
+    helpInfo.className = 'help-info';
+    helpInfo.innerHTML = `
+        <p><strong>Como jogar:</strong> Arraste o símbolo para a Sefirah correta ou clique nela.</p>
+        <p><strong>Ajuda:</strong> Use os botões para remover opções incorretas (ganha menos pontos).</p>
+        <p><strong>Teclas:</strong> 1-0 para respostas | Espaço para pausar | Ctrl+1/2/3 para ajuda</p>
+    `;
+    
+    const gameContainer = document.getElementById('game-container');
+    const controls = document.querySelector('.game-controls');
+    if (gameContainer && controls) {
+        gameContainer.insertBefore(helpInfo, controls.nextSibling);
+    }
 });
