@@ -3,8 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kabbalah Interativa</title>
+    <title>Kabbalah Interativa - A Árvore da Vida</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=MedievalSharp&display=swap');
+        
+        /* Fontes para elementos específicos */
+        .symbol, .sefirah {
+            font-family: 'MedievalSharp', cursive;
+        }
+        
+        h2, h3, .menu-section {
+            font-family: 'Cinzel', serif;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -15,78 +29,106 @@
         </div>
         <nav class="menu" id="menu">
             <ul>
-                <!-- Seção do jogo (nova) -->
-                <li class="menu-section">Kabbalah</li>
-                <li><a href="#" class="menu-item" id="game-modes-btn">🎮 Modos de Jogo</a></li>
-                <li><a href="#" class="menu-item" id="difficulty-btn">⚡ Dificuldade</a></li>
-                <li><a href="#" class="menu-item" id="stats-btn">📊 Estatísticas</a></li>
-                <li><a href="#" class="menu-item" id="practice-btn">📚 Prática Livre</a></li>
+                <!-- Seção principal -->
+                <li class="menu-section">Kabbalah Interativa</li>
+                <li><a href="#" class="menu-item" id="game-modes-btn">Modos de Jogo</a></li>
+                <li><a href="#" class="menu-item" id="difficulty-btn">Nível de Dificuldade</a></li>
+                <li><a href="#" class="menu-item" id="stats-btn">Estatísticas e Progresso</a></li>
+                <li><a href="#" class="menu-item" id="practice-btn">Modo de Prática</a></li>
                 
                 <!-- Separador -->
                 <li class="menu-divider"></li>
-                <li class="menu-section">Outros Jogos</li>
+                <li class="menu-section">Coleção de Jogos</li>
                 
                 <!-- Links originais mantidos -->
                 <li><a href="https://alexxanorafa.github.io/Alquimia-dos-Sentimentos/" class="menu-item">Alquimia dos Sentimentos</a></li>
-          <li><a href="https://alexxanorafa.github.io/Almas-Conectadas/" class="menu-item">Almas Conectadas</a></li>
-          <li><a href="https://alexxanorafa.github.io/Aneis_da_Sabedoria/" class="menu-item">Anéis da Sabedoria</a></li>
-          <li><a href="https://alexxanorafa.github.io/Animais-de-Poder/" class="menu-item">Animais de Poder</a></li>
-          <li><a href="https://alexxanorafa.github.io/Biblioteca-Onirica/" class="menu-item">Biblioteca Onirica</a></li>
-          <li><a href="https://alexxanorafa.github.io/Buzios/" class="menu-item">Buzios</a></li>
-          <li><a href="https://alexxanorafa.github.io/Cartas-de-Sibila/" class="menu-item">Cartas de Sibila</a></li>
-          <li><a href="https://alexxanorafa.github.io/Do-you-love-me/" class="menu-item">Do you love me?</a></li>
-          <li><a href="https://alexxanorafa.github.io/ECO-SAPIENS/" class="menu-item">ECO-SAPIENS</a></li>
-          <li><a href="https://alexxanorafa.github.io/Entrecamadas-Telepatia-Proposito/" class="menu-item">Entrecamadas</a></li>
-          <li><a href="https://alexxanorafa.github.io/Experiencia-Sensorial/" class="menu-item">Experiencia Sensorial</a></li>
-          <li><a href="https://alexxanorafa.github.io/I-Ching-Virtual/" class="menu-item">I Ching Virtual</a></li>
-          <li><a href="https://alexxanorafa.github.io/Jornada-Arquetipica/" class="menu-item">Jornada Arquetípica</a></li>
-          <li><a href="https://alexxanorafa.github.io/Jornadas-Mitologica/" class="menu-item">Jornada Mitológica</a></li>
-          <li><a href="https://alexxanorafa.github.io/Kabbalah-Interativa/" class="menu-item">Kabbalah Interativa</a></li>
-          <li><a href="https://alexxanorafa.github.io/Livro-das-Sombras/" class="menu-item">Livro das Sombras</a></li>
-          <li><a href="https://alexxanorafa.github.io/Magia-das-Cores/" class="menu-item">Magia das Cores</a></li>
-          <li><a href="https://alexxanorafa.github.io/Murmurios-do-Destino/" class="menu-item">Murmúrios do Destino</a></li>
-          <li><a href="https://alexxanorafa.github.io/O-Construtor-do-Destino/" class="menu-item">O Construtor do Destino</a></li>
-          <li><a href="https://alexxanorafa.github.io/Oraculo-das-Pedras/" class="menu-item">Oráculo das Pedras</a></li>
-          <li><a href="https://alexxanorafa.github.io/Oraculo-dos-Deuses/" class="menu-item">Oráculo dos Deuses</a></li>
-          <li><a href="https://alexxanorafa.github.io/Oraculo-Numerologico/" class="menu-item">Oráculo Numerológico</a></li>
-          <li><a href="https://alexxanorafa.github.io/Pendulo-Divinatorio/" class="menu-item">Pendulo Divinatorio</a></li>
-          <li><a href="https://alexxanorafa.github.io/Portal-das-Almas/" class="menu-item">Portal das Almas</a></li>
-          <li><a href="https://alexxanorafa.github.io/Potencial-Coletivo/" class="menu-item">Potencial Coletivo</a></li>
-          <li><a href="https://alexxanorafa.github.io/Runas-Celtas/" class="menu-item">Runas Celtas</a></li>
-          <li><a href="https://alexxanorafa.github.io/Runas-Estelares/" class="menu-item">Runas Estelares</a></li>
-          <li><a href="https://alexxanorafa.github.io/Runas-do-Destino/" class="menu-item">Runas Nórdicas</a></li>
-          <li><a href="https://alexxanorafa.github.io/Simulador-Quantico/" class="menu-item">Simulador Quantico</a></li>
-          <li><a href="https://alexxanorafa.github.io/Tabuleiro-Quantico/" class="menu-item">Tabuleiro Quantico</a></li>
-          <li><a href="https://alexxanorafa.github.io/TarodeMarselha/" class="menu-item">Tarô de Marselha</a></li>
-          <li><a href="https://alexxanorafa.github.io/Tasseografia/" class="menu-item">Tasseografia</a></li>
-          <li><a href="https://alexxanorafa.github.io/Tempo_e_Sonhos/" class="menu-item">Tempo e Sonhos</a></li>
-          <li><a href="https://alexxanorafa.github.io/The-Da-Vinci-Code/" class="menu-item">The Da Vinci Code</a></li>
-          <li><a href="https://alexxanorafa.github.io/Whispering-Shadows/" class="menu-item">Whispering Shadows</a></li>
-          <li><a href="https://alexxanorafa.github.io/Whispering-Shadows-2/" class="menu-item">Whispering Shadows 2</a></li>
-          <li><a href="https://alexxanorafa.github.io/Whispering-Shadows-3/" class="menu-item">Whispering Shadows 3</a></li>
-          <li><a href="https://alexxanorafa.github.io/Xamanismo-Animal/" class="menu-item">Xamanismo Animal</a></li>              
+                <li><a href="https://alexxanorafa.github.io/Almas-Conectadas/" class="menu-item">Almas Conectadas</a></li>
+                <li><a href="https://alexxanorafa.github.io/Aneis_da_Sabedoria/" class="menu-item">Anéis da Sabedoria</a></li>
+                <li><a href="https://alexxanorafa.github.io/Animais-de-Poder/" class="menu-item">Animais de Poder</a></li>
+                <li><a href="https://alexxanorafa.github.io/Biblioteca-Onirica/" class="menu-item">Biblioteca Onírica</a></li>
+                <li><a href="https://alexxanorafa.github.io/Buzios/" class="menu-item">Búzios</a></li>
+                <li><a href="https://alexxanorafa.github.io/Cartas-de-Sibila/" class="menu-item">Cartas de Sibila</a></li>
+                <li><a href="https://alexxanorafa.github.io/Do-you-love-me/" class="menu-item">Do you love me?</a></li>
+                <li><a href="https://alexxanorafa.github.io/ECO-SAPIENS/" class="menu-item">ECO-SAPIENS</a></li>
+                <li><a href="https://alexxanorafa.github.io/Entrecamadas-Telepatia-Proposito/" class="menu-item">Entrecamadas</a></li>
+                <li><a href="https://alexxanorafa.github.io/Experiencia-Sensorial/" class="menu-item">Experiência Sensorial</a></li>
+                <li><a href="https://alexxanorafa.github.io/I-Ching-Virtual/" class="menu-item">I Ching Virtual</a></li>
+                <li><a href="https://alexxanorafa.github.io/Jornada-Arquetipica/" class="menu-item">Jornada Arquetípica</a></li>
+                <li><a href="https://alexxanorafa.github.io/Jornadas-Mitologica/" class="menu-item">Jornada Mitológica</a></li>
+                <li><a href="https://alexxanorafa.github.io/Kabbalah-Interativa/" class="menu-item">Kabbalah Interativa</a></li>
+                <li><a href="https://alexxanorafa.github.io/Livro-das-Sombras/" class="menu-item">Livro das Sombras</a></li>
+                <li><a href="https://alexxanorafa.github.io/Magia-das-Cores/" class="menu-item">Magia das Cores</a></li>
+                <li><a href="https://alexxanorafa.github.io/Murmurios-do-Destino/" class="menu-item">Murmúrios do Destino</a></li>
+                <li><a href="https://alexxanorafa.github.io/O-Construtor-do-Destino/" class="menu-item">O Construtor do Destino</a></li>
+                <li><a href="https://alexxanorafa.github.io/Oraculo-das-Pedras/" class="menu-item">Oráculo das Pedras</a></li>
+                <li><a href="https://alexxanorafa.github.io/Oraculo-dos-Deuses/" class="menu-item">Oráculo dos Deuses</a></li>
+                <li><a href="https://alexxanorafa.github.io/Oraculo-Numerologico/" class="menu-item">Oráculo Numerológico</a></li>
+                <li><a href="https://alexxanorafa.github.io/Pendulo-Divinatorio/" class="menu-item">Pêndulo Divinatório</a></li>
+                <li><a href="https://alexxanorafa.github.io/Portal-das-Almas/" class="menu-item">Portal das Almas</a></li>
+                <li><a href="https://alexxanorafa.github.io/Potencial-Coletivo/" class="menu-item">Potencial Coletivo</a></li>
+                <li><a href="https://alexxanorafa.github.io/Runas-Celtas/" class="menu-item">Runas Celtas</a></li>
+                <li><a href="https://alexxanorafa.github.io/Runas-Estelares/" class="menu-item">Runas Estelares</a></li>
+                <li><a href="https://alexxanorafa.github.io/Runas-do-Destino/" class="menu-item">Runas Nórdicas</a></li>
+                <li><a href="https://alexxanorafa.github.io/Simulador-Quantico/" class="menu-item">Simulador Quântico</a></li>
+                <li><a href="https://alexxanorafa.github.io/Tabuleiro-Quantico/" class="menu-item">Tabuleiro Quântico</a></li>
+                <li><a href="https://alexxanorafa.github.io/TarodeMarselha/" class="menu-item">Tarô de Marselha</a></li>
+                <li><a href="https://alexxanorafa.github.io/Tasseografia/" class="menu-item">Tasseografia</a></li>
+                <li><a href="https://alexxanorafa.github.io/Tempo_e_Sonhos/" class="menu-item">Tempo e Sonhos</a></li>
+                <li><a href="https://alexxanorafa.github.io/The-Da-Vinci-Code/" class="menu-item">The Da Vinci Code</a></li>
+                <li><a href="https://alexxanorafa.github.io/Whispering-Shadows/" class="menu-item">Whispering Shadows</a></li>
+                <li><a href="https://alexxanorafa.github.io/Whispering-Shadows-2/" class="menu-item">Whispering Shadows 2</a></li>
+                <li><a href="https://alexxanorafa.github.io/Whispering-Shadows-3/" class="menu-item">Whispering Shadows 3</a></li>
+                <li><a href="https://alexxanorafa.github.io/Xamanismo-Animal/" class="menu-item">Xamanismo Animal</a></li>              
             </ul>
         </nav>
     </header>
     
     <main id="game-container">
-        <!-- Botão Iniciar Original -->
-        <button id="start-btn" class="btn">Iniciar Jogo</button>
+        <!-- Título e introdução -->
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="font-family: 'Cinzel', serif; color: #d4b192; font-size: 2.5em; margin-bottom: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+                Kabbalah Interativa
+            </h1>
+            <p style="font-size: 1.1em; opacity: 0.8; max-width: 800px; margin: 0 auto; line-height: 1.6;">
+                Explore a Árvore da Vida da tradição cabalística. Associe as letras hebraicas às suas Sefirot correspondentes 
+                e aprofunde seu conhecimento da sabedoria ancestral.
+            </p>
+        </div>
 
-        <!-- Painel da Questão (Original) -->
+        <!-- Botão Iniciar refinado -->
+        <button id="start-btn" class="btn">Iniciar Jornada</button>
+
+        <!-- Painel da Questão -->
         <div id="question-panel" class="panel hidden">
             <h2 id="current-question"></h2>
             <div id="current-symbol" class="symbol"></div>
             
-            <!-- Novos controles compactos -->
+            <!-- Sistema de Ajuda com ícones mínimos -->
             <div class="question-controls">
-                <button id="hint-btn" class="small-btn" title="Dica (Tecla H)">💡</button>
-                <button id="skip-btn" class="small-btn" title="Pular (Tecla S)">⏭️</button>
-                <button id="pause-btn" class="small-btn" title="Pausar (Espaço)">⏸️</button>
+                <button id="help-25-btn" class="help-btn">
+                    <span style="font-weight: 600;">25% Ajuda</span>
+                    <small style="font-size: 0.8em; opacity: 0.7;">(75% pontos)</small>
+                </button>
+                <button id="help-50-btn" class="help-btn">
+                    <span style="font-weight: 600;">50% Ajuda</span>
+                    <small style="font-size: 0.8em; opacity: 0.7;">(50% pontos)</small>
+                </button>
+                <button id="help-75-btn" class="help-btn">
+                    <span style="font-weight: 600;">75% Ajuda</span>
+                    <small style="font-size: 0.8em; opacity: 0.7;">(25% pontos)</small>
+                </button>
+                <button id="skip-btn" class="help-btn" style="background: rgba(231, 76, 60, 0.1); border-color: rgba(231, 76, 60, 0.3);">
+                    <span style="font-weight: 600;">Pular Questão</span>
+                    <small style="font-size: 0.8em; opacity: 0.7;">(-75 pontos)</small>
+                </button>
             </div>
+            
+            <p style="margin-top: 20px; font-size: 0.9em; opacity: 0.7; font-style: italic; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Dica: Arraste o símbolo para uma Sefirah ou clique nela. Use menos ajuda para maximizar sua pontuação!
+            </p>
         </div>
 
-        <!-- Árvore da Vida (Original) -->
+        <!-- Árvore da Vida -->
         <div class="tree-of-life">
             <div class="sefirah" id="keter">Keter<br>1</div>
             <div class="sefirah" id="chokhmah">Chokhmah<br>2</div>
@@ -100,42 +142,59 @@
             <div class="sefirah" id="malkuth">Malkuth<br>10</div>
         </div>
 
-        <!-- Controles do Jogo (Expandido) -->
+        <!-- Controles do Jogo -->
         <div class="game-controls">
             <div class="controls-left">
                 <div id="score">Pontuação: <span>0</span></div>
-                <div id="lives" title="Vidas restantes">❤️❤️❤️</div>
+                <div id="lives">Vidas: <span>●●●</span></div>
+                <div id="help-level">Ajuda Usada: <span>0%</span></div>
             </div>
             
             <div class="controls-center">
-                <div id="combo" title="Multiplicador de Combo">Combo: <span>1x</span></div>
-                <div id="progress">Questão: <span id="current-q">1</span>/10</div>
+                <div id="combo">Multiplicador: <span>1x</span></div>
+                <div id="progress">Progresso: <span id="current-q">1</span>/10</div>
             </div>
             
             <div class="controls-right">
                 <button id="restart-btn" class="btn">Reiniciar</button>
-                <button id="mode-btn" class="btn small" title="Mudar Modo">🎮</button>
+                <button id="mode-btn" class="btn small">Opções</button>
             </div>
+        </div>
+        
+        <!-- Instruções e informações -->
+        <div style="margin-top: 30px; text-align: center; font-size: 0.9em; opacity: 0.6;">
+            <p>📖 <strong>Instruções:</strong> Associe cada letra hebraica à Sefirah correta na Árvore da Vida.</p>
+            <p>🎯 <strong>Dificuldade:</strong> Ajuste o nível para alterar a visibilidade das informações.</p>
+            <p>💡 <strong>Ajuda:</strong> Use os botões para remover opções incorretas (menos ajuda = mais pontos!).</p>
+            <p>⌨️ <strong>Teclas:</strong> Use 1-0 para respostas rápidas | Espaço para pausar | Ctrl+1/2/3 para ajuda</p>
         </div>
     </main>
 
-    <!-- HUD Flutuante Minimalista (novo) -->
+    <!-- HUD Flutuante -->
     <div id="floating-hud" class="hidden">
         <div class="hud-item" id="hud-score">0</div>
         <div class="hud-item" id="hud-combo">1x</div>
-        <div class="hud-item" id="hud-lives">❤️❤️❤️</div>
+        <div class="hud-item" id="hud-lives">●●●</div>
     </div>
 
-    <!-- Modal de Configurações (novo - aparece apenas quando necessário) -->
+    <!-- Modal -->
     <div id="game-modal" class="modal hidden">
         <div class="modal-content">
-            <!-- Conteúdo será injetado via JS -->
+            <!-- Conteúdo injetado via JS -->
         </div>
     </div>
 
-    <!-- Toast Notifications (novo) -->
+    <!-- Toast Notifications -->
     <div id="toast-container"></div>
 
     <script src="script.js"></script>
+    
+    <!-- Efeitos sonoros básicos (opcional) -->
+    <audio id="sound-correct" preload="auto">
+        <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEAQB8AAEAfAAABAAgAZGF0YQ" type="audio/wav">
+    </audio>
+    <audio id="sound-incorrect" preload="auto">
+        <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEAQB8AAEAfAAABAAgAZGF0YQ" type="audio/wav">
+    </audio>
 </body>
 </html>
