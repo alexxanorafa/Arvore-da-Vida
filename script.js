@@ -414,7 +414,7 @@ class KabbalahGame {
         this.startTimer();
         this.updateUI();
         
-        this.showToast('Jogo iniciado! Use as teclas 1-0 para respostas rápidas.', 'info');
+        this.showToast('Jogo iniciado!', 'info');
         this.playSound('start');
     }
 
@@ -444,7 +444,7 @@ class KabbalahGame {
 
         const question = this.questions[this.state.currentQuestion];
         this.elements.currentQuestion.textContent = 
-            `Associe a letra ${question.letter} (Número ${question.number}) à Sefirah correspondente:`;
+            `Associe a letra ${question.letter} à Sefirah correspondente:`;  // CORRIGIDO: removido número
         this.elements.currentSymbol.textContent = question.letter;
         
         this.elements.currentQ.textContent = this.state.currentQuestion + 1;
@@ -638,24 +638,23 @@ class KabbalahGame {
         // Ajustar visibilidade baseado na dificuldade
         this.elements.sefirot.forEach(sefirah => {
             const name = this.getSefirahName(sefirah.id);
-            const number = this.getSefirahNumber(sefirah.id);
             
             switch(this.config.difficulty) {
                 case 'easy':
-                    // Nomes e números sempre visíveis
-                    sefirah.innerHTML = `${name}<br><small>${number}</small>`;
+                    // Apenas nomes
+                    sefirah.innerHTML = `${name}`;
                     sefirah.style.fontSize = '0.9em';
                     sefirah.classList.remove('faded');
                     break;
                 case 'hard':
-                    // Apenas números, nomes esmaecidos
-                    sefirah.innerHTML = number;
-                    sefirah.style.fontSize = '1.2em';
+                    // Nomes menores ou esmaecidos (sem números)
+                    sefirah.innerHTML = name;
+                    sefirah.style.fontSize = '0.8em';
                     sefirah.classList.add('faded');
                     break;
                 default:
-                    // Médio: nomes e números
-                    sefirah.innerHTML = `${name}<br>${number}`;
+                    // Apenas nomes
+                    sefirah.innerHTML = `${name}`;
                     sefirah.style.fontSize = '0.85em';
                     sefirah.classList.remove('faded');
             }
@@ -678,21 +677,22 @@ class KabbalahGame {
         return names[id] || id;
     }
 
-    getSefirahNumber(id) {
-        const numbers = {
-            'keter': '1',
-            'chokhmah': '2',
-            'binah': '3',
-            'chesed': '4',
-            'gevurah': '5',
-            'tiferet': '6',
-            'netzach': '7',
-            'hod': '8',
-            'yesod': '9',
-            'malkuth': '10'
-        };
-        return numbers[id] || '';
-    }
+    // Função removida pois não é mais usada
+    // getSefirahNumber(id) {
+    //     const numbers = {
+    //         'keter': '1',
+    //         'chokhmah': '2',
+    //         'binah': '3',
+    //         'chesed': '4',
+    //         'gevurah': '5',
+    //         'tiferet': '6',
+    //         'netzach': '7',
+    //         'hod': '8',
+    //         'yesod': '9',
+    //         'malkuth': '10'
+    //     };
+    //     return numbers[id] || '';
+    // }
 
     setMode(mode) {
         this.config.mode = mode;
@@ -851,7 +851,7 @@ class KabbalahGame {
                     <div class="difficulty-options">
                         <button class="diff-btn ${this.config.difficulty === 'easy' ? 'active' : ''}" data-diff="easy">
                             <span class="diff-name">Fácil</span>
-                            <span class="diff-desc">Nomes e números visíveis, menos pontos</span>
+                            <span class="diff-desc">Nomes visíveis</span>
                         </button>
                         <button class="diff-btn ${this.config.difficulty === 'medium' ? 'active' : ''}" data-diff="medium">
                             <span class="diff-name">Médio</span>
@@ -859,7 +859,7 @@ class KabbalahGame {
                         </button>
                         <button class="diff-btn ${this.config.difficulty === 'hard' ? 'active' : ''}" data-diff="hard">
                             <span class="diff-name">Difícil</span>
-                            <span class="diff-desc">Apenas números, mais pontos por acerto</span>
+                            <span class="diff-desc">Nomes menores e esmaecidos</span>
                         </button>
                     </div>
                 `;
@@ -1015,7 +1015,7 @@ class KabbalahGame {
     handleKeyboard(e) {
         if (!this.state.isPlaying || this.state.isPaused) return;
 
-        // Teclas 1-0 para Sefirot
+        // Teclas para Sefirot (opcional, pode remover se não quiser)
         if (e.key >= '1' && e.key <= '9') {
             const index = parseInt(e.key) - 1;
             const sefirot = ['keter', 'chokhmah', 'binah', 'chesed', 'gevurah', 
@@ -1142,11 +1142,10 @@ class KabbalahGame {
             helpAvailable: true
         };
         
-        // Resetar Sefirot
+        // Resetar Sefirot - APENAS NOMES, SEM NÚMEROS
         this.elements.sefirot.forEach(sefirah => {
             const name = this.getSefirahName(sefirah.id);
-            const number = this.getSefirahNumber(sefirah.id);
-            sefirah.innerHTML = `${name}<br>${number}`;
+            sefirah.innerHTML = `${name}`;  // CORRIGIDO: apenas nome, sem número
             sefirah.style.fontSize = '';
             sefirah.classList.remove('hidden-option', 'help-highlight', 'faded');
             sefirah.style.animation = '';
@@ -1201,7 +1200,7 @@ document.addEventListener('DOMContentLoaded', () => {
     helpInfo.innerHTML = `
         <p><strong>Como jogar:</strong> Arraste o símbolo para a Sefirah correta ou clique nela.</p>
         <p><strong>Ajuda:</strong> Use os botões para remover opções incorretas (ganha menos pontos).</p>
-        <p><strong>Teclas:</strong> 1-0 para respostas | Espaço para pausar | Ctrl+1/2/3 para ajuda</p>
+        <p><strong>Teclas:</strong> Espaço para pausar | Ctrl+1/2/3 para ajuda</p>
     `;
     
     const gameContainer = document.getElementById('game-container');
