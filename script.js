@@ -55,33 +55,33 @@ class KabbalahGame {
         // Questões (25 no total)
         this.questions = [
             // 10 originais
-            { letter: 'א', number: 1, sefirah: 'keter', meaning: 'Aleph - O Espírito Divino' },
-            { letter: 'ב', number: 2, sefirah: 'chokhmah', meaning: 'Bet - Sabedoria Primordial' },
-            { letter: 'ג', number: 3, sefirah: 'binah', meaning: 'Gimel - Entendimento Divino' },
-            { letter: 'ד', number: 4, sefirah: 'chesed', meaning: 'Dalet - Amor e Misericórdia' },
-            { letter: 'ה', number: 5, sefirah: 'gevurah', meaning: 'Hei - Julgamento e Restrição' },
-            { letter: 'ו', number: 6, sefirah: 'tiferet', meaning: 'Vav - Beleza e Harmonia' },
-            { letter: 'ז', number: 7, sefirah: 'netzach', meaning: 'Zayin - Vitória Eterna' },
-            { letter: 'ח', number: 8, sefirah: 'hod', meaning: 'Chet - Esplendor Divino' },
-            { letter: 'ט', number: 9, sefirah: 'yesod', meaning: 'Tet - Fundação do Mundo' },
-            { letter: 'י', number: 10, sefirah: 'malkuth', meaning: 'Yod - Reino Material' },
+            { letter: 'א', sefirah: 'keter', meaning: 'Aleph - O Espírito Divino' },
+            { letter: 'ב', sefirah: 'chokhmah', meaning: 'Bet - Sabedoria Primordial' },
+            { letter: 'ג', sefirah: 'binah', meaning: 'Gimel - Entendimento Divino' },
+            { letter: 'ד', sefirah: 'chesed', meaning: 'Dalet - Amor e Misericórdia' },
+            { letter: 'ה', sefirah: 'gevurah', meaning: 'Hei - Julgamento e Restrição' },
+            { letter: 'ו', sefirah: 'tiferet', meaning: 'Vav - Beleza e Harmonia' },
+            { letter: 'ז', sefirah: 'netzach', meaning: 'Zayin - Vitória Eterna' },
+            { letter: 'ח', sefirah: 'hod', meaning: 'Chet - Esplendor Divino' },
+            { letter: 'ט', sefirah: 'yesod', meaning: 'Tet - Fundação do Mundo' },
+            { letter: 'י', sefirah: 'malkuth', meaning: 'Yod - Reino Material' },
             
             // 15 novas questões
-            { letter: 'כ', number: 20, sefirah: 'chokhmah', meaning: 'Kaf - Sabedoria Prática' },
-            { letter: 'ל', number: 30, sefirah: 'chesed', meaning: 'Lamed - Coração Aprendiz' },
-            { letter: 'מ', number: 40, sefirah: 'hod', meaning: 'Mem - Águas da Sabedoria' },
-            { letter: 'נ', number: 50, sefirah: 'yesod', meaning: 'Nun - Peixe da Fundação' },
-            { letter: 'ס', number: 60, sefirah: 'binah', meaning: 'Samekh - Suporte do Entendimento' },
-            { letter: 'ע', number: 70, sefirah: 'netzach', meaning: 'Ayin - Olho da Vitória' },
-            { letter: 'פ', number: 80, sefirah: 'hod', meaning: 'Pe - Boca do Esplendor' },
-            { letter: 'צ', number: 90, sefirah: 'yesod', meaning: 'Tsade - Justiça da Fundação' },
-            { letter: 'ק', number: 100, sefirah: 'keter', meaning: 'Qof - Santidade da Coroa' },
-            { letter: 'ר', number: 200, sefirah: 'gevurah', meaning: 'Resh - Cabeça do Julgamento' },
-            { letter: 'ש', number: 300, sefirah: 'tiferet', meaning: 'Shin - Dente da Harmonia' },
-            { letter: 'ת', number: 400, sefirah: 'malkuth', meaning: 'Tav - Cruz do Reino' },
-            { letter: 'ך', number: 500, sefirah: 'chokhmah', meaning: 'Kaf final - Sabedoria Completa' },
-            { letter: 'ם', number: 600, sefirah: 'binah', meaning: 'Mem final - Entendimento Profundo' },
-            { letter: 'ן', number: 700, sefirah: 'netzach', meaning: 'Nun final - Vitória Eterna' }
+            { letter: 'כ', sefirah: 'chokhmah', meaning: 'Kaf - Sabedoria Prática' },
+            { letter: 'ל', sefirah: 'chesed', meaning: 'Lamed - Coração Aprendiz' },
+            { letter: 'מ', sefirah: 'hod', meaning: 'Mem - Águas da Sabedoria' },
+            { letter: 'נ', sefirah: 'yesod', meaning: 'Nun - Peixe da Fundação' },
+            { letter: 'ס', sefirah: 'binah', meaning: 'Samekh - Suporte do Entendimento' },
+            { letter: 'ע', sefirah: 'netzach', meaning: 'Ayin - Olho da Vitória' },
+            { letter: 'פ', sefirah: 'hod', meaning: 'Pe - Boca do Esplendor' },
+            { letter: 'צ', sefirah: 'yesod', meaning: 'Tsade - Justiça da Fundação' },
+            { letter: 'ק', sefirah: 'keter', meaning: 'Qof - Santidade da Coroa' },
+            { letter: 'ר', sefirah: 'gevurah', meaning: 'Resh - Cabeça do Julgamento' },
+            { letter: 'ש', sefirah: 'tiferet', meaning: 'Shin - Dente da Harmonia' },
+            { letter: 'ת', sefirah: 'malkuth', meaning: 'Tav - Cruz do Reino' },
+            { letter: 'ך', sefirah: 'chokhmah', meaning: 'Kaf final - Sabedoria Completa' },
+            { letter: 'ם', sefirah: 'binah', meaning: 'Mem final - Entendimento Profundo' },
+            { letter: 'ן', sefirah: 'netzach', meaning: 'Nun final - Vitória Eterna' }
         ];
 
         // Sistema de erros
@@ -384,7 +384,7 @@ class KabbalahGame {
 
         const question = this.questions[this.state.currentQuestion];
         this.elements.currentQuestion.textContent = 
-            `Associe "${question.letter}" (valor: ${question.number}) à Sefirah correspondente:`;
+            `Associe a letra "${question.letter}" à Sefirah correspondente:`;
         this.elements.currentSymbol.textContent = question.letter;
         this.elements.currentSymbol.title = question.meaning;
         
