@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kabbalah Interativa - A Árvore da Vida</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="bugfixes.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <style>
@@ -17,25 +18,38 @@
         h2, h3, .menu-section {
             font-family: 'Cinzel', serif;
         }
+        
+        /* Estilos de correção imediatos */
+        .game-grid-container {
+            display: grid;
+            grid-template-columns: 320px 600px 250px;
+            grid-template-rows: 1fr;
+            gap: 20px;
+            width: 100%;
+            min-height: 700px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 1200px) {
+            .game-grid-container {
+                grid-template-columns: 300px 550px 220px;
+                max-width: 1070px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .game-grid-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                max-width: 600px;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- HEADER COM DOIS MENUS SEPARADOS -->
+    <!-- HEADER COM APENAS UM MENU (APPS) -->
     <header>
-        <!-- MENU DO JOGO (ESQUERDA) -->
-        <div class="menu-icon" id="gameMenuIcon">
-            <span>📱</span>
-        </div>
-        <nav class="menu game-menu" id="gameMenu">
-            <ul>
-                <li class="menu-section">Kabbalah Interativa</li>
-                <li><a href="#" class="menu-item" id="game-modes-btn">🜁 Modos de Jogo</a></li>
-                <li><a href="#" class="menu-item" id="difficulty-btn">⚚ Nível de Dificuldade</a></li>
-                <li><a href="#" class="menu-item" id="stats-btn">🜔 Estatísticas e Progresso</a></li>
-                <li><a href="#" class="menu-item" id="practice-btn">🜃 Modo de Prática</a></li>
-            </ul>
-        </nav>
-
         <!-- TÍTULO CENTRAL -->
         <div class="header-title">
             <h1>Kabbalah Interativa</h1>
@@ -91,7 +105,7 @@
     
     <!-- ÁREA DO JOGO -->
     <main id="game-container">
-        <!-- TELA INICIAL COM BOTÃO PROMINENTE -->
+        <!-- TELA INICIAL -->
         <div class="welcome-screen" id="welcome-screen">
             <div class="welcome-content">
                 <h1>Kabbalah Interativa</h1>
@@ -100,7 +114,7 @@
                     e aprofunde seu conhecimento da sabedoria ancestral.
                 </p>
                 
-                <!-- BOTÃO INICIAR JORNADA (PROMINENTE) -->
+                <!-- BOTÃO INICIAR JORNADA -->
                 <button id="start-btn" class="btn main-btn">Iniciar Jornada</button>
                 
                 <!-- CONTROLES RÁPIDOS -->
@@ -111,6 +125,10 @@
                         <div class="control-item"><span class="key">0</span><span>Malkuth</span></div>
                         <div class="control-item"><span class="key">Ctrl+1/2/3</span><span>Ajuda (25%/50%/75%)</span></div>
                         <div class="control-item"><span class="key">Espaço</span><span>Pausar</span></div>
+                        <div class="control-item"><span class="key">S</span><span>Pular Questão</span></div>
+                        <div class="control-item"><span class="key">A</span><span>Conquistas</span></div>
+                        <div class="control-item"><span class="key">C</span><span>Desafio Diário</span></div>
+                        <div class="control-item"><span class="key">ESC</span><span>Fechar Modais</span></div>
                     </div>
                 </div>
             </div>
@@ -118,102 +136,115 @@
 
         <!-- JOGO (OCULTO INICIALMENTE) -->
         <div id="game-area" class="hidden">
-            <!-- QUESTÃO ATUAL -->
-            <div id="question-panel" class="panel">
-                <h2 id="current-question"></h2>
-                <div id="current-symbol" class="symbol"></div>
-                
-                <!-- SISTEMA DE AJUDA NO JOGO (25%/50%/75%) -->
-                <div class="question-controls">
-                    <div class="help-section">
-                        <h4>Remover opções incorretas:</h4>
-                        <div class="help-buttons">
-                            <button id="help-25-btn" class="help-btn">
-                                <span>25%</span>
-                                <small>(-25 pontos)</small>
-                            </button>
-                            <button id="help-50-btn" class="help-btn">
-                                <span>50%</span>
-                                <small>(-50 pontos)</small>
-                            </button>
-                            <button id="help-75-btn" class="help-btn">
-                                <span>75%</span>
-                                <small>(-75 pontos)</small>
-                            </button>
+            <!-- Container grid corrigido -->
+            <div class="game-grid-container">
+                <!-- Coluna esquerda: Questão -->
+                <div id="question-panel" class="panel">
+                    <h2 id="current-question"></h2>
+                    <div id="current-symbol" class="symbol"></div>
+                    
+                    <!-- SISTEMA DE AJUDA NO JOGO (25%/50%/75%) -->
+                    <div class="question-controls">
+                        <div class="help-section">
+                            <h4>Reduzir opções incorretas:</h4>
+                            <div class="help-buttons">
+                                <button id="help-25-btn" class="help-btn">
+                                    <span>25%</span>
+                                    <small>(máx: 7.5 pts)</small>
+                                </button>
+                                <button id="help-50-btn" class="help-btn">
+                                    <span>50%</span>
+                                    <small>(máx: 5 pts)</small>
+                                </button>
+                                <button id="help-75-btn" class="help-btn">
+                                    <span>75%</span>
+                                    <small>(máx: 2.5 pts)</small>
+                                </button>
+                            </div>
                         </div>
+                        <button id="skip-btn" class="help-btn skip">
+                            <span>Pular Questão</span>
+                            <small>(-5 pontos)</small>
+                        </button>
                     </div>
-                    <button id="skip-btn" class="help-btn skip">
-                        <span>Pular Questão</span>
-                        <small>(-75 pontos)</small>
-                    </button>
                 </div>
-            </div>
 
-            <!-- ÁRVORE DA VIDA -->
-            <div class="tree-of-life">
-                <div class="tree-inner">
+                <!-- Coluna central: Árvore da Vida -->
+                <div class="tree-of-life">
+                    <div class="tree-inner">
+                        <!-- Linhas conectando as Sefirot -->
+                        <svg class="tree-lines" width="100%" height="100%" 
+                            style="position: absolute; top: 0; left: 0; z-index: 1; pointer-events: none;">
+                            <!-- Conexões centrais -->
+                            <line x1="50%" y1="5%" x2="50%" y2="40%" stroke="rgba(212, 177, 146, 0.3)" stroke-width="2"/>
+                            <line x1="50%" y1="40%" x2="50%" y2="65%" stroke="rgba(212, 177, 146, 0.3)" stroke-width="2"/>
+                            <line x1="50%" y1="65%" x2="50%" y2="85%" stroke="rgba(212, 177, 146, 0.3)" stroke-width="2"/>
 
-                    <!-- Linhas conectando as Sefirot -->
-                    <svg class="tree-lines" width="100%" height="100%" 
-                        style="position: absolute; top: 0; left: 0; z-index: 1; pointer-events: none;">
-                        <!-- Conexões centrais -->
-                        <line x1="50%" y1="5%" x2="50%" y2="40%" stroke="rgba(212, 177, 146, 0.3)" stroke-width="2"/>
-                        <line x1="50%" y1="40%" x2="50%" y2="65%" stroke="rgba(212, 177, 146, 0.3)" stroke-width="2"/>
-                        <line x1="50%" y1="65%" x2="50%" y2="85%" stroke="rgba(212, 177, 146, 0.3)" stroke-width="2"/>
+                            <!-- Conexões laterais -->
+                            <line x1="20%" y1="20%" x2="50%" y2="40%" stroke="rgba(212, 177, 146, 0.3)" stroke-width="2"/>
+                            <line x1="80%" y1="20%" x2="50%" y2="40%" stroke="rgba(212, 177, 146, 0.3)" stroke-width="2"/>
+                            <line x1="10%" y1="40%" x2="50%" y2="40%" stroke="rgba(212, 177, 146, 0.3)" stroke-width="2"/>
+                            <line x1="90%" y1="40%" x2="50%" y2="40%" stroke="rgba(212, 177, 146, 0.3)" stroke-width="2"/>
+                            <line x1="20%" y1="60%" x2="50%" y2="65%" stroke="rgba(212, 177, 146, 0.3)" stroke-width="2"/>
+                            <line x1="80%" y1="60%" x2="50%" y2="65%" stroke="rgba(212, 177, 146, 0.3)" stroke-width="2"/>
+                        </svg>
 
-                        <!-- Conexões laterais -->
-                        <line x1="20%" y1="20%" x2="50%" y2="40%" stroke="rgba(212, 177, 146, 0.3)" stroke-width="2"/>
-                        <line x1="80%" y1="20%" x2="50%" y2="40%" stroke="rgba(212, 177, 146, 0.3)" stroke-width="2"/>
-                        <line x1="10%" y1="40%" x2="50%" y2="40%" stroke="rgba(212, 177, 146, 0.3)" stroke-width="2"/>
-                        <line x1="90%" y1="40%" x2="50%" y2="40%" stroke="rgba(212, 177, 146, 0.3)" stroke-width="2"/>
-                        <line x1="20%" y1="60%" x2="50%" y2="65%" stroke="rgba(212, 177, 146, 0.3)" stroke-width="2"/>
-                        <line x1="80%" y1="60%" x2="50%" y2="65%" stroke="rgba(212, 177, 146, 0.3)" stroke-width="2"/>
-                    </svg>
-
-                    <!-- Sefirot -->
-                    <div class="sefirah" id="keter" data-number="1">Keter<br><small>1</small></div>
-                    <div class="sefirah" id="chokhmah" data-number="2">Chokhmah<br><small>2</small></div>
-                    <div class="sefirah" id="binah" data-number="3">Binah<br><small>3</small></div>
-                    <div class="sefirah" id="chesed" data-number="4">Chesed<br><small>4</small></div>
-                    <div class="sefirah" id="gevurah" data-number="5">Gevurah<br><small>5</small></div>
-                    <div class="sefirah" id="tiferet" data-number="6">Tiferet<br><small>6</small></div>
-                    <div class="sefirah" id="netzach" data-number="7">Netzach<br><small>7</small></div>
-                    <div class="sefirah" id="hod" data-number="8">Hod<br><small>8</small></div>
-                    <div class="sefirah" id="yesod" data-number="9">Yesod<br><small>9</small></div>
-                    <div class="sefirah" id="malkuth" data-number="10">Malkuth<br><small>10</small></div>
-
+                        <!-- Sefirot -->
+                        <div class="sefirah" id="keter" data-number="1" data-name="Keter">Keter<br><small>1</small></div>
+                        <div class="sefirah" id="chokhmah" data-number="2" data-name="Chokhmah">Chokhmah<br><small>2</small></div>
+                        <div class="sefirah" id="binah" data-number="3" data-name="Binah">Binah<br><small>3</small></div>
+                        <div class="sefirah" id="chesed" data-number="4" data-name="Chesed">Chesed<br><small>4</small></div>
+                        <div class="sefirah" id="gevurah" data-number="5" data-name="Gevurah">Gevurah<br><small>5</small></div>
+                        <div class="sefirah" id="tiferet" data-number="6" data-name="Tiferet">Tiferet<br><small>6</small></div>
+                        <div class="sefirah" id="netzach" data-number="7" data-name="Netzach">Netzach<br><small>7</small></div>
+                        <div class="sefirah" id="hod" data-number="8" data-name="Hod">Hod<br><small>8</small></div>
+                        <div class="sefirah" id="yesod" data-number="9" data-name="Yesod">Yesod<br><small>9</small></div>
+                        <div class="sefirah" id="malkuth" data-number="10" data-name="Malkuth">Malkuth<br><small>10</small></div>
+                    </div>
                 </div>
-            </div>
 
-            
-            <!-- STATUS DO JOGO -->
-            <div class="game-status">
-                <div class="status-item">
-                    <span class="status-label">Pontos:</span>
-                    <span id="score" class="status-value">0</span>
-                </div>
-                <div class="status-item">
-                    <span class="status-label">Vidas:</span>
-                    <span id="lives" class="status-value">●●●</span>
-                </div>
-                <div class="status-item">
-                    <span class="status-label">Questão:</span>
-                    <span id="progress" class="status-value">1/25</span>
-                </div>
-                <div class="status-item">
-                    <span class="status-label">Erros:</span>
-                    <span id="errors-count" class="status-value">0</span>
-                </div>
-                <div class="status-buttons">
-                    <button id="pause-btn" class="btn small">⏸️</button>
-                    <button id="options-btn" class="btn small">⚙️</button>
-                    <button id="restart-btn" class="btn small">🔄</button>
+                <!-- Coluna direita: Status do jogo -->
+                <div class="game-status">
+                    <div class="status-item">
+                        <span class="status-label">Pontos:</span>
+                        <span id="score" class="status-value">0</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Vidas:</span>
+                        <span id="lives" class="status-value">●●●</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Questão:</span>
+                        <span id="progress" class="status-value">1/25</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Erros:</span>
+                        <span id="errors-count" class="status-value">0</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Streak:</span>
+                        <span id="streak-count" class="status-value">0</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Tempo:</span>
+                        <span id="time-count" class="status-value">0s</span>
+                    </div>
+                    <div class="status-buttons">
+                        <button id="pause-btn" class="btn small">⏸️</button>
+                        <button id="options-btn" class="btn small">⚙️</button>
+                        <button id="restart-btn" class="btn small">🔄</button>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- BOTÃO DE HELP FLUTUANTE (?) -->
+    <!-- BOTÕES FLUTUANTES ADICIONAIS -->
+    <button id="daily-challenge-btn" class="floating-btn" title="Desafio Diário">🌅</button>
+    <button id="achievements-btn" class="floating-btn" title="Conquistas">🏆</button>
+    <button id="audio-toggle-btn" class="floating-btn" title="Áudio">🔊</button>
+    
+    <!-- BOTÃO DE HELP FLUTUANTE -->
     <button id="global-help-btn" class="help-floating-btn">?</button>
 
     <!-- MODAL DE HELP GERAL -->
@@ -226,31 +257,44 @@
             </div>
             <div class="instruction-item">
                 <strong>⚡ Sistema de Pontos:</strong>
-                <p>• Acertar na primeira tentativa: 10 pontos</p>
-                <p>• Acertar com menos opções: menos pontos</p>
-                <p>• Cada erro na mesma Sefirah reduz sua visibilidade</p>
-                <p>• Usar ajuda durante o jogo: penalidade de pontos</p>
+                <ul>
+                    <li>Acertar na primeira tentativa: <strong>10 pontos</strong></li>
+                    <li>Cada tentativa extra: <strong>-1 ponto</strong></li>
+                    <li>Usar ajuda de 25%: máximo <strong>7.5 pontos</strong></li>
+                    <li>Usar ajuda de 50%: máximo <strong>5 pontos</strong></li>
+                    <li>Usar ajuda de 75%: máximo <strong>2.5 pontos</strong></li>
+                    <li>Pular questão: <strong>-5 pontos</strong></li>
+                    <li>Erro: <strong>-2 pontos</strong></li>
+                </ul>
             </div>
             <div class="instruction-item">
                 <strong>🔧 Sistema de Erros:</strong>
-                <p>• 1º erro: Sefirah fica 70% transparente</p>
-                <p>• 2º erro: Fica 40% transparente + borda tracejada</p>
-                <p>• 3º erro: Sefirah é eliminada (✗)</p>
+                <ul>
+                    <li>1º erro: Sefirah fica 70% transparente</li>
+                    <li>2º erro: Fica 40% transparente + borda tracejada</li>
+                    <li>3º erro: Sefirah é eliminada (✗)</li>
+                </ul>
             </div>
             <div class="instruction-item">
                 <strong>⌨️ Teclas Rápidas:</strong>
-                <p><strong>1-9</strong> para Sefirot (1=Keter...9=Yesod)</p>
-                <p><strong>0</strong> para Malkuth</p>
-                <p><strong>Ctrl+1/2/3</strong> para ajuda (25%/50%/75%)</p>
-                <p><strong>Espaço</strong> para pausar</p>
+                <div class="keyboard-grid">
+                    <div><kbd>1-9</kbd> Sefirot (1=Keter...9=Yesod)</div>
+                    <div><kbd>0</kbd> Malkuth</div>
+                    <div><kbd>Ctrl+1/2/3</kbd> Ajuda (25%/50%/75%)</div>
+                    <div><kbd>Espaço</kbd> Pausar</div>
+                    <div><kbd>S</kbd> Pular questão</div>
+                    <div><kbd>A</kbd> Conquistas</div>
+                    <div><kbd>C</kbd> Desafio Diário</div>
+                    <div><kbd>ESC</kbd> Fechar modais</div>
+                </div>
             </div>
             <div class="actions">
-                <button class="btn" onclick="game.hideHelp()">Fechar</button>
+                <button class="btn" onclick="window.modalManager.hide('help-modal')">Fechar</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DE JOGO -->
+    <!-- MODAL PRINCIPAL DO JOGO -->
     <div id="game-modal" class="modal hidden">
         <div class="modal-content"></div>
     </div>
@@ -258,14 +302,11 @@
     <!-- TOASTS -->
     <div id="toast-container"></div>
 
-    <!-- SONS -->
-    <audio id="sound-correct" preload="auto">
-        <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEAQB8AAEAfAAABAAgAZGF0YQ" type="audio/wav">
-    </audio>
-    <audio id="sound-incorrect" preload="auto">
-        <source src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEAQB8AAEAfAAABAAgAZGF0YQ" type="audio/wav">
-    </audio>
-
+    <!-- SCRIPTS -->
+    <script src="achievements.js"></script>
+    <script src="audio.js"></script>
+    <script src="daily-challenge.js"></script>
     <script src="script.js"></script>
+    <script src="bugfixes.js"></script>
 </body>
 </html>

@@ -1,0 +1,267 @@
+/* bugfixes.css - Correções finais de CSS */
+
+/* ========== LAYOUT ========== */
+.game-grid-container {
+    display: grid;
+    grid-template-columns: 320px 600px 250px;
+    grid-template-rows: 1fr;
+    gap: 20px;
+    width: 100%;
+    min-height: 700px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Correção para telas grandes */
+@media (min-width: 1201px) {
+    .game-grid-container {
+        grid-template-columns: 320px 600px 250px;
+    }
+}
+
+/* Correção para telas médias */
+@media (max-width: 1200px) and (min-width: 993px) {
+    .game-grid-container {
+        grid-template-columns: 300px 550px 220px;
+        max-width: 1070px;
+    }
+    
+    .tree-of-life {
+        width: 550px !important;
+    }
+}
+
+/* Correção para tablets */
+@media (max-width: 992px) and (min-width: 769px) {
+    .game-grid-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        max-width: 700px;
+        gap: 15px;
+    }
+    
+    #question-panel, .tree-of-life, .game-status {
+        width: 100% !important;
+        margin: 0 auto;
+    }
+    
+    .tree-of-life {
+        height: 550px !important;
+    }
+}
+
+/* Correção para mobile */
+@media (max-width: 768px) {
+    .game-grid-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        max-width: 100%;
+        gap: 15px;
+        min-height: auto;
+    }
+    
+    #question-panel, .tree-of-life, .game-status {
+        width: 100% !important;
+        height: auto !important;
+        margin: 0 auto;
+    }
+    
+    .tree-of-life {
+        height: 400px !important;
+    }
+    
+    .sefirah {
+        width: 60px !important;
+        height: 60px !important;
+        font-size: 0.8em !important;
+    }
+    
+    .symbol {
+        width: 80px !important;
+        height: 80px !important;
+        font-size: 2.5em !important;
+    }
+    
+    .help-buttons {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .help-btn {
+        margin-bottom: 10px !important;
+    }
+}
+
+/* Correção para telas muito pequenas */
+@media (max-width: 480px) {
+    .tree-of-life {
+        height: 350px !important;
+    }
+    
+    .sefirah {
+        width: 50px !important;
+        height: 50px !important;
+        font-size: 0.7em !important;
+    }
+    
+    .symbol {
+        width: 70px !important;
+        height: 70px !important;
+        font-size: 2em !important;
+    }
+    
+    .status-item {
+        padding: 10px !important;
+    }
+}
+
+/* ========== ANIMAÇÕES ========== */
+@keyframes correctPulse {
+    0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.7); }
+    70% { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 0 0 10px rgba(39, 174, 96, 0); }
+    100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(39, 174, 96, 0); }
+}
+
+@keyframes incorrectShake {
+    0%, 100% { transform: translate(-50%, -50%) translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translate(-50%, -50%) translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translate(-50%, -50%) translateX(5px); }
+}
+
+@keyframes fadeOutHelp {
+    from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    to { opacity: 0.3; transform: translate(-50%, -50%) scale(0.9); }
+}
+
+.sefirah.correct {
+    animation: correctPulse 0.6s ease !important;
+}
+
+.sefirah.incorrect {
+    animation: incorrectShake 0.5s ease !important;
+}
+
+.help-removed {
+    animation: fadeOutHelp 0.5s forwards !important;
+    pointer-events: none !important;
+    opacity: 0.3 !important;
+}
+
+/* ========== BOTÕES FLUTUANTES ========== */
+.floating-btn, .help-floating-btn {
+    z-index: 999 !important;
+    transition: all 0.3s ease !important;
+}
+
+@media (max-width: 768px) {
+    .floating-btn, .help-floating-btn {
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 1em !important;
+    }
+    
+    #daily-challenge-btn { bottom: 20px !important; }
+    #achievements-btn { bottom: 70px !important; }
+    #audio-toggle-btn { bottom: 120px !important; }
+    .help-floating-btn { bottom: 170px !important; }
+}
+
+/* ========== MODAIS ========== */
+.modal {
+    z-index: 10000 !important;
+    backdrop-filter: blur(15px) !important;
+}
+
+.modal-content {
+    max-height: 85vh !important;
+    overflow-y: auto !important;
+}
+
+/* ========== TOASTS ========== */
+.toast {
+    z-index: 10001 !important;
+    backdrop-filter: blur(20px) !important;
+}
+
+/* ========== ÁRVORE DA VIDA ========== */
+.tree-of-life {
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.sefirah {
+    position: absolute !important;
+    transform: translate(-50%, -50%) !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Posições fixas */
+#keter { left: 50%; top: 5%; }
+#chokhmah { left: 20%; top: 20%; }
+#binah { left: 80%; top: 20%; }
+#chesed { left: 10%; top: 40%; }
+#gevurah { left: 90%; top: 40%; }
+#tiferet { left: 50%; top: 40%; }
+#netzach { left: 20%; top: 60%; }
+#hod { left: 80%; top: 60%; }
+#yesod { left: 50%; top: 65%; }
+#malkuth { left: 50%; top: 85%; }
+
+/* ========== ESTADOS ========== */
+.sefirah.eliminated {
+    background: repeating-linear-gradient(
+        45deg,
+        rgba(231, 76, 60, 0.1),
+        rgba(231, 76, 60, 0.1) 10px,
+        rgba(20, 20, 40, 0.1) 10px,
+        rgba(20, 20, 40, 0.1) 20px
+    ) !important;
+    border: 2px dashed #e74c3c !important;
+    pointer-events: none !important;
+}
+
+/* ========== TIPOGRAFIA ========== */
+.symbol, .daily-letter {
+    font-family: 'Times New Roman', serif !important;
+    font-weight: bold !important;
+}
+
+/* ========== SCROLL ========== */
+body {
+    overflow-x: hidden !important;
+}
+
+/* ========== ACESSIBILIDADE ========== */
+button:focus, .btn:focus, .sefirah:focus {
+    outline: 2px solid var(--primary) !important;
+    outline-offset: 2px !important;
+}
+
+/* ========== PERFORMANCE ========== */
+.sefirah, .symbol {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+}
+
+/* ========== CORREÇÕES ESPECÍFICAS ========== */
+.achievement-notification {
+    z-index: 10002 !important;
+}
+
+.status-buttons {
+    margin-top: auto !important;
+}
+
+.question-controls {
+    margin-top: auto !important;
+}
+
+/* Garantir que tudo fique dentro dos limites */
+* {
+    box-sizing: border-box !important;
+}
+
+/* Prevenir seleção de texto durante o jogo */
+#game-area *, .sefirah, .symbol {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
