@@ -97,57 +97,59 @@
             <div class="game-grid-container">
                 <!-- Painel de Questões -->
                 <div id="question-panel" class="game-section">
-                    <h2 id="current-question"></h2>
-                    <div id="current-symbol" class="symbol"></div>
+                    <div class="question-content">
+                        <div id="current-question"></div>
+                        <div id="current-symbol" class="symbol"></div>
                     
-                    <!-- Sistema de Ajuda -->
-                    <div class="help-section">
-                        <button id="help-toggle-btn" class="help-toggle-btn">
-                            🆘 Mostrar Ajudas
-                        </button>
-                        
-                        <div class="help-buttons">
-                            <button id="help-25-btn" class="help-btn">
-                                <span>25%</span>
-                                <small>máx 7.5 pts</small>
+                        <!-- Sistema de Ajuda -->
+                        <div class="help-section">
+                            <button id="help-toggle-btn" class="help-toggle-btn">
+                                🆘 Mostrar Ajudas
                             </button>
-                            <button id="help-50-btn" class="help-btn">
-                                <span>50%</span>
-                                <small>máx 5 pts</small>
-                            </button>
-                            <button id="help-75-btn" class="help-btn">
-                                <span>75%</span>
-                                <small>máx 2.5 pts</small>
-                            </button>
-                            <button id="skip-btn" class="skip-btn">
-                                <span>⏭️ Pular</span>
-                                <small>-5 pontos</small>
-                            </button>
+                            
+                            <div class="help-buttons">
+                                <button id="help-25-btn" class="help-btn">
+                                    <span>25%</span>
+                                    <small>máx 7.5 pts</small>
+                                </button>
+                                <button id="help-50-btn" class="help-btn">
+                                    <span>50%</span>
+                                    <small>máx 5 pts</small>
+                                </button>
+                                <button id="help-75-btn" class="help-btn">
+                                    <span>75%</span>
+                                    <small>máx 2.5 pts</small>
+                                </button>
+                                <button id="skip-btn" class="skip-btn">
+                                    <span>⏭️ Pular</span>
+                                    <small>-5 pontos</small>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <!-- Controles do Jogo -->
-                    <div class="game-controls">
-                        <button id="pause-btn" class="control-btn">⏸️ Pausar</button>
-                        <button id="restart-btn" class="control-btn">🔄 Reiniciar</button>
-                        <button id="options-btn" class="control-btn">⚙️ Opções</button>
+                        
+                        <!-- Controles do Jogo -->
+                        <div class="game-controls">
+                            <button id="pause-btn" class="control-btn">⏸️ Pausar</button>
+                            <button id="restart-btn" class="control-btn">🔄 Reiniciar</button>
+                            <button id="options-btn" class="control-btn">⚙️ Opções</button>
+                        </div>
                     </div>
                 </div>
                 
                 <!-- Árvore da Vida -->
                 <div class="tree-of-life game-section">
                     <div class="tree-inner-container">
-                        <!-- Sefirot -->
-                        <div class="sefirah" id="keter" data-number="1" data-name="Keter">Keter<br><small>1</small></div>
-                        <div class="sefirah" id="chokhmah" data-number="2" data-name="Chokhmah">Chokhmah<br><small>2</small></div>
-                        <div class="sefirah" id="binah" data-number="3" data-name="Binah">Binah<br><small>3</small></div>
-                        <div class="sefirah" id="chesed" data-number="4" data-name="Chesed">Chesed<br><small>4</small></div>
-                        <div class="sefirah" id="gevurah" data-number="5" data-name="Gevurah">Gevurah<br><small>5</small></div>
-                        <div class="sefirah" id="tiferet" data-number="6" data-name="Tiferet">Tiferet<br><small>6</small></div>
-                        <div class="sefirah" id="netzach" data-number="7" data-name="Netzach">Netzach<br><small>7</small></div>
-                        <div class="sefirah" id="hod" data-number="8" data-name="Hod">Hod<br><small>8</small></div>
-                        <div class="sefirah" id="yesod" data-number="9" data-name="Yesod">Yesod<br><small>9</small></div>
-                        <div class="sefirah" id="malkuth" data-number="10" data-name="Malkuth">Malkuth<br><small>10</small></div>
+                        <!-- Sefirot SEM números visíveis -->
+                        <div class="sefirah" id="keter" data-number="1" data-name="Keter">Keter</div>
+                        <div class="sefirah" id="chokhmah" data-number="2" data-name="Chokhmah">Chokhmah</div>
+                        <div class="sefirah" id="binah" data-number="3" data-name="Binah">Binah</div>
+                        <div class="sefirah" id="chesed" data-number="4" data-name="Chesed">Chesed</div>
+                        <div class="sefirah" id="gevurah" data-number="5" data-name="Gevurah">Gevurah</div>
+                        <div class="sefirah" id="tiferet" data-number="6" data-name="Tiferet">Tiferet</div>
+                        <div class="sefirah" id="netzach" data-number="7" data-name="Netzach">Netzach</div>
+                        <div class="sefirah" id="hod" data-number="8" data-name="Hod">Hod</div>
+                        <div class="sefirah" id="yesod" data-number="9" data-name="Yesod">Yesod</div>
+                        <div class="sefirah" id="malkuth" data-number="10" data-name="Malkuth">Malkuth</div>
                     </div>
                 </div>
                 

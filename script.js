@@ -1,4 +1,5 @@
-// script.js - VERSÃO CORRIGIDA
+// script.js - VERSÃO COMPLETA COM 90+ QUESTÕES ALEATÓRIAS E SIGNIFICADOS
+
 // ========== MENU DE APPS INDEPENDENTE ==========
 class AppsMenu {
     constructor() {
@@ -49,39 +50,144 @@ class AppsMenu {
     }
 }
 
-// ========== JOGO KABBALAH (COM TODAS CORREÇÕES) ==========
+// ========== JOGO KABBALAH (VERSÃO COMPLETA) ==========
 class KabbalahGame {
     constructor() {
-        // Questões (25 no total)
+        // ========== BANCO DE 90+ QUESTÕES ==========
         this.questions = [
-            // 10 originais
-            { letter: 'א', sefirah: 'keter', meaning: 'Aleph - O Espírito Divino' },
-            { letter: 'ב', sefirah: 'chokhmah', meaning: 'Bet - Sabedoria Primordial' },
-            { letter: 'ג', sefirah: 'binah', meaning: 'Gimel - Entendimento Divino' },
-            { letter: 'ד', sefirah: 'chesed', meaning: 'Dalet - Amor e Misericórdia' },
-            { letter: 'ה', sefirah: 'gevurah', meaning: 'Hei - Julgamento e Restrição' },
-            { letter: 'ו', sefirah: 'tiferet', meaning: 'Vav - Beleza e Harmonia' },
-            { letter: 'ז', sefirah: 'netzach', meaning: 'Zayin - Vitória Eterna' },
-            { letter: 'ח', sefirah: 'hod', meaning: 'Chet - Esplendor Divino' },
-            { letter: 'ט', sefirah: 'yesod', meaning: 'Tet - Fundação do Mundo' },
-            { letter: 'י', sefirah: 'malkuth', meaning: 'Yod - Reino Material' },
+            // GRUPO 1: Letras básicas (1-10)
+            { letter: 'א', sefirah: 'keter', meaning: 'O Primeiro, Unidade Divina, Princípio de Tudo' },
+            { letter: 'ב', sefirah: 'chokhmah', meaning: 'Casa da Sabedoria, Início da Criação' },
+            { letter: 'ג', sefirah: 'binah', meaning: 'Recompensa, Bondade que Retorna' },
+            { letter: 'ד', sefirah: 'chesed', meaning: 'Porta da Misericórdia, Pobre que Recebe' },
+            { letter: 'ה', sefirah: 'gevurah', meaning: 'Revelação, Sopro Divino, Existência' },
+            { letter: 'ו', sefirah: 'tiferet', meaning: 'União, Conexão entre Céu e Terra' },
+            { letter: 'ז', sefirah: 'netzach', meaning: 'Armamento, Força Espiritual' },
+            { letter: 'ח', sefirah: 'hod', meaning: 'Vida, Graça, Unidade Transcendente' },
+            { letter: 'ט', sefirah: 'yesod', meaning: 'Bondade Ocultada, Serpente Transformada' },
+            { letter: 'י', sefirah: 'malkuth', meaning: 'Mão que Abençoa, Ponto de Partida' },
             
-            // 15 novas questões
-            { letter: 'כ', sefirah: 'chokhmah', meaning: 'Kaf - Sabedoria Prática' },
-            { letter: 'ל', sefirah: 'chesed', meaning: 'Lamed - Coração Aprendiz' },
-            { letter: 'מ', sefirah: 'hod', meaning: 'Mem - Águas da Sabedoria' },
-            { letter: 'נ', sefirah: 'yesod', meaning: 'Nun - Peixe da Fundação' },
-            { letter: 'ס', sefirah: 'binah', meaning: 'Samekh - Suporte do Entendimento' },
-            { letter: 'ע', sefirah: 'netzach', meaning: 'Ayin - Olho da Vitória' },
-            { letter: 'פ', sefirah: 'hod', meaning: 'Pe - Boca do Esplendor' },
-            { letter: 'צ', sefirah: 'yesod', meaning: 'Tsade - Justiça da Fundação' },
-            { letter: 'ק', sefirah: 'keter', meaning: 'Qof - Santidade da Coroa' },
-            { letter: 'ר', sefirah: 'gevurah', meaning: 'Resh - Cabeça do Julgamento' },
-            { letter: 'ש', sefirah: 'tiferet', meaning: 'Shin - Dente da Harmonia' },
-            { letter: 'ת', sefirah: 'malkuth', meaning: 'Tav - Cruz do Reino' },
-            { letter: 'ך', sefirah: 'chokhmah', meaning: 'Kaf final - Sabedoria Completa' },
-            { letter: 'ם', sefirah: 'binah', meaning: 'Mem final - Entendimento Profundo' },
-            { letter: 'ן', sefirah: 'netzach', meaning: 'Nun final - Vitória Eterna' }
+            // GRUPO 2: Letras intermediárias (11-20)
+            { letter: 'כ', sefirah: 'chokhmah', meaning: 'Palma da Mão que Sustenta a Sabedoria' },
+            { letter: 'ל', sefirah: 'chesed', meaning: 'Coração que Aprende, Aspiração ao Divino' },
+            { letter: 'מ', sefirah: 'hod', meaning: 'Águas Maternas, Sabedoria Fluida' },
+            { letter: 'נ', sefirah: 'yesod', meaning: 'Peixe que Nada nas Profundezas' },
+            { letter: 'ס', sefirah: 'binah', meaning: 'Círculo Protetor do Entendimento' },
+            { letter: 'ע', sefirah: 'netzach', meaning: 'Olho que Vê Além, Visão Espiritual' },
+            { letter: 'פ', sefirah: 'hod', meaning: 'Boca que Fala a Verdade do Esplendor' },
+            { letter: 'צ', sefirah: 'yesod', meaning: 'Justiça Divina, Retidão da Fundação' },
+            { letter: 'ק', sefirah: 'keter', meaning: 'Sagrado, Separado do Mundo' },
+            { letter: 'ר', sefirah: 'gevurah', meaning: 'Cabeça que Julga com Retidão' },
+            
+            // GRUPO 3: Letras finais (21-25)
+            { letter: 'ך', sefirah: 'chokhmah', meaning: 'Sabedoria que se Conclui, Fim da Iluminação' },
+            { letter: 'ם', sefirah: 'binah', meaning: 'Águas do Entendimento que se Estagnam' },
+            { letter: 'ן', sefirah: 'netzach', meaning: 'Vitória que Persiste, Eternidade Realizada' },
+            { letter: 'ף', sefirah: 'hod', meaning: 'Boca do Esplendor que se Cala' },
+            { letter: 'ץ', sefirah: 'yesod', meaning: 'Justiça que se Fundamenta' },
+            
+            // GRUPO 4: Letras especiais (26-30)
+            { letter: 'ש', sefirah: 'tiferet', meaning: 'Dente que Consome o Mal, Fogo Transformador' },
+            { letter: 'ת', sefirah: 'malkuth', meaning: 'Sinal, Cruz, Assinatura Divina' },
+            
+            // GRUPO 5: Letras com daguesh (31-35)
+            { letter: 'אּ', sefirah: 'keter', meaning: 'Espírito Divino Intensificado' },
+            { letter: 'בּ', sefirah: 'chokhmah', meaning: 'Sabedoria com Ponto de Força' },
+            { letter: 'כּ', sefirah: 'chokhmah', meaning: 'Sabedoria que Conquista' },
+            { letter: 'פּ', sefirah: 'hod', meaning: 'Esplendor que se Pronuncia' },
+            
+            // GRUPO 6: Letras com vogais (36-45)
+            { letter: 'אָ', sefirah: 'keter', meaning: 'Espírito com Luz Plena' },
+            { letter: 'אֵ', sefirah: 'keter', meaning: 'Espírito que Brilha' },
+            { letter: 'אִ', sefirah: 'keter', meaning: 'Espírito com Faísca Interior' },
+            { letter: 'אֹ', sefirah: 'keter', meaning: 'Espírito que se Eleva' },
+            { letter: 'אֻ', sefirah: 'keter', meaning: 'Espírito Fixado' },
+            { letter: 'בָ', sefirah: 'chokhmah', meaning: 'Sabedoria Iluminada' },
+            { letter: 'גִ', sefirah: 'binah', meaning: 'Entendimento Interno' },
+            { letter: 'דֵ', sefirah: 'chesed', meaning: 'Misericórdia Brilhante' },
+            { letter: 'הֹ', sefirah: 'gevurah', meaning: 'Julgamento Elevado' },
+            { letter: 'וּ', sefirah: 'tiferet', meaning: 'União Estabelecida' },
+            
+            // GRUPO 7: Combinações de 2 letras (46-60)
+            { letter: 'יה', sefirah: 'tiferet', meaning: 'Força Criativa Ativa, Início da Manifestação' },
+            { letter: 'וה', sefirah: 'tiferet', meaning: 'União com a Existência' },
+            { letter: 'אה', sefirah: 'keter', meaning: 'Espírito e Forma Unificados' },
+            { letter: 'בן', sefirah: 'chokhmah', meaning: 'Filho da Sabedoria' },
+            { letter: 'אב', sefirah: 'keter', meaning: 'Pai, Origem Primordial' },
+            { letter: 'אם', sefirah: 'binah', meaning: 'Mãe, Origem Material' },
+            { letter: 'אל', sefirah: 'chesed', meaning: 'Deus, Força Divina' },
+            { letter: 'רה', sefirah: 'gevurah', meaning: 'Espírito que Vê, Consciência Expandida' },
+            { letter: 'מה', sefirah: 'hod', meaning: 'O Quê? Questionamento do Esplendor' },
+            { letter: 'לא', sefirah: 'chesed', meaning: 'Não, Limite da Misericórdia' },
+            { letter: 'כן', sefirah: 'chokhmah', meaning: 'Sim, Afirmação da Sabedoria' },
+            { letter: 'פה', sefirah: 'hod', meaning: 'Boca que Declara' },
+            { letter: 'שם', sefirah: 'tiferet', meaning: 'Nome, Essência Identificada' },
+            { letter: 'זה', sefirah: 'netzach', meaning: 'Este, Identificação da Vitória' },
+            { letter: 'כי', sefirah: 'chokhmah', meaning: 'Porque, Razão da Sabedoria' },
+            
+            // GRUPO 8: Combinações de 3 letras (61-70)
+            { letter: 'אבג', sefirah: 'keter', meaning: 'Alfa-Beta-Gama, ABC da Criação' },
+            { letter: 'דהא', sefirah: 'chesed', meaning: 'Conhecimento da Porta Divina' },
+            { letter: 'זחט', sefirah: 'netzach', meaning: 'Força-Vida-Bondade Oculta' },
+            { letter: 'יכל', sefirah: 'malkuth', meaning: 'Capacidade, Poder Realizado' },
+            { letter: 'מן', sefirah: 'hod', meaning: 'De, Separação das Águas' },
+            { letter: 'סער', sefirah: 'binah', meaning: 'Tempestade do Entendimento' },
+            { letter: 'עבר', sefirah: 'netzach', meaning: 'Passado da Vitória' },
+            { letter: 'צהר', sefirah: 'yesod', meaning: 'Meio-dia da Justiça' },
+            { letter: 'קרח', sefirah: 'keter', meaning: 'Gelo Sagrado' },
+            { letter: 'רשע', sefirah: 'gevurah', meaning: 'Mau no Julgamento' },
+            
+            // GRUPO 9: Palavras cabalísticas (71-80)
+            { letter: 'כתר', sefirah: 'keter', meaning: 'Coroa, Ponto Mais Alto' },
+            { letter: 'חכמה', sefirah: 'chokhmah', meaning: 'Sabedoria, Conhecimento Recebido' },
+            { letter: 'בינה', sefirah: 'binah', meaning: 'Entendimento, Compreensão Interna' },
+            { letter: 'חסד', sefirah: 'chesed', meaning: 'Amor Gracioso, Bondade Ilimitada' },
+            { letter: 'גבורה', sefirah: 'gevurah', meaning: 'Força, Julgamento Restritivo' },
+            { letter: 'תפארת', sefirah: 'tiferet', meaning: 'Beleza, Harmonia Central' },
+            { letter: 'נצח', sefirah: 'netzach', meaning: 'Vitória, Eternidade Ativa' },
+            { letter: 'הוד', sefirah: 'hod', meaning: 'Esplendor, Reconhecimento' },
+            { letter: 'יסוד', sefirah: 'yesod', meaning: 'Fundação, Base Estável' },
+            { letter: 'מלכות', sefirah: 'malkuth', meaning: 'Reino, Manifestação Final' },
+            
+            // GRUPO 10: Nomes divinos (81-85)
+            { letter: 'יהוה', sefirah: 'tiferet', meaning: 'Tetragrama Sagrado, Nome Inefável' },
+            { letter: 'אהיה', sefirah: 'keter', meaning: 'EU SOU, Auto-Existência' },
+            { letter: 'אדני', sefirah: 'malkuth', meaning: 'Senhor, Soberania' },
+            { letter: 'שדי', sefirah: 'yesod', meaning: 'Todo-Poderoso, Força da Natureza' },
+            { letter: 'צבאות', sefirah: 'netzach', meaning: 'Exércitos, Ordem Divina' },
+            
+            // GRUPO 11: Letras com shva (86-88)
+            { letter: 'בּ', sefirah: 'chokhmah', meaning: 'Sabedoria que Repousa' },
+            { letter: 'כּ', sefirah: 'chokhmah', meaning: 'Palma que Descansa' },
+            { letter: 'פּ', sefirah: 'hod', meaning: 'Boca que Silencia' },
+            
+            // GRUPO 12: Números em hebraico (89-93)
+            { letter: 'י״א', sefirah: 'keter', meaning: 'Onze - Transição Mística' },
+            { letter: 'י״ב', sefirah: 'chokhmah', meaning: 'Doze - Governo Divino' },
+            { letter: 'י״ג', sefirah: 'binah', meaning: 'Treze - Misericórdia de Deus' },
+            { letter: 'י״ד', sefirah: 'chesed', meaning: 'Catorze - Amor Manifestado' },
+            { letter: 'ט״ו', sefirah: 'gevurah', meaning: 'Quinze - Força Oculta' },
+            
+            // GRUPO 13: Conceitos místicos (94-103)
+            { letter: 'אור', sefirah: 'keter', meaning: 'Luz Primordial' },
+            { letter: 'חיים', sefirah: 'hod', meaning: 'Vida Eterna' },
+            { letter: 'שלום', sefirah: 'tiferet', meaning: 'Paz Completa' },
+            { letter: 'אמת', sefirah: 'yesod', meaning: 'Verdade Absoluta' },
+            { letter: 'רחמים', sefirah: 'chesed', meaning: 'Compaixão Profunda' },
+            { letter: 'חן', sefirah: 'hod', meaning: 'Graça, Beleza Interior' },
+            { letter: 'כבוד', sefirah: 'hod', meaning: 'Glória, Honra Divina' },
+            { letter: 'תורה', sefirah: 'tiferet', meaning: 'Instrução, Lei Divina' },
+            { letter: 'משה', sefirah: 'netzach', meaning: 'Extraído das Águas' },
+            { letter: 'אהרון', sefirah: 'hod', meaning: 'Montanha de Força' },
+            
+            // GRUPO 14: Mais conceitos (104-110)
+            { letter: 'סוד', sefirah: 'binah', meaning: 'Segredo, Conhecimento Oculto' },
+            { letter: 'רז', sefirah: 'chokhmah', meaning: 'Mistério Profundo' },
+            { letter: 'קבלה', sefirah: 'binah', meaning: 'Recepção, Tradição Mística' },
+            { letter: 'ספר', sefirah: 'hod', meaning: 'Livro, Contagem' },
+            { letter: 'מעשה', sefirah: 'malkuth', meaning: 'Ação, Obra Manifestada' },
+            { letter: 'דעת', sefirah: 'daath', meaning: 'Conhecimento, Ponte Oculta' },
+            { letter: 'שכינה', sefirah: 'malkuth', meaning: 'Presença Divina' }
         ];
 
         // Sistema de erros
@@ -108,6 +214,10 @@ class KabbalahGame {
         // Tracking de Sefirot descobertas
         this.discoveredSefirot = new Set();
         
+        // Sistema de aleatoriedade
+        this.usedQuestions = new Set();
+        this.currentQuestionIndex = 0;
+        
         // Estado do jogo
         this.state = {
             isPlaying: false,
@@ -115,7 +225,7 @@ class KabbalahGame {
             currentQuestion: 0,
             score: 0,
             lives: 3,
-            totalQuestions: 25,
+            totalQuestions: this.questions.length, // Usa todas as questões
             errors: 0
         };
 
@@ -447,6 +557,54 @@ class KabbalahGame {
         return Math.round(points * 10) / 10;
     }
 
+    // ========== SISTEMA DE ALEATORIEDADE ==========
+    
+    // Embaralhar questões de forma robusta
+    shuffleQuestions() {
+        // Reset do conjunto de questões usadas
+        this.usedQuestions.clear();
+        
+        // Embaralha todas as questões usando algoritmo Fisher-Yates
+        for (let i = this.questions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this.questions[i], this.questions[j]] = [this.questions[j], this.questions[i]];
+        }
+        
+        console.log(`✅ ${this.questions.length} questões embaralhadas`);
+    }
+    
+    // Obter questão aleatória única
+    getRandomQuestion() {
+        // Se já usamos todas as questões, reiniciamos
+        if (this.usedQuestions.size >= this.questions.length) {
+            console.log('🔄 Todas as questões usadas, reiniciando...');
+            this.usedQuestions.clear();
+            // Reembaralha para nova rodada
+            this.shuffleQuestions();
+        }
+        
+        // Encontra uma questão não usada
+        let availableQuestions = [];
+        for (let i = 0; i < this.questions.length; i++) {
+            if (!this.usedQuestions.has(i)) {
+                availableQuestions.push(i);
+            }
+        }
+        
+        // Escolhe aleatoriamente entre as disponíveis
+        if (availableQuestions.length === 0) {
+            // Fallback: recomeça
+            this.usedQuestions.clear();
+            availableQuestions = Array.from({length: this.questions.length}, (_, i) => i);
+        }
+        
+        const randomIndex = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+        this.usedQuestions.add(randomIndex);
+        this.currentQuestionIndex = randomIndex;
+        
+        return this.questions[randomIndex];
+    }
+
     showWelcomeScreen() {
         this.elements.welcomeScreen?.classList.remove('hidden');
         this.elements.gameArea?.classList.add('hidden');
@@ -478,14 +636,17 @@ class KabbalahGame {
         this.elapsedTime = 0;
         this.discoveredSefirot.clear();
         
+        // RESET DA ALEATORIEDADE - Embaralha todas as questões
+        this.usedQuestions.clear();
+        this.shuffleQuestions();
+        
         this.startTimer();
         this.resetVisualEffects();
         this.showGameScreen();
-        this.shuffleQuestions();
-        this.showQuestion();
+        this.showQuestion(); // Já chama getRandomQuestion()
         this.updateUI();
         
-        this.showToast('Jogo iniciado! Use as teclas 1-0 para respostas rápidas.', 'info');
+        this.showToast('Jogo iniciado! 110+ questões aleatórias aguardam você.', 'info');
         
         if (this.audioSystem) {
             this.audioSystem.play('click');
@@ -510,32 +671,40 @@ class KabbalahGame {
         }
     }
 
-    shuffleQuestions() {
-        for (let i = this.questions.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [this.questions[i], this.questions[j]] = [this.questions[j], this.questions[i]];
+    // MÉTODO MODIFICADO: Mostrar questão com letter e meaning
+        showQuestion() {
+            if (this.state.currentQuestion >= 150) {
+                this.endGame();
+                return;
+            }
+
+            const question = this.getRandomQuestion();
+            
+            // VERSÃO LIMPA E ALINHADA:
+            this.elements.currentQuestion.innerHTML = `
+                <div class="question-context">
+                    <span class="question-counter">Questão ${this.state.currentQuestion + 1}</span>
+                    <span class="streak-indicator">🔥 ${this.currentStreak}</span>
+                </div>
+                <div class="concept-meaning">
+                    ${question.meaning}
+                </div>
+                <div class="action-prompt">
+                    Selecione a Sefirah correspondente
+                </div>
+            `;
+            
+            // Apenas a letra no símbolo
+            this.elements.currentSymbol.textContent = question.letter;
+            this.elements.currentSymbol.title = `Significado: ${question.meaning}`;
+            
+            // Atualiza progresso no status
+            this.elements.progress.textContent = `${this.state.currentQuestion + 1}`;
+            
+            this.currentHelpUsed = false;
+            this.currentAttempts = 0;
+            this.updateVisibleOptionsCount();
         }
-    }
-
-    showQuestion() {
-        if (this.state.currentQuestion >= this.state.totalQuestions) {
-            this.endGame();
-            return;
-        }
-
-        const question = this.questions[this.state.currentQuestion];
-        this.elements.currentQuestion.textContent = 
-            `Associe a letra "${question.letter}" à Sefirah correspondente:`;
-        this.elements.currentSymbol.textContent = question.letter;
-        this.elements.currentSymbol.title = question.meaning;
-        
-        this.elements.progress.textContent = `${this.state.currentQuestion + 1}/${this.state.totalQuestions}`;
-        
-        this.currentHelpUsed = false;
-        this.currentAttempts = 0;
-        this.updateVisibleOptionsCount();
-    }
-
     updateVisibleOptionsCount() {
         let count = 0;
         this.elements.sefirot.forEach(sefirah => {
@@ -597,8 +766,8 @@ class KabbalahGame {
             sefirah.style.animation = '';
             sefirah.style.transition = 'all 0.3s ease';
             const name = this.getSefirahName(sefirah.id);
-            const number = sefirah.dataset.number;
-            sefirah.innerHTML = `${name}<br><small>${number}</small>`;
+            // APENAS O NOME, SEM NÚMERO
+            sefirah.innerHTML = name;
         });
         this.visibleOptions = 10;
         this.currentHelpUsed = false;
@@ -616,7 +785,7 @@ class KabbalahGame {
     checkAnswer(sefirahId) {
         if (!this.state.isPlaying || this.state.isPaused) return;
 
-        const question = this.questions[this.state.currentQuestion];
+        const question = this.questions[this.currentQuestionIndex];
         const isCorrect = sefirahId === question.sefirah;
         const element = document.getElementById(sefirahId);
 
@@ -649,8 +818,14 @@ class KabbalahGame {
             this.bestStreak = this.currentStreak;
         }
         
-        if (this.currentStreak >= 10 && this.achievementSystem) {
-            this.achievementSystem.unlock('perfectionist');
+        // Verifica conquistas de streak
+        if (this.achievementSystem) {
+            if (this.currentStreak >= 10) {
+                this.achievementSystem.unlock('perfectionist');
+            }
+            if (this.currentStreak >= 15) {
+                this.achievementSystem.unlock('streak_master');
+            }
         }
         
         this.updateUI();
@@ -666,11 +841,10 @@ class KabbalahGame {
             this.currentAttempts = 0;
             this.currentHelpUsed = false;
             this.resetVisualEffects();
-            if (this.state.currentQuestion < this.state.totalQuestions) {
-                this.showQuestion();
-            } else {
-                this.endGame();
-            }
+            
+            // Continua sempre com nova questão aleatória
+            this.showQuestion();
+            
         }, 1000);
     }
 
@@ -694,7 +868,7 @@ class KabbalahGame {
             return;
         }
         
-        const question = this.questions[this.state.currentQuestion];
+        const question = this.questions[this.currentQuestionIndex];
         const incorrectSefirot = Array.from(this.elements.sefirot)
             .filter(s => s.id !== question.sefirah && !s.classList.contains('eliminated'));
         
@@ -745,11 +919,9 @@ class KabbalahGame {
         this.currentStreak = 0;
         this.currentHelpUsed = false;
         this.resetVisualEffects();
-        if (this.state.currentQuestion < this.state.totalQuestions) {
-            this.showQuestion();
-        } else {
-            this.endGame();
-        }
+        
+        // Continua sempre com nova questão
+        this.showQuestion();
         
         this.showToast(`Questão pulada: -${skipPenalty} pontos`, 'error');
     }
@@ -769,12 +941,16 @@ class KabbalahGame {
                         <span class="value">${this.state.score}</span>
                     </div>
                     <div class="stat-item">
-                        <span class="label">Questão:</span>
-                        <span class="value">${this.state.currentQuestion + 1}/${this.state.totalQuestions}</span>
+                        <span class="label">Questões Respondidas:</span>
+                        <span class="value">${this.state.currentQuestion}</span>
                     </div>
                     <div class="stat-item">
-                        <span class="label">Streak:</span>
+                        <span class="label">Streak Atual:</span>
                         <span class="value">${this.currentStreak}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="label">Melhor Streak:</span>
+                        <span class="value">${this.bestStreak}</span>
                     </div>
                     <div class="stat-item">
                         <span class="label">Tempo:</span>
@@ -784,11 +960,15 @@ class KabbalahGame {
                         <span class="label">Erros:</span>
                         <span class="value">${this.state.errors}</span>
                     </div>
+                    <div class="stat-item">
+                        <span class="label">Questões Restantes:</span>
+                        <span class="value">${this.questions.length - this.usedQuestions.size}</span>
+                    </div>
                 </div>
                 <div class="actions">
                     <button class="btn primary" onclick="game.togglePause()">▶️ Continuar</button>
-                    <button class="btn" onclick="game.resetGame(); this.closest('.modal').classList.add('hidden');">🔄 Reiniciar</button>
-                    <button class="btn" onclick="game.endGame()">🏁 Terminar Jogo</button>
+                    <button class="btn" onclick="game.resetGame(); this.closest('.modal').classList.add('hidden');">🔄 Reiniciar Jogo</button>
+                    <button class="btn" onclick="game.endGame()">🏁 Terminar Sessão</button>
                 </div>
             `;
             this.showModal('pause', content);
@@ -818,6 +998,9 @@ class KabbalahGame {
         this.elapsedTime = 0;
         this.discoveredSefirot.clear();
         
+        // Limpa aleatoriedade
+        this.usedQuestions.clear();
+        
         this.stopTimer();
         this.resetVisualEffects();
         this.showWelcomeScreen();
@@ -834,18 +1017,19 @@ class KabbalahGame {
         this.stopTimer();
         
         const gameTime = this.elapsedTime;
-        const accuracy = this.state.totalQuestions > 0 ? 
-            Math.round(((this.state.currentQuestion - this.state.errors) / this.state.totalQuestions) * 100) : 0;
+        const accuracy = this.state.currentQuestion > 0 ? 
+            Math.round(((this.state.currentQuestion - this.state.errors) / this.state.currentQuestion) * 100) : 0;
         const grade = accuracy === 100 ? '🎖️ PERFEITO' :
                      accuracy >= 90 ? '🏅 EXCELENTE' :
                      accuracy >= 80 ? '🥇 MUITO BOM' :
                      accuracy >= 70 ? '🥈 BOM' :
                      accuracy >= 60 ? '🥉 SATISFATÓRIO' : '📚 CONTINUE PRATICANDO';
         
+        // Atualiza estatísticas
         if (this.achievementSystem) {
             this.achievementSystem.updateStats({
                 score: this.state.score,
-                totalQuestions: this.state.totalQuestions,
+                totalQuestions: this.state.currentQuestion,
                 errors: this.state.errors,
                 time: gameTime,
                 streak: this.bestStreak,
@@ -853,12 +1037,16 @@ class KabbalahGame {
             });
         }
         
-        if (this.audioSystem && accuracy > 70) {
-            this.audioSystem.play('victory');
+        if (this.audioSystem) {
+            if (accuracy > 70) {
+                this.audioSystem.play('victory');
+            } else if (accuracy > 50) {
+                this.audioSystem.play('achievement');
+            }
         }
         
         const results = `
-            <h3>🎉 Jogo Concluído</h3>
+            <h3>🎉 Sessão Concluída</h3>
             <div class="results">
                 <div class="result-item">
                     <span class="label">Pontuação Final</span>
@@ -866,7 +1054,7 @@ class KabbalahGame {
                 </div>
                 <div class="result-item">
                     <span class="label">Questões Respondidas</span>
-                    <span class="value">${this.state.currentQuestion}/${this.state.totalQuestions}</span>
+                    <span class="value">${this.state.currentQuestion}</span>
                 </div>
                 <div class="result-item">
                     <span class="label">Precisão</span>
@@ -888,10 +1076,14 @@ class KabbalahGame {
                     <span class="label">Sefirot Descobertas</span>
                     <span class="value">${this.discoveredSefirot.size}/10</span>
                 </div>
+                <div class="result-item">
+                    <span class="label">Questões Únicas</span>
+                    <span class="value">${this.usedQuestions.size}/${this.questions.length}</span>
+                </div>
             </div>
             <div class="grade">${grade}</div>
             <div class="actions">
-                <button class="btn primary" onclick="game.startGame()">🔄 Jogar Novamente</button>
+                <button class="btn primary" onclick="game.startGame()">🔄 Nova Sessão</button>
                 <button class="btn" onclick="game.showAchievements()">🏆 Conquistas</button>
                 <button class="btn" onclick="game.showOptions()">⚙️ Opções</button>
                 <button class="btn" onclick="game.resetGame(); this.closest('.modal').classList.add('hidden');">🏠 Menu Principal</button>
@@ -910,38 +1102,65 @@ class KabbalahGame {
 
     showOptions() {
         const content = `
-            <h3>⚙️ Opções</h3>
+            <h3>⚙️ Opções do Jogo</h3>
             <div class="options-grid">
                 <button class="btn option-btn" onclick="game.showAchievements()">
                     <span class="option-icon">🏆</span>
                     <span class="option-text">Conquistas</span>
+                    <small>${this.achievementSystem ? this.achievementSystem.getUnlockedCount() : 0}/10</small>
                 </button>
                 
                 <button class="btn option-btn" onclick="window.audioSystem?.showAudioSettings()">
                     <span class="option-icon">🔊</span>
-                    <span class="option-text">Configurações de Áudio</span>
+                    <span class="option-text">Áudio</span>
+                    <small>${window.audioSystem?.enabled ? '✅' : '🔇'}</small>
                 </button>
                 
                 <button class="btn option-btn" onclick="window.dailyChallenge?.showDailyChallengeModal()">
                     <span class="option-icon">🌅</span>
                     <span class="option-text">Desafio Diário</span>
+                    <small>${window.dailyChallenge?.progress?.streak || 0} dias</small>
                 </button>
                 
                 <button class="btn option-btn" onclick="game.resetGame(); this.closest('.modal').classList.add('hidden');">
                     <span class="option-icon">🔄</span>
-                    <span class="option-text">Reiniciar Jogo</span>
+                    <span class="option-text">Reiniciar</span>
+                    <small>Começar de novo</small>
                 </button>
                 
                 <button class="btn option-btn" onclick="game.showHelp()">
                     <span class="option-icon">❓</span>
                     <span class="option-text">Como Jogar</span>
+                    <small>Instruções</small>
                 </button>
                 
                 <button class="btn option-btn" onclick="game.togglePause()">
-                    <span class="option-icon">⏸️</span>
+                    <span class="option-icon">${this.state.isPaused ? '▶️' : '⏸️'}</span>
                     <span class="option-text">${this.state.isPaused ? 'Continuar' : 'Pausar'}</span>
+                    <small>Jogo</small>
                 </button>
             </div>
+            
+            <div class="current-stats">
+                <h4>📊 Estatísticas Atuais</h4>
+                <div class="stat-row">
+                    <span>Questões na Sessão:</span>
+                    <span class="stat-value">${this.state.currentQuestion}</span>
+                </div>
+                <div class="stat-row">
+                    <span>Pontuação:</span>
+                    <span class="stat-value">${this.state.score}</span>
+                </div>
+                <div class="stat-row">
+                    <span>Streak Atual:</span>
+                    <span class="stat-value">${this.currentStreak}</span>
+                </div>
+                <div class="stat-row">
+                    <span>Questões Restantes:</span>
+                    <span class="stat-value">${this.questions.length - this.usedQuestions.size}</span>
+                </div>
+            </div>
+            
             <div class="modal-actions">
                 <button class="btn close-modal">❌ Fechar</button>
             </div>
@@ -958,6 +1177,7 @@ class KabbalahGame {
             e.preventDefault();
         }
 
+        // Teclas 1-9 para Sefirot (1=Keter...9=Yesod)
         if (e.key >= '1' && e.key <= '9') {
             const index = parseInt(e.key) - 1;
             const sefirot = ['keter', 'chokhmah', 'binah', 'chesed', 'gevurah', 
@@ -969,6 +1189,7 @@ class KabbalahGame {
             this.checkAnswer('malkuth');
         }
         
+        // Ctrl + 1/2/3 para ajuda
         else if (e.ctrlKey) {
             switch(e.key) {
                 case '1': this.useHelp(25); break;
@@ -977,32 +1198,32 @@ class KabbalahGame {
             }
         }
         
+        // Teclas de função
         else {
             switch(e.key.toLowerCase()) {
-                case ' ':
+                case ' ': // Espaço para pausar
                     this.togglePause();
                     break;
-                case 's':
+                case 's': // S para pular
                     this.skipQuestion();
                     break;
-                case 'o':
+                case 'o': // O para opções
                     this.showOptions();
                     break;
-                case 'h':
+                case 'h': // H para ajuda
                     this.toggleHelp();
                     break;
-                case 'a':
+                case 'a': // A para conquistas
                     if (this.achievementSystem) {
                         this.achievementSystem.showAchievementsModal();
                     }
                     break;
-                case 'c':
+                case 'c': // C para desafio diário
                     if (this.dailyChallenge) {
                         this.dailyChallenge.showDailyChallengeModal();
                     }
                     break;
-                case 'escape':
-                    // Fechar todos os modais
+                case 'escape': // ESC para fechar modais
                     document.querySelectorAll('.modal').forEach(modal => {
                         modal.classList.add('hidden');
                     });
@@ -1051,14 +1272,14 @@ class KabbalahGame {
 
     loadProgress() {
         try {
-            const saved = localStorage.getItem('kabbalah_progress');
+            const saved = localStorage.getItem('kabbalah_progress_v3');
             if (saved) {
                 return JSON.parse(saved);
             }
         } catch (e) {
             console.warn('Não foi possível carregar o progresso:', e);
         }
-        return { games: 0, bestScore: 0, totalCorrect: 0 };
+        return { games: 0, bestScore: 0, totalCorrect: 0, questionsSeen: 0 };
     }
 
     updateProgress() {
@@ -1071,9 +1292,10 @@ class KabbalahGame {
         
         const correctAnswers = Math.max(0, this.state.currentQuestion - this.state.errors);
         progress.totalCorrect = (progress.totalCorrect || 0) + correctAnswers;
+        progress.questionsSeen = (progress.questionsSeen || 0) + this.usedQuestions.size;
         
         try {
-            localStorage.setItem('kabbalah_progress', JSON.stringify(progress));
+            localStorage.setItem('kabbalah_progress_v3', JSON.stringify(progress));
         } catch (e) {
             console.warn('Não foi possível salvar o progresso:', e);
         }
@@ -1149,10 +1371,12 @@ class KabbalahGame {
     }
 }
 
+// ========== INICIALIZAÇÃO DO JOGO ==========
 document.addEventListener('DOMContentLoaded', () => {
     new AppsMenu();
     window.game = new KabbalahGame();
     
+    // Ativar áudio na primeira interação
     document.addEventListener('click', () => {
         if (window.audioSystem && !window.audioSystem.initialized) {
             window.audioSystem.init();

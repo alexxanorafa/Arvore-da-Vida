@@ -5,6 +5,10 @@
     --light-bg: rgba(255, 255, 255, 0.05);
     --border-radius: 12px;
     --transition: all 0.3s ease;
+    --success: #27ae60;
+    --error: #e74c3c;
+    --warning: #f39c12;
+    --info: #3498db;
 }
 
 * {
@@ -24,7 +28,7 @@ body {
     overflow-x: hidden;
     overflow-y: hidden;
     height: 100vh;
-    padding-bottom: 50px; /* Margem para o footer invisível */
+    padding-bottom: 50px;
 }
 
 /* ========== HEADER ========== */
@@ -175,20 +179,20 @@ header {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 50px; /* Altura da margem */
-    z-index: -1; /* Coloca atrás de tudo */
-    opacity: 0; /* Totalmente invisível */
-    pointer-events: none; /* Não interfere com cliques */
-    background: transparent; /* Sem cor */
-    visibility: hidden; /* Escondido do DOM */
+    height: 50px;
+    z-index: -1;
+    opacity: 0;
+    pointer-events: none;
+    background: transparent;
+    visibility: hidden;
 }
 
-/* ========== CONTAINER DO JOGO COM MARGEM ========== */
+/* ========== CONTAINER DO JOGO ========== */
 #game-container {
     position: relative;
     z-index: 1;
     width: 100%;
-    height: calc(100vh - 150px); /* Altura total menos header e margem */
+    height: calc(100vh - 150px);
     max-width: 1200px;
     margin: 0 auto;
     overflow: hidden;
@@ -223,22 +227,86 @@ header {
     display: flex;
     flex-direction: column;
     height: 100%;
+    padding: 20px;
+}
+
+/* Container específico para conteúdo centralizado */
+.question-content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.question-content {
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
 }
 
 #current-question {
-    font-size: 1.2em;
-    color: var(--primary);
-    line-height: 1.4;
-    font-weight: 300;
-    margin-bottom: 25px;
-    padding: 15px;
-    background: rgba(212, 177, 146, 0.03);
-    border-radius: 8px;
-    text-align: center;
-    border: 1px solid rgba(212, 177, 146, 0.08);
+    flex: 0 0 auto;
+    width: 100%;
+    margin-bottom: 20px;
 }
 
-#current-symbol {
+/* PERGUNTAS SIMPLIFICADAS E ALINHADAS */
+.question-context {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 0 10px;
+}
+
+.question-counter {
+    font-size: 0.9em;
+    opacity: 0.7;
+    background: rgba(212, 177, 146, 0.1);
+    padding: 6px 12px;
+    border-radius: 15px;
+}
+
+.streak-indicator {
+    color: #e74c3c;
+    font-weight: 600;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.concept-meaning {
+    font-size: 1.15em;
+    line-height: 1.5;
+    margin: 20px 0 25px 0;
+    padding: 20px;
+    background: rgba(212, 177, 146, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(212, 177, 146, 0.1);
+    font-style: italic;
+    color: rgba(212, 177, 146, 0.95);
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    word-wrap: break-word;
+    hyphens: auto;
+}
+
+.action-prompt {
+    font-size: 1em;
+    color: rgba(212, 177, 146, 0.8);
+    margin: 15px 0 25px 0;
+    padding: 10px;
+    background: rgba(212, 177, 146, 0.03);
+    border-radius: 8px;
+}
+
+/* SÍMBOLO PERFEITAMENTE CENTRALIZADO */
+.question-content-container #current-symbol {
     width: 140px;
     height: 140px;
     background: rgba(26, 26, 26, 0.7);
@@ -247,19 +315,19 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3.5em;
-    margin: 0 auto 30px auto;
+    font-size: 4em;
     font-family: 'Times New Roman', serif;
     font-weight: bold;
     color: var(--primary);
     box-shadow: 
         inset 0 0 20px rgba(212, 177, 146, 0.1),
         0 0 40px rgba(212, 177, 146, 0.2);
-    flex-shrink: 0;
     position: relative;
+    cursor: help;
+    margin: 10px auto 30px auto;
 }
 
-#current-symbol::after {
+.question-content-container #current-symbol::after {
     content: '';
     position: absolute;
     top: -5px;
@@ -271,10 +339,36 @@ header {
     z-index: -1;
 }
 
+/* Tooltip para o símbolo */
+.question-content-container #current-symbol:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.95);
+    color: var(--primary);
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 0.9em;
+    width: 280px;
+    z-index: 1000;
+    border: 1px solid var(--accent);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    line-height: 1.4;
+    backdrop-filter: blur(10px);
+    white-space: normal;
+    word-wrap: break-word;
+    font-style: normal;
+    font-size: 0.95em;
+}
+
 /* ========== SISTEMA DE AJUDA ========== */
 .help-section {
     margin-top: auto;
     margin-bottom: 20px;
+    width: 100%;
 }
 
 .help-toggle-btn {
@@ -389,7 +483,7 @@ header {
 .game-controls {
     display: flex;
     gap: 10px;
-    margin-top: auto;
+    width: 100%;
 }
 
 .control-btn {
@@ -415,11 +509,10 @@ header {
 }
 
 /* ========== ÁRVORE DA VIDA ========== */
-/* ========== ÁRVORE DA VIDA COM MARGEM INTERNA ========== */
 .tree-of-life {
     position: relative;
-    overflow: visible;
-    padding: 30px; /* Margem interna para as Sefirot respirarem */
+    overflow: visible !important; /* MUDAR PARA VISIBLE */
+    padding: 30px;
     background: rgba(10, 10, 15, 0.3);
     border-radius: var(--border-radius);
     min-height: 500px;
@@ -428,15 +521,14 @@ header {
     justify-content: center;
 }
 
-/* Container interno para limitar área clicável */
 .tree-inner-container {
     position: relative;
-    width: calc(100% - 60px); /* Desconta o padding */
-    height: calc(100% - 60px); /* Desconta o padding */
+    width: calc(100% - 60px);
+    height: calc(100% - 60px);
     margin: 0 auto;
+    overflow: visible !important; /* IMPORTANTE! */
 }
 
-/* Sefirot com posições ajustadas para margem */
 .sefirah {
     position: absolute;
     width: 80px;
@@ -473,142 +565,78 @@ header {
 }
 
 .sefirah small {
-    font-size: 0.85em;
+    display: none !important; /* ESCONDER OS NÚMEROS */
+}
+
+/* ========== POSIÇÕES DAS SEFIROT ========== */
+#keter { left: 50%; top: 10%; }
+#chokhmah { left: 25%; top: 25%; }
+#binah { left: 75%; top: 25%; }
+#chesed { left: 15%; top: 45%; }
+#gevurah { left: 85%; top: 45%; }
+#tiferet { left: 50%; top: 45%; }
+#netzach { left: 25%; top: 65%; }
+#hod { left: 75%; top: 65%; }
+#yesod { left: 50%; top: 70%; }
+#malkuth { left: 50%; top: 90%; }
+
+/* Estados das Sefirot */
+.sefirah.correct {
+    animation: correctPulse 0.6s ease;
+    border-color: var(--success);
+    background: linear-gradient(145deg, 
+        rgba(39, 174, 96, 0.2) 0%,
+        rgba(20, 20, 40, 0.95) 100%);
+}
+
+.sefirah.incorrect {
+    animation: incorrectShake 0.5s ease;
+    border-color: var(--error);
+    background: linear-gradient(145deg, 
+        rgba(231, 76, 60, 0.2) 0%,
+        rgba(20, 20, 40, 0.95) 100%);
+}
+
+.help-removed {
+    animation: fadeOutHelp 0.5s forwards;
+    pointer-events: none;
+    opacity: 0.3 !important;
+}
+
+@keyframes correctPulse {
+    0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.7); }
+    70% { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 0 0 10px rgba(39, 174, 96, 0); }
+    100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(39, 174, 96, 0); }
+}
+
+@keyframes incorrectShake {
+    0%, 100% { transform: translate(-50%, -50%) translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translate(-50%, -50%) translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translate(-50%, -50%) translateX(5px); }
+}
+
+@keyframes fadeOutHelp {
+    from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    to { opacity: 0.3; transform: translate(-50%, -50%) scale(0.9); }
+}
+
+.sefirah.eliminated {
+    background: repeating-linear-gradient(
+        45deg,
+        rgba(231, 76, 60, 0.1),
+        rgba(231, 76, 60, 0.1) 10px,
+        rgba(20, 20, 40, 0.1) 10px,
+        rgba(20, 20, 40, 0.1) 20px
+    ) !important;
+    border: 2px dashed #e74c3c !important;
+    pointer-events: none !important;
+}
+
+.sefirah.eliminated::before {
+    content: '✗';
+    font-size: 1.5em;
+    color: #e74c3c;
     opacity: 0.7;
-    margin-top: 2px;
-}
-
-/* ========== NOVAS POSIÇÕES COM MARGEM ========== */
-/* Ajustadas para considerar o padding de 30px */
-#keter { left: 50%; top: 10%; } /* Antes: 5% */
-#chokhmah { left: 25%; top: 25%; } /* Antes: 20% */
-#binah { left: 75%; top: 25%; } /* Antes: 80% */
-#chesed { left: 15%; top: 45%; } /* Antes: 10% */
-#gevurah { left: 85%; top: 45%; } /* Antes: 90% */
-#tiferet { left: 50%; top: 45%; } /* Antes: 40% */
-#netzach { left: 25%; top: 65%; } /* Antes: 20% */
-#hod { left: 75%; top: 65%; } /* Antes: 80% */
-#yesod { left: 50%; top: 70%; } /* Antes: 65% */
-#malkuth { left: 50%; top: 90%; } /* Antes: 85% */
-
-/* ========== RESPONSIVIDADE COM MARGEM ========== */
-@media (max-width: 1200px) {
-    .tree-of-life {
-        padding: 25px;
-    }
-    
-    .tree-inner-container {
-        width: calc(100% - 50px);
-        height: calc(100% - 50px);
-    }
-    
-    .sefirah {
-        width: 75px;
-        height: 75px;
-        font-size: 0.8em;
-    }
-}
-
-@media (max-width: 992px) {
-    .tree-of-life {
-        padding: 20px;
-        min-height: 450px;
-    }
-    
-    .tree-inner-container {
-        width: calc(100% - 40px);
-        height: calc(100% - 40px);
-    }
-}
-
-@media (max-width: 768px) {
-    .tree-of-life {
-        padding: 15px;
-        min-height: 400px;
-    }
-    
-    .tree-inner-container {
-        width: calc(100% - 30px);
-        height: calc(100% - 30px);
-    }
-    
-    .sefirah {
-        width: 60px;
-        height: 60px;
-        font-size: 0.75em;
-    }
-    
-    /* Ajuste das posições para mobile */
-    #keter { top: 12%; }
-    #chokhmah { left: 28%; top: 28%; }
-    #binah { left: 72%; top: 28%; }
-    #chesed { left: 18%; top: 48%; }
-    #gevurah { left: 82%; top: 48%; }
-    #tiferet { top: 48%; }
-    #netzach { left: 28%; top: 68%; }
-    #hod { left: 72%; top: 68%; }
-    #yesod { top: 73%; }
-    #malkuth { top: 92%; }
-}
-
-@media (max-width: 480px) {
-    .tree-of-life {
-        padding: 12px;
-        min-height: 350px;
-    }
-    
-    .tree-inner-container {
-        width: calc(100% - 24px);
-        height: calc(100% - 24px);
-    }
-    
-    .sefirah {
-        width: 50px;
-        height: 50px;
-        font-size: 0.65em;
-    }
-    
-    /* Ajuste das posições para telas pequenas */
-    #keter { top: 15%; }
-    #chokhmah { left: 30%; top: 30%; }
-    #binah { left: 70%; top: 30%; }
-    #chesed { left: 20%; top: 50%; }
-    #gevurah { left: 80%; top: 50%; }
-    #tiferet { top: 50%; }
-    #netzach { left: 30%; top: 70%; }
-    #hod { left: 70%; top: 70%; }
-    #yesod { top: 75%; }
-    #malkuth { top: 92%; }
-}
-
-@media (max-width: 380px) {
-    .tree-of-life {
-        padding: 10px;
-        min-height: 320px;
-    }
-    
-    .tree-inner-container {
-        width: calc(100% - 20px);
-        height: calc(100% - 20px);
-    }
-    
-    .sefirah {
-        width: 45px;
-        height: 45px;
-        font-size: 0.6em;
-    }
-    
-    /* Ajuste adicional para telas muito pequenas */
-    #keter { top: 18%; }
-    #chokhmah { left: 32%; top: 32%; }
-    #binah { left: 68%; top: 32%; }
-    #chesed { left: 22%; top: 52%; }
-    #gevurah { left: 78%; top: 52%; }
-    #tiferet { top: 52%; }
-    #netzach { left: 32%; top: 72%; }
-    #hod { left: 68%; top: 72%; }
-    #yesod { top: 77%; }
-    #malkuth { top: 92%; }
 }
 
 /* ========== STATUS DO JOGO ========== */
@@ -658,7 +686,7 @@ header {
 }
 
 #lives.status-value {
-    color: #27ae60;
+    color: var(--success);
     font-size: 1.4em;
     letter-spacing: 4px;
 }
@@ -847,7 +875,7 @@ header {
 
 .achievement-points {
     font-weight: bold;
-    color: #27ae60;
+    color: var(--success);
     font-size: 0.9em;
 }
 
@@ -985,7 +1013,7 @@ header {
 }
 
 .achievement-card-locked {
-    color: #e74c3c;
+    color: var(--error);
     font-style: italic;
 }
 
@@ -1058,7 +1086,7 @@ header {
 }
 
 .streak-icon {
-    color: #e74c3c;
+    color: var(--error);
 }
 
 .streak-value {
@@ -1111,19 +1139,19 @@ header {
 
 .difficulty-value.easy {
     background: rgba(39, 174, 96, 0.2);
-    color: #27ae60;
+    color: var(--success);
     border: 1px solid rgba(39, 174, 96, 0.3);
 }
 
 .difficulty-value.medium {
     background: rgba(243, 156, 18, 0.2);
-    color: #f39c12;
+    color: var(--warning);
     border: 1px solid rgba(243, 156, 18, 0.3);
 }
 
 .difficulty-value.hard {
     background: rgba(231, 76, 60, 0.2);
-    color: #e74c3c;
+    color: var(--error);
     border: 1px solid rgba(231, 76, 60, 0.3);
 }
 
@@ -1206,7 +1234,7 @@ header {
 }
 
 .daily-completed h4 {
-    color: #27ae60;
+    color: var(--success);
     margin-bottom: 15px;
 }
 
@@ -1340,12 +1368,12 @@ header {
 .btn.danger {
     background: rgba(231, 76, 60, 0.1);
     border-color: rgba(231, 76, 60, 0.3);
-    color: #e74c3c;
+    color: var(--error);
 }
 
 .btn.danger:hover {
     background: rgba(231, 76, 60, 0.2);
-    border-color: #e74c3c;
+    border-color: var(--error);
 }
 
 /* ========== MODAIS ========== */
@@ -1396,6 +1424,7 @@ header {
     }
 }
 
+/* ========== OPÇÕES ========== */
 .options-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -1409,7 +1438,8 @@ header {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 5px;
+    padding: 15px;
 }
 
 .option-icon {
@@ -1421,35 +1451,16 @@ header {
     text-align: center;
 }
 
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin: 20px 0;
+.option-btn small {
+    display: block;
+    font-size: 0.8em;
+    opacity: 0.7;
+    margin-top: 5px;
 }
 
-.stat-card {
-    background: rgba(212, 177, 146, 0.05);
-    border: 1px solid var(--accent);
-    border-radius: var(--border-radius);
-    padding: 20px;
-    text-align: center;
-}
-
-.stat-number {
-    font-size: 2em;
-    font-weight: bold;
-    color: var(--primary);
-    margin-bottom: 5px;
-}
-
-.stat-label {
-    font-size: 0.9em;
-    opacity: 0.8;
-}
-
+/* ========== ESTATÍSTICAS ========== */
 .current-stats {
-    margin: 25px 0;
+    margin: 20px 0;
     padding: 20px;
     background: rgba(212, 177, 146, 0.05);
     border-radius: var(--border-radius);
@@ -1470,6 +1481,60 @@ header {
 
 .stat-row:last-child {
     border-bottom: none;
+}
+
+.stat-value {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+/* ========== RESULTADOS ========== */
+.results {
+    margin: 20px 0;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(212, 177, 146, 0.1);
+}
+
+.result-item:last-child {
+    border-bottom: none;
+}
+
+.result-item .label {
+    opacity: 0.8;
+}
+
+.result-item .value {
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.grade {
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(212, 177, 146, 0.1);
+    border-radius: 8px;
+    border: 1px solid var(--accent);
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.actions .btn {
+    min-width: 140px;
+    flex: 1;
 }
 
 .modal-actions {
@@ -1520,18 +1585,38 @@ header {
 }
 
 .toast.success {
-    border-color: #27ae60;
-    color: #27ae60;
+    border-color: var(--success);
+    color: var(--success);
 }
 
 .toast.error {
-    border-color: #e74c3c;
-    color: #e74c3c;
+    border-color: var(--error);
+    color: var(--error);
 }
 
 .toast.info {
-    border-color: #3498db;
-    color: #3498db;
+    border-color: var(--info);
+    color: var(--info);
+}
+
+/* ========== SCROLLBARS ========== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(212, 177, 146, 0.05);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(212, 177, 146, 0.2);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(212, 177, 146, 0.3);
 }
 
 /* ========== RESPONSIVIDADE ========== */
@@ -1539,6 +1624,27 @@ header {
     .game-grid-container {
         grid-template-columns: 300px 1fr 220px;
         gap: 15px;
+    }
+    
+    .tree-of-life {
+        padding: 25px;
+    }
+    
+    .tree-inner-container {
+        width: calc(100% - 50px);
+        height: calc(100% - 50px);
+    }
+    
+    .sefirah {
+        width: 75px;
+        height: 75px;
+        font-size: 0.8em;
+    }
+    
+    .question-content-container #current-symbol {
+        width: 130px;
+        height: 130px;
+        font-size: 3.5em;
     }
 }
 
@@ -1562,7 +1668,25 @@ header {
     }
     
     .tree-of-life {
-        min-height: 500px;
+        min-height: 450px;
+        padding: 20px;
+    }
+    
+    .tree-inner-container {
+        width: calc(100% - 40px);
+        height: calc(100% - 40px);
+    }
+    
+    .question-content-container #current-symbol {
+        width: 120px;
+        height: 120px;
+        font-size: 3em;
+    }
+    
+    .concept-meaning {
+        font-size: 1.1em;
+        padding: 15px;
+        min-height: 90px;
     }
 }
 
@@ -1606,10 +1730,44 @@ header {
         font-size: 0.75em;
     }
     
-    #current-symbol {
-        width: 120px;
-        height: 120px;
-        font-size: 3em;
+    .question-content-container #current-symbol {
+        width: 110px;
+        height: 110px;
+        font-size: 2.8em;
+    }
+    
+    .tree-of-life {
+        padding: 15px;
+        min-height: 400px;
+    }
+    
+    .tree-inner-container {
+        width: calc(100% - 30px);
+        height: calc(100% - 30px);
+    }
+    
+    /* Ajuste das posições para mobile */
+    #keter { top: 12%; }
+    #chokhmah { left: 28%; top: 28%; }
+    #binah { left: 72%; top: 28%; }
+    #chesed { left: 18%; top: 48%; }
+    #gevurah { left: 82%; top: 48%; }
+    #tiferet { top: 48%; }
+    #netzach { left: 28%; top: 68%; }
+    #hod { left: 72%; top: 68%; }
+    #yesod { top: 73%; }
+    #malkuth { top: 92%; }
+    
+    .concept-meaning {
+        font-size: 1em;
+        padding: 12px;
+        min-height: 80px;
+        margin: 15px 0 20px 0;
+    }
+    
+    .action-prompt {
+        font-size: 0.95em;
+        margin: 10px 0 20px 0;
     }
 }
 
@@ -1644,7 +1802,7 @@ header {
         font-size: 0.65em;
     }
     
-    #current-symbol {
+    .question-content-container #current-symbol {
         width: 100px;
         height: 100px;
         font-size: 2.5em;
@@ -1661,4 +1819,131 @@ header {
     #achievements-btn { bottom: 170px; }
     #audio-toggle-btn { bottom: 225px; }
     #quick-help-btn { bottom: 280px; }
+    
+    .tree-of-life {
+        padding: 12px;
+        min-height: 350px;
+    }
+    
+    .tree-inner-container {
+        width: calc(100% - 24px);
+        height: calc(100% - 24px);
+    }
+    
+    /* Ajuste das posições para telas pequenas */
+    #keter { top: 15%; }
+    #chokhmah { left: 30%; top: 30%; }
+    #binah { left: 70%; top: 30%; }
+    #chesed { left: 20%; top: 50%; }
+    #gevurah { left: 80%; top: 50%; }
+    #tiferet { top: 50%; }
+    #netzach { left: 30%; top: 70%; }
+    #hod { left: 70%; top: 70%; }
+    #yesod { top: 75%; }
+    #malkuth { top: 92%; }
+    
+    .modal-content {
+        padding: 20px;
+    }
+    
+    .actions {
+        flex-direction: column;
+    }
+    
+    .actions .btn {
+        width: 100%;
+    }
+    
+    .question-context {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .concept-meaning {
+        font-size: 0.95em;
+        padding: 10px;
+        min-height: 70px;
+    }
+}
+
+@media (max-width: 380px) {
+    .tree-of-life {
+        padding: 10px;
+        min-height: 320px;
+    }
+    
+    .tree-inner-container {
+        width: calc(100% - 20px);
+        height: calc(100% - 20px);
+    }
+    
+    .sefirah {
+        width: 45px;
+        height: 45px;
+        font-size: 0.6em;
+    }
+    
+    /* Ajuste adicional para telas muito pequenas */
+    #keter { top: 18%; }
+    #chokhmah { left: 32%; top: 32%; }
+    #binah { left: 68%; top: 32%; }
+    #chesed { left: 22%; top: 52%; }
+    #gevurah { left: 78%; top: 52%; }
+    #tiferet { top: 52%; }
+    #netzach { left: 32%; top: 72%; }
+    #hod { left: 68%; top: 72%; }
+    #yesod { top: 77%; }
+    #malkuth { top: 92%; }
+    
+    .floating-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1em;
+        bottom: 50px;
+    }
+    
+    #daily-challenge-btn { bottom: 100px; }
+    #achievements-btn { bottom: 150px; }
+    #audio-toggle-btn { bottom: 200px; }
+    #quick-help-btn { bottom: 250px; }
+    
+    .question-content-container #current-symbol {
+        width: 90px;
+        height: 90px;
+        font-size: 2.2em;
+    }
+    
+    .concept-meaning {
+        font-size: 0.9em;
+        min-height: 60px;
+    }
+}
+
+/* ========== ACESSIBILIDADE ========== */
+button:focus, .btn:focus, .sefirah:focus {
+    outline: 2px solid var(--primary) !important;
+    outline-offset: 2px !important;
+}
+
+/* Prevenir zoom em mobile */
+@media (max-width: 768px) {
+    input, select, textarea {
+        font-size: 16px !important;
+    }
+}
+
+/* Garantir que botões sejam clicáveis */
+button, .btn, .sefirah {
+    touch-action: manipulation !important;
+}
+
+/* Prevenir seleção de texto durante o jogo */
+#game-area *, .sefirah, .symbol {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
+
+/* Garantir que tudo fique dentro dos limites */
+* {
+    box-sizing: border-box !important;
 }
