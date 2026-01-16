@@ -54,142 +54,141 @@ class AppsMenu {
 class KabbalahGame {
     constructor() {
         // ========== BANCO DE 90+ QUESTÕES ==========
-        this.questions = [
-            // GRUPO 1: Letras básicas (1-10)
-            { letter: 'א', sefirah: 'keter', meaning: 'O Primeiro, Unidade Divina, Princípio de Tudo' },
-            { letter: 'ב', sefirah: 'chokhmah', meaning: 'Casa da Sabedoria, Início da Criação' },
-            { letter: 'ג', sefirah: 'binah', meaning: 'Recompensa, Bondade que Retorna' },
-            { letter: 'ד', sefirah: 'chesed', meaning: 'Porta da Misericórdia, Pobre que Recebe' },
-            { letter: 'ה', sefirah: 'gevurah', meaning: 'Revelação, Sopro Divino, Existência' },
-            { letter: 'ו', sefirah: 'tiferet', meaning: 'União, Conexão entre Céu e Terra' },
-            { letter: 'ז', sefirah: 'netzach', meaning: 'Armamento, Força Espiritual' },
-            { letter: 'ח', sefirah: 'hod', meaning: 'Vida, Graça, Unidade Transcendente' },
-            { letter: 'ט', sefirah: 'yesod', meaning: 'Bondade Ocultada, Serpente Transformada' },
-            { letter: 'י', sefirah: 'malkuth', meaning: 'Mão que Abençoa, Ponto de Partida' },
-            
-            // GRUPO 2: Letras intermediárias (11-20)
-            { letter: 'כ', sefirah: 'chokhmah', meaning: 'Palma da Mão que Sustenta a Sabedoria' },
-            { letter: 'ל', sefirah: 'chesed', meaning: 'Coração que Aprende, Aspiração ao Divino' },
-            { letter: 'מ', sefirah: 'hod', meaning: 'Águas Maternas, Sabedoria Fluida' },
-            { letter: 'נ', sefirah: 'yesod', meaning: 'Peixe que Nada nas Profundezas' },
-            { letter: 'ס', sefirah: 'binah', meaning: 'Círculo Protetor do Entendimento' },
-            { letter: 'ע', sefirah: 'netzach', meaning: 'Olho que Vê Além, Visão Espiritual' },
-            { letter: 'פ', sefirah: 'hod', meaning: 'Boca que Fala a Verdade do Esplendor' },
-            { letter: 'צ', sefirah: 'yesod', meaning: 'Justiça Divina, Retidão da Fundação' },
-            { letter: 'ק', sefirah: 'keter', meaning: 'Sagrado, Separado do Mundo' },
-            { letter: 'ר', sefirah: 'gevurah', meaning: 'Cabeça que Julga com Retidão' },
-            
-            // GRUPO 3: Letras finais (21-25)
-            { letter: 'ך', sefirah: 'chokhmah', meaning: 'Sabedoria que se Conclui, Fim da Iluminação' },
-            { letter: 'ם', sefirah: 'binah', meaning: 'Águas do Entendimento que se Estagnam' },
-            { letter: 'ן', sefirah: 'netzach', meaning: 'Vitória que Persiste, Eternidade Realizada' },
-            { letter: 'ף', sefirah: 'hod', meaning: 'Boca do Esplendor que se Cala' },
-            { letter: 'ץ', sefirah: 'yesod', meaning: 'Justiça que se Fundamenta' },
-            
-            // GRUPO 4: Letras especiais (26-30)
-            { letter: 'ש', sefirah: 'tiferet', meaning: 'Dente que Consome o Mal, Fogo Transformador' },
-            { letter: 'ת', sefirah: 'malkuth', meaning: 'Sinal, Cruz, Assinatura Divina' },
-            
-            // GRUPO 5: Letras com daguesh (31-35)
-            { letter: 'אּ', sefirah: 'keter', meaning: 'Espírito Divino Intensificado' },
-            { letter: 'בּ', sefirah: 'chokhmah', meaning: 'Sabedoria com Ponto de Força' },
-            { letter: 'כּ', sefirah: 'chokhmah', meaning: 'Sabedoria que Conquista' },
-            { letter: 'פּ', sefirah: 'hod', meaning: 'Esplendor que se Pronuncia' },
-            
-            // GRUPO 6: Letras com vogais (36-45)
-            { letter: 'אָ', sefirah: 'keter', meaning: 'Espírito com Luz Plena' },
-            { letter: 'אֵ', sefirah: 'keter', meaning: 'Espírito que Brilha' },
-            { letter: 'אִ', sefirah: 'keter', meaning: 'Espírito com Faísca Interior' },
-            { letter: 'אֹ', sefirah: 'keter', meaning: 'Espírito que se Eleva' },
-            { letter: 'אֻ', sefirah: 'keter', meaning: 'Espírito Fixado' },
-            { letter: 'בָ', sefirah: 'chokhmah', meaning: 'Sabedoria Iluminada' },
-            { letter: 'גִ', sefirah: 'binah', meaning: 'Entendimento Interno' },
-            { letter: 'דֵ', sefirah: 'chesed', meaning: 'Misericórdia Brilhante' },
-            { letter: 'הֹ', sefirah: 'gevurah', meaning: 'Julgamento Elevado' },
-            { letter: 'וּ', sefirah: 'tiferet', meaning: 'União Estabelecida' },
-            
-            // GRUPO 7: Combinações de 2 letras (46-60)
-            { letter: 'יה', sefirah: 'tiferet', meaning: 'Força Criativa Ativa, Início da Manifestação' },
-            { letter: 'וה', sefirah: 'tiferet', meaning: 'União com a Existência' },
-            { letter: 'אה', sefirah: 'keter', meaning: 'Espírito e Forma Unificados' },
-            { letter: 'בן', sefirah: 'chokhmah', meaning: 'Filho da Sabedoria' },
-            { letter: 'אב', sefirah: 'keter', meaning: 'Pai, Origem Primordial' },
-            { letter: 'אם', sefirah: 'binah', meaning: 'Mãe, Origem Material' },
-            { letter: 'אל', sefirah: 'chesed', meaning: 'Deus, Força Divina' },
-            { letter: 'רה', sefirah: 'gevurah', meaning: 'Espírito que Vê, Consciência Expandida' },
-            { letter: 'מה', sefirah: 'hod', meaning: 'O Quê? Questionamento do Esplendor' },
-            { letter: 'לא', sefirah: 'chesed', meaning: 'Não, Limite da Misericórdia' },
-            { letter: 'כן', sefirah: 'chokhmah', meaning: 'Sim, Afirmação da Sabedoria' },
-            { letter: 'פה', sefirah: 'hod', meaning: 'Boca que Declara' },
-            { letter: 'שם', sefirah: 'tiferet', meaning: 'Nome, Essência Identificada' },
-            { letter: 'זה', sefirah: 'netzach', meaning: 'Este, Identificação da Vitória' },
-            { letter: 'כי', sefirah: 'chokhmah', meaning: 'Porque, Razão da Sabedoria' },
-            
-            // GRUPO 8: Combinações de 3 letras (61-70)
-            { letter: 'אבג', sefirah: 'keter', meaning: 'Alfa-Beta-Gama, ABC da Criação' },
-            { letter: 'דהא', sefirah: 'chesed', meaning: 'Conhecimento da Porta Divina' },
-            { letter: 'זחט', sefirah: 'netzach', meaning: 'Força-Vida-Bondade Oculta' },
-            { letter: 'יכל', sefirah: 'malkuth', meaning: 'Capacidade, Poder Realizado' },
-            { letter: 'מן', sefirah: 'hod', meaning: 'De, Separação das Águas' },
-            { letter: 'סער', sefirah: 'binah', meaning: 'Tempestade do Entendimento' },
-            { letter: 'עבר', sefirah: 'netzach', meaning: 'Passado da Vitória' },
-            { letter: 'צהר', sefirah: 'yesod', meaning: 'Meio-dia da Justiça' },
-            { letter: 'קרח', sefirah: 'keter', meaning: 'Gelo Sagrado' },
-            { letter: 'רשע', sefirah: 'gevurah', meaning: 'Mau no Julgamento' },
-            
-            // GRUPO 9: Palavras cabalísticas (71-80)
-            { letter: 'כתר', sefirah: 'keter', meaning: 'Coroa, Ponto Mais Alto' },
-            { letter: 'חכמה', sefirah: 'chokhmah', meaning: 'Sabedoria, Conhecimento Recebido' },
-            { letter: 'בינה', sefirah: 'binah', meaning: 'Entendimento, Compreensão Interna' },
-            { letter: 'חסד', sefirah: 'chesed', meaning: 'Amor Gracioso, Bondade Ilimitada' },
-            { letter: 'גבורה', sefirah: 'gevurah', meaning: 'Força, Julgamento Restritivo' },
-            { letter: 'תפארת', sefirah: 'tiferet', meaning: 'Beleza, Harmonia Central' },
-            { letter: 'נצח', sefirah: 'netzach', meaning: 'Vitória, Eternidade Ativa' },
-            { letter: 'הוד', sefirah: 'hod', meaning: 'Esplendor, Reconhecimento' },
-            { letter: 'יסוד', sefirah: 'yesod', meaning: 'Fundação, Base Estável' },
-            { letter: 'מלכות', sefirah: 'malkuth', meaning: 'Reino, Manifestação Final' },
-            
-            // GRUPO 10: Nomes divinos (81-85)
-            { letter: 'יהוה', sefirah: 'tiferet', meaning: 'Tetragrama Sagrado, Nome Inefável' },
-            { letter: 'אהיה', sefirah: 'keter', meaning: 'EU SOU, Auto-Existência' },
-            { letter: 'אדני', sefirah: 'malkuth', meaning: 'Senhor, Soberania' },
-            { letter: 'שדי', sefirah: 'yesod', meaning: 'Todo-Poderoso, Força da Natureza' },
-            { letter: 'צבאות', sefirah: 'netzach', meaning: 'Exércitos, Ordem Divina' },
-            
-            // GRUPO 11: Letras com shva (86-88)
-            { letter: 'בּ', sefirah: 'chokhmah', meaning: 'Sabedoria que Repousa' },
-            { letter: 'כּ', sefirah: 'chokhmah', meaning: 'Palma que Descansa' },
-            { letter: 'פּ', sefirah: 'hod', meaning: 'Boca que Silencia' },
-            
-            // GRUPO 12: Números em hebraico (89-93)
-            { letter: 'י״א', sefirah: 'keter', meaning: 'Onze - Transição Mística' },
-            { letter: 'י״ב', sefirah: 'chokhmah', meaning: 'Doze - Governo Divino' },
-            { letter: 'י״ג', sefirah: 'binah', meaning: 'Treze - Misericórdia de Deus' },
-            { letter: 'י״ד', sefirah: 'chesed', meaning: 'Catorze - Amor Manifestado' },
-            { letter: 'ט״ו', sefirah: 'gevurah', meaning: 'Quinze - Força Oculta' },
-            
-            // GRUPO 13: Conceitos místicos (94-103)
-            { letter: 'אור', sefirah: 'keter', meaning: 'Luz Primordial' },
-            { letter: 'חיים', sefirah: 'hod', meaning: 'Vida Eterna' },
-            { letter: 'שלום', sefirah: 'tiferet', meaning: 'Paz Completa' },
-            { letter: 'אמת', sefirah: 'yesod', meaning: 'Verdade Absoluta' },
-            { letter: 'רחמים', sefirah: 'chesed', meaning: 'Compaixão Profunda' },
-            { letter: 'חן', sefirah: 'hod', meaning: 'Graça, Beleza Interior' },
-            { letter: 'כבוד', sefirah: 'hod', meaning: 'Glória, Honra Divina' },
-            { letter: 'תורה', sefirah: 'tiferet', meaning: 'Instrução, Lei Divina' },
-            { letter: 'משה', sefirah: 'netzach', meaning: 'Extraído das Águas' },
-            { letter: 'אהרון', sefirah: 'hod', meaning: 'Montanha de Força' },
-            
-            // GRUPO 14: Mais conceitos (104-110)
-            { letter: 'סוד', sefirah: 'binah', meaning: 'Segredo, Conhecimento Oculto' },
-            { letter: 'רז', sefirah: 'chokhmah', meaning: 'Mistério Profundo' },
-            { letter: 'קבלה', sefirah: 'binah', meaning: 'Recepção, Tradição Mística' },
-            { letter: 'ספר', sefirah: 'hod', meaning: 'Livro, Contagem' },
-            { letter: 'מעשה', sefirah: 'malkuth', meaning: 'Ação, Obra Manifestada' },
-            { letter: 'דעת', sefirah: 'daath', meaning: 'Conhecimento, Ponte Oculta' },
-            { letter: 'שכינה', sefirah: 'malkuth', meaning: 'Presença Divina' }
-        ];
-
+this.questions = [
+    // GRUPO 1: Letras básicas
+    { letter: 'א', sefirah: 'Coroa', meaning: 'O Primeiro, Unidade Divina, Princípio de Tudo' },
+    { letter: 'ב', sefirah: 'Sabedoria', meaning: 'Palácio do Insight, Início da Criação' },
+    { letter: 'ג', sefirah: 'Entendimento', meaning: 'Recompensa, Benevolência que Retorna' },
+    { letter: 'ד', sefirah: 'Bondade / Misericórdia', meaning: 'Porta da Generosidade, Pobre que Recebe' },
+    { letter: 'ה', sefirah: 'Força / Rigor', meaning: 'Revelação, Sopro Divino, Existência' },
+    { letter: 'ו', sefirah: 'Beleza / Harmonia', meaning: 'União, Conexão entre Céu e Terra' },
+    { letter: 'ז', sefirah: 'Vitória / Persistência', meaning: 'Armamento, Força Espiritual' },
+    { letter: 'ח', sefirah: 'Glória / Intelecto Analítico', meaning: 'Vida, Graça, Unidade Transcendente' },
+    { letter: 'ט', sefirah: 'Fundação', meaning: 'Bem Ocultado, Serpente Transformada' },
+    { letter: 'י', sefirah: 'Reino / Manifestação', meaning: 'Mão que Abençoa, Ponto de Partida' },
+    
+    // GRUPO 2: Letras intermediárias
+    { letter: 'כ', sefirah: 'Sabedoria', meaning: 'Palma da Mão que Sustenta o Insight' },
+    { letter: 'ל', sefirah: 'Bondade / Misericórdia', meaning: 'Coração que Aprende, Aspiração ao Divino' },
+    { letter: 'מ', sefirah: 'Glória / Intelecto Analítico', meaning: 'Águas Maternas, Fluidez Mental' },
+    { letter: 'נ', sefirah: 'Fundação', meaning: 'Peixe que Nada nas Profundezas' },
+    { letter: 'ס', sefirah: 'Entendimento', meaning: 'Círculo Protetor da Matriz Formadora' },
+    { letter: 'ע', sefirah: 'Vitória / Persistência', meaning: 'Olho que Vê Além, Visão Espiritual' },
+    { letter: 'פ', sefirah: 'Glória / Intelecto Analítico', meaning: 'Boca que Fala a Verdade do Esplendor' },
+    { letter: 'צ', sefirah: 'Fundação', meaning: 'Retidão Divina, Integridade da Base' },
+    { letter: 'ק', sefirah: 'Coroa', meaning: 'Sagrado, Separado do Mundo' },
+    { letter: 'ר', sefirah: 'Força / Rigor', meaning: 'Cabeça que Julga com Retidão' },
+    
+    // GRUPO 3: Letras finais
+    { letter: 'ך', sefirah: 'Sabedoria', meaning: 'Insight que se Conclui, Fim da Iluminação' },
+    { letter: 'ם', sefirah: 'Entendimento', meaning: 'Águas da Compreensão que se Estagnam' },
+    { letter: 'ן', sefirah: 'Vitória / Persistência', meaning: 'Triunfo que Persiste, Eternidade Realizada' },
+    { letter: 'ף', sefirah: 'Glória / Intelecto Analítico', meaning: 'Boca do Esplendor que se Cala' },
+    { letter: 'ץ', sefirah: 'Fundação', meaning: 'Justiça que se Torna Alicerce' },
+    
+    // GRUPO 4: Letras especiais
+    { letter: 'ש', sefirah: 'Beleza / Harmonia', meaning: 'Dente que Consome o Mal, Fogo Transformador' },
+    { letter: 'ת', sefirah: 'Reino / Manifestação', meaning: 'Sinal, Cruz, Assinatura Divina' },
+    
+    // GRUPO 5: Letras com daguesh
+    { letter: 'אּ', sefirah: 'Coroa', meaning: 'Espírito Divino Intensificado' },
+    { letter: 'בּ', sefirah: 'Sabedoria', meaning: 'Insight com Ponto de Força' },
+    { letter: 'כּ', sefirah: 'Sabedoria', meaning: 'Conhecimento que Conquista' },
+    { letter: 'פּ', sefirah: 'Glória / Intelecto Analítico', meaning: 'Esplendor que se Pronuncia' },
+    
+    // GRUPO 6: Letras com vogais
+    { letter: 'אָ', sefirah: 'Coroa', meaning: 'Espírito com Luz Plena' },
+    { letter: 'אֵ', sefirah: 'Coroa', meaning: 'Espírito que Brilha' },
+    { letter: 'אִ', sefirah: 'Coroa', meaning: 'Espírito com Faísca Interior' },
+    { letter: 'אֹ', sefirah: 'Coroa', meaning: 'Espírito que se Eleva' },
+    { letter: 'אֻ', sefirah: 'Coroa', meaning: 'Espírito Fixado' },
+    { letter: 'בָ', sefirah: 'Sabedoria', meaning: 'Iluminação Primal' },
+    { letter: 'גִ', sefirah: 'Entendimento', meaning: 'Compreensão Interna' },
+    { letter: 'דֵ', sefirah: 'Bondade / Misericórdia', meaning: 'Dádiva Brilhante' },
+    { letter: 'הֹ', sefirah: 'Força / Rigor', meaning: 'Julgamento Elevado' },
+    { letter: 'וּ', sefirah: 'Beleza / Harmonia', meaning: 'União Estabelecida' },
+    
+    // GRUPO 7: Combinações de 2 letras
+    { letter: 'יה', sefirah: 'Beleza / Harmonia', meaning: 'Força Criativa Ativa, Início da Manifestação' },
+    { letter: 'וה', sefirah: 'Beleza / Harmonia', meaning: 'União com a Existência' },
+    { letter: 'אה', sefirah: 'Coroa', meaning: 'Espírito e Forma Unificados' },
+    { letter: 'בן', sefirah: 'Sabedoria', meaning: 'Filho do Insight' },
+    { letter: 'אב', sefirah: 'Coroa', meaning: 'Pai, Origem Primordial' },
+    { letter: 'אם', sefirah: 'Entendimento', meaning: 'Mãe, Origem Material' },
+    { letter: 'אל', sefirah: 'Bondade / Misericórdia', meaning: 'Deus, Poder Benevolente' },
+    { letter: 'רה', sefirah: 'Força / Rigor', meaning: 'Espírito que Vê, Consciência Expandida' },
+    { letter: 'מה', sefirah: 'Glória / Intelecto Analítico', meaning: 'O Quê? Questionamento do Esplendor' },
+    { letter: 'לא', sefirah: 'Bondade / Misericórdia', meaning: 'Não, Limite da Expansão' },
+    { letter: 'כן', sefirah: 'Sabedoria', meaning: 'Sim, Afirmação do Insight' },
+    { letter: 'פה', sefirah: 'Glória / Intelecto Analítico', meaning: 'Boca que Declara' },
+    { letter: 'שם', sefirah: 'Beleza / Harmonia', meaning: 'Nome, Essência Identificada' },
+    { letter: 'זה', sefirah: 'Vitória / Persistência', meaning: 'Este, Identificação do Triunfo' },
+    { letter: 'כי', sefirah: 'Sabedoria', meaning: 'Porque, Razão do Insight' },
+    
+    // GRUPO 8: Combinações de 3 letras
+    { letter: 'אבg', sefirah: 'Coroa', meaning: 'Alfa-Beta-Gama, ABC da Criação' },
+    { letter: 'דהא', sefirah: 'Bondade / Misericórdia', meaning: 'Conhecimento da Porta Divina' },
+    { letter: 'זחט', sefirah: 'Vitória / Persistência', meaning: 'Força-Vida-Bem Oculto' },
+    { letter: 'יכל', sefirah: 'Reino / Manifestação', meaning: 'Capacidade, Poder Realizado' },
+    { letter: 'מן', sefirah: 'Glória / Intelecto Analítico', meaning: 'De, Separação das Águas' },
+    { letter: 'סער', sefirah: 'Entendimento', meaning: 'Tempestade da Compreensão' },
+    { letter: 'עבר', sefirah: 'Vitória / Persistência', meaning: 'Passado do Triunfo' },
+    { letter: 'צהר', sefirah: 'Fundação', meaning: 'Meio-dia da Retidão' },
+    { letter: 'קרח', sefirah: 'Coroa', meaning: 'Gelo Sagrado' },
+    { letter: 'רשע', sefirah: 'Força / Rigor', meaning: 'Mau no Julgamento' },
+    
+    // GRUPO 9: Palavras cabalísticas (Saneadas para não dar a resposta)
+    { letter: 'כתר', sefirah: 'Coroa', meaning: 'Vértice Supremo, Ponto Mais Elevado' },
+    { letter: 'חכמה', sefirah: 'Sabedoria', meaning: 'Insight Primordial, Semente da Ideia' },
+    { letter: 'בינה', sefirah: 'Entendimento', meaning: 'Matriz Formadora, Ventre da Compreensão' },
+    { letter: 'חסد', sefirah: 'Bondade / Misericórdia', meaning: 'Amor Incondicional, Expansão Infinita' },
+    { letter: 'גבורה', sefirah: 'Força / Rigor', meaning: 'Poder da Contenção, Severidade Necessária' },
+    { letter: 'תפארת', sefirah: 'Beleza / Harmonia', meaning: 'Equilíbrio Estético, Eixo Central' },
+    { letter: 'נצח', sefirah: 'Vitória / Persistência', meaning: 'Resiliência Ativa, Triunfo Perpétuo' },
+    { letter: 'הוד', sefirah: 'Glória / Intelecto Analítico', meaning: 'Reverberação Mental, Louvor Sincero' },
+    { letter: 'יסוד', sefirah: 'Fundação', meaning: 'Alicerce Místico, Suporte Estável' },
+    { letter: 'מלכות', sefirah: 'Reino / Manifestação', meaning: 'Domínio Material, Realidade Concreta' },
+    
+    // GRUPO 10: Nomes divinos
+    { letter: 'יהוה', sefirah: 'Beleza / Harmonia', meaning: 'Tetragrama Sagrado, Nome Inefável' },
+    { letter: 'אהיה', sefirah: 'Coroa', meaning: 'EU SOU, Auto-Existência' },
+    { letter: 'אדני', sefirah: 'Reino / Manifestação', meaning: 'Senhor, Soberania Terrena' },
+    { letter: 'שדי', sefirah: 'Fundação', meaning: 'Todo-Poderoso, Sustento da Natureza' },
+    { letter: 'צבאות', sefirah: 'Vitória / Persistência', meaning: 'Exércitos, Ordem do Triunfo' },
+    
+    // GRUPO 11: Letras com shva
+    { letter: 'בּ', sefirah: 'Sabedoria', meaning: 'Insight que Repousa' },
+    { letter: 'כּ', sefirah: 'Sabedoria', meaning: 'Recetáculo que Descansa' },
+    { letter: 'פּ', sefirah: 'Glória / Intelecto Analítico', meaning: 'Boca que Silencia' },
+    
+    // GRUPO 12: Números em hebraico
+    { letter: 'י״א', sefirah: 'Coroa', meaning: 'Onze - Transição Mística' },
+    { letter: 'י״ב', sefirah: 'Sabedoria', meaning: 'Doze - Governo Superior' },
+    { letter: 'י״ג', sefirah: 'Entendimento', meaning: 'Treze - Atributos de Piedade' },
+    { letter: 'י״ד', sefirah: 'Bondade / Misericórdia', meaning: 'Catorze - Amor Manifestado' },
+    { letter: 'ט״ו', sefirah: 'Força / Rigor', meaning: 'Quinze - Poder Oculto' },
+    
+    // GRUPO 13: Conceitos místicos
+    { letter: 'אור', sefirah: 'Coroa', meaning: 'Luz Primordial' },
+    { letter: 'חיים', sefirah: 'Glória / Intelecto Analítico', meaning: 'Vitalidade Eterna' },
+    { letter: 'שלום', sefirah: 'Beleza / Harmonia', meaning: 'Plenitude, Ausência de Conflito' },
+    { letter: 'אمت', sefirah: 'Fundação', meaning: 'Verdade Absoluta' },
+    { letter: 'רחמים', sefirah: 'Bondade / Misericórdia', meaning: 'Compaixão Profunda' },
+    { letter: 'חן', sefirah: 'Glória / Intelecto Analítico', meaning: 'Charme Espiritual, Encanto Interior' },
+    { letter: 'כבוד', sefirah: 'Glória / Intelecto Analítico', meaning: 'Honra Divina, Peso da Luz' },
+    { letter: 'תורה', sefirah: 'Beleza / Harmonia', meaning: 'Instrução, Lei do Equilíbrio' },
+    { letter: 'משה', sefirah: 'Vitória / Persistência', meaning: 'Aquele que foi Extraído' },
+    { letter: 'אהרון', sefirah: 'Glória / Intelecto Analítico', meaning: 'Montanha de Resplandecência' },
+    
+    // GRUPO 14: Mais conceitos
+    { letter: 'סוד', sefirah: 'Entendimento', meaning: 'Mistério Oculto, Camada Profunda' },
+    { letter: 'רז', sefirah: 'Sabedoria', meaning: 'Enigma do Insight' },
+    { letter: 'קבלה', sefirah: 'Entendimento', meaning: 'Recepção da Tradição Mística' },
+    { letter: 'ספר', sefirah: 'Glória / Intelecto Analítico', meaning: 'Manuscrito, Enumeração' },
+    { letter: 'معشه', sefirah: 'Reino / Manifestação', meaning: 'Ação, Obra Finalizada' },
+    { letter: 'דעת', sefirah: 'Entendimento', meaning: 'Conhecimento, Ponte Invisível' },
+    { letter: 'שכינה', sefirah: 'Reino / Manifestação', meaning: 'Habitação da Presença Divina' }
+];
         // Sistema de erros
         this.errorCount = new Map();
         this.currentAttempts = 0;
