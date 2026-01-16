@@ -22,6 +22,9 @@ body {
     padding: 20px;
     margin-top: 80px;
     overflow-x: hidden;
+    overflow-y: hidden;
+    height: 100vh;
+    padding-bottom: 50px; /* Margem para o footer invisível */
 }
 
 /* ========== HEADER ========== */
@@ -166,17 +169,529 @@ header {
     transform: translateX(5px);
 }
 
-/* ========== LAYOUT DO JOGO ========== */
-#game-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    margin-top: 20px;
+/* ========== FOOTER INVISÍVEL ========== */
+#invisible-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px; /* Altura da margem */
+    z-index: -1; /* Coloca atrás de tudo */
+    opacity: 0; /* Totalmente invisível */
+    pointer-events: none; /* Não interfere com cliques */
+    background: transparent; /* Sem cor */
+    visibility: hidden; /* Escondido do DOM */
 }
 
+/* ========== CONTAINER DO JOGO COM MARGEM ========== */
+#game-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: calc(100vh - 150px); /* Altura total menos header e margem */
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+    padding-top: 10px;
+}
+
+/* ========== GRID DO JOGO ========== */
+.game-grid-container {
+    display: grid;
+    grid-template-columns: 320px 1fr 250px;
+    grid-template-rows: 1fr;
+    gap: 20px;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.game-section {
+    background: rgba(15, 15, 25, 0.7);
+    border-radius: var(--border-radius);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(212, 177, 146, 0.1);
+    padding: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* ========== PAINEL DE QUESTÕES ========== */
+#question-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#current-question {
+    font-size: 1.2em;
+    color: var(--primary);
+    line-height: 1.4;
+    font-weight: 300;
+    margin-bottom: 25px;
+    padding: 15px;
+    background: rgba(212, 177, 146, 0.03);
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid rgba(212, 177, 146, 0.08);
+}
+
+#current-symbol {
+    width: 140px;
+    height: 140px;
+    background: rgba(26, 26, 26, 0.7);
+    border: 3px solid var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5em;
+    margin: 0 auto 30px auto;
+    font-family: 'Times New Roman', serif;
+    font-weight: bold;
+    color: var(--primary);
+    box-shadow: 
+        inset 0 0 20px rgba(212, 177, 146, 0.1),
+        0 0 40px rgba(212, 177, 146, 0.2);
+    flex-shrink: 0;
+    position: relative;
+}
+
+#current-symbol::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 50%;
+    background: radial-gradient(circle, transparent 50%, rgba(212, 177, 146, 0.1) 100%);
+    z-index: -1;
+}
+
+/* ========== SISTEMA DE AJUDA ========== */
+.help-section {
+    margin-top: auto;
+    margin-bottom: 20px;
+}
+
+.help-toggle-btn {
+    width: 100%;
+    padding: 12px;
+    background: rgba(212, 177, 146, 0.08);
+    border: 1px solid rgba(212, 177, 146, 0.15);
+    border-radius: 8px;
+    color: var(--primary);
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.help-toggle-btn:hover {
+    background: rgba(212, 177, 146, 0.15);
+    transform: translateY(-2px);
+}
+
+.help-toggle-btn.active {
+    background: rgba(212, 177, 146, 0.2);
+    border-color: rgba(212, 177, 146, 0.3);
+}
+
+.help-buttons {
+    display: none;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background: rgba(212, 177, 146, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(212, 177, 146, 0.1);
+    animation: fadeIn 0.3s ease;
+}
+
+.help-buttons.visible {
+    display: grid;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.help-btn {
+    height: 55px;
+    background: rgba(212, 177, 146, 0.05);
+    border: 1px solid rgba(212, 177, 146, 0.15);
+    border-radius: 10px;
+    color: var(--primary);
+    cursor: pointer;
+    font-size: 0.95em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.help-btn:hover {
+    background: rgba(212, 177, 146, 0.1);
+    transform: translateY(-2px);
+    border-color: rgba(212, 177, 146, 0.3);
+}
+
+.help-btn span {
+    font-size: 1.1em;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.help-btn small {
+    font-size: 0.8em;
+    opacity: 0.7;
+}
+
+.skip-btn {
+    grid-column: span 2;
+    height: 50px;
+    background: rgba(231, 76, 60, 0.05);
+    border: 1px solid rgba(231, 76, 60, 0.15);
+    border-radius: 10px;
+    color: #e74c3c;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 0.95em;
+    transition: var(--transition);
+}
+
+.skip-btn:hover {
+    background: rgba(231, 76, 60, 0.1);
+    transform: translateY(-2px);
+    border-color: rgba(231, 76, 60, 0.3);
+}
+
+/* ========== CONTROLES DO JOGO ========== */
+.game-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.control-btn {
+    flex: 1;
+    padding: 12px;
+    background: rgba(212, 177, 146, 0.07);
+    border: 1px solid rgba(212, 177, 146, 0.15);
+    border-radius: 8px;
+    color: var(--primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.9em;
+    transition: var(--transition);
+}
+
+.control-btn:hover {
+    background: rgba(212, 177, 146, 0.15);
+    transform: translateY(-2px);
+    border-color: rgba(212, 177, 146, 0.3);
+}
+
+/* ========== ÁRVORE DA VIDA ========== */
+/* ========== ÁRVORE DA VIDA COM MARGEM INTERNA ========== */
+.tree-of-life {
+    position: relative;
+    overflow: visible;
+    padding: 30px; /* Margem interna para as Sefirot respirarem */
+    background: rgba(10, 10, 15, 0.3);
+    border-radius: var(--border-radius);
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Container interno para limitar área clicável */
+.tree-inner-container {
+    position: relative;
+    width: calc(100% - 60px); /* Desconta o padding */
+    height: calc(100% - 60px); /* Desconta o padding */
+    margin: 0 auto;
+}
+
+/* Sefirot com posições ajustadas para margem */
+.sefirah {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border: 2px solid rgba(212, 177, 146, 0.3);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.85em;
+    background: linear-gradient(145deg, 
+        rgba(30, 30, 50, 0.9) 0%,
+        rgba(20, 20, 40, 0.95) 100%);
+    padding: 8px;
+    user-select: none;
+    z-index: 10;
+    transform: translate(-50%, -50%);
+    box-shadow: 
+        inset 0 2px 10px rgba(255, 255, 255, 0.05),
+        0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.sefirah:hover {
+    transform: translate(-50%, -50%) scale(1.15);
+    border-color: var(--primary);
+    box-shadow: 
+        inset 0 2px 20px rgba(212, 177, 146, 0.1),
+        0 0 30px rgba(212, 177, 146, 0.4);
+    background: rgba(25, 25, 40, 0.98);
+}
+
+.sefirah small {
+    font-size: 0.85em;
+    opacity: 0.7;
+    margin-top: 2px;
+}
+
+/* ========== NOVAS POSIÇÕES COM MARGEM ========== */
+/* Ajustadas para considerar o padding de 30px */
+#keter { left: 50%; top: 10%; } /* Antes: 5% */
+#chokhmah { left: 25%; top: 25%; } /* Antes: 20% */
+#binah { left: 75%; top: 25%; } /* Antes: 80% */
+#chesed { left: 15%; top: 45%; } /* Antes: 10% */
+#gevurah { left: 85%; top: 45%; } /* Antes: 90% */
+#tiferet { left: 50%; top: 45%; } /* Antes: 40% */
+#netzach { left: 25%; top: 65%; } /* Antes: 20% */
+#hod { left: 75%; top: 65%; } /* Antes: 80% */
+#yesod { left: 50%; top: 70%; } /* Antes: 65% */
+#malkuth { left: 50%; top: 90%; } /* Antes: 85% */
+
+/* ========== RESPONSIVIDADE COM MARGEM ========== */
+@media (max-width: 1200px) {
+    .tree-of-life {
+        padding: 25px;
+    }
+    
+    .tree-inner-container {
+        width: calc(100% - 50px);
+        height: calc(100% - 50px);
+    }
+    
+    .sefirah {
+        width: 75px;
+        height: 75px;
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 992px) {
+    .tree-of-life {
+        padding: 20px;
+        min-height: 450px;
+    }
+    
+    .tree-inner-container {
+        width: calc(100% - 40px);
+        height: calc(100% - 40px);
+    }
+}
+
+@media (max-width: 768px) {
+    .tree-of-life {
+        padding: 15px;
+        min-height: 400px;
+    }
+    
+    .tree-inner-container {
+        width: calc(100% - 30px);
+        height: calc(100% - 30px);
+    }
+    
+    .sefirah {
+        width: 60px;
+        height: 60px;
+        font-size: 0.75em;
+    }
+    
+    /* Ajuste das posições para mobile */
+    #keter { top: 12%; }
+    #chokhmah { left: 28%; top: 28%; }
+    #binah { left: 72%; top: 28%; }
+    #chesed { left: 18%; top: 48%; }
+    #gevurah { left: 82%; top: 48%; }
+    #tiferet { top: 48%; }
+    #netzach { left: 28%; top: 68%; }
+    #hod { left: 72%; top: 68%; }
+    #yesod { top: 73%; }
+    #malkuth { top: 92%; }
+}
+
+@media (max-width: 480px) {
+    .tree-of-life {
+        padding: 12px;
+        min-height: 350px;
+    }
+    
+    .tree-inner-container {
+        width: calc(100% - 24px);
+        height: calc(100% - 24px);
+    }
+    
+    .sefirah {
+        width: 50px;
+        height: 50px;
+        font-size: 0.65em;
+    }
+    
+    /* Ajuste das posições para telas pequenas */
+    #keter { top: 15%; }
+    #chokhmah { left: 30%; top: 30%; }
+    #binah { left: 70%; top: 30%; }
+    #chesed { left: 20%; top: 50%; }
+    #gevurah { left: 80%; top: 50%; }
+    #tiferet { top: 50%; }
+    #netzach { left: 30%; top: 70%; }
+    #hod { left: 70%; top: 70%; }
+    #yesod { top: 75%; }
+    #malkuth { top: 92%; }
+}
+
+@media (max-width: 380px) {
+    .tree-of-life {
+        padding: 10px;
+        min-height: 320px;
+    }
+    
+    .tree-inner-container {
+        width: calc(100% - 20px);
+        height: calc(100% - 20px);
+    }
+    
+    .sefirah {
+        width: 45px;
+        height: 45px;
+        font-size: 0.6em;
+    }
+    
+    /* Ajuste adicional para telas muito pequenas */
+    #keter { top: 18%; }
+    #chokhmah { left: 32%; top: 32%; }
+    #binah { left: 68%; top: 32%; }
+    #chesed { left: 22%; top: 52%; }
+    #gevurah { left: 78%; top: 52%; }
+    #tiferet { top: 52%; }
+    #netzach { left: 32%; top: 72%; }
+    #hod { left: 68%; top: 72%; }
+    #yesod { top: 77%; }
+    #malkuth { top: 92%; }
+}
+
+/* ========== STATUS DO JOGO ========== */
+.game-status {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.status-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 12px;
+    background: rgba(212, 177, 146, 0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(212, 177, 146, 0.08);
+    min-height: 70px;
+    transition: var(--transition);
+}
+
+.status-item:hover {
+    background: rgba(212, 177, 146, 0.06);
+    border-color: rgba(212, 177, 146, 0.15);
+}
+
+.status-label {
+    font-size: 0.8em;
+    opacity: 0.8;
+    margin-bottom: 6px;
+    font-weight: 300;
+}
+
+.status-value {
+    font-size: 1.3em;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+#lives.status-value {
+    color: #27ae60;
+    font-size: 1.4em;
+    letter-spacing: 4px;
+}
+
+.status-buttons {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.status-btn {
+    padding: 12px;
+    background: rgba(212, 177, 146, 0.05);
+    border: 1px solid rgba(212, 177, 146, 0.15);
+    border-radius: 8px;
+    color: var(--primary);
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: var(--transition);
+    text-align: center;
+}
+
+.status-btn:hover {
+    background: rgba(212, 177, 146, 0.1);
+    transform: translateY(-2px);
+    border-color: rgba(212, 177, 146, 0.3);
+}
+
+/* ========== TELA INICIAL ========== */
 .welcome-screen {
     background: rgba(15, 15, 25, 0.85);
-    border: 1px solid var(--accent);
+    border: 1px solid rgba(212, 177, 146, 0.2);
     border-radius: var(--border-radius);
     padding: 40px;
     text-align: center;
@@ -184,6 +699,10 @@ header {
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
     max-width: 800px;
     margin: 0 auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .welcome-content {
@@ -193,16 +712,16 @@ header {
 
 .welcome-content h1 {
     font-family: 'Cinzel', serif;
-    font-size: 1.5em;
-    margin-bottom: 20px;
+    font-size: 2.2em;
+    margin-bottom: 25px;
     color: var(--primary);
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
 }
 
 .welcome-content p {
-    font-size: 1.0em;
-    line-height: 1.4;
-    margin-bottom: 30px;
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 35px;
     opacity: 0.9;
 }
 
@@ -211,7 +730,7 @@ header {
     color: #0a0a0a;
     border: none;
     padding: 18px 40px;
-    font-size: 1.0em;
+    font-size: 1.1em;
     font-weight: 600;
     margin: 30px 0;
     min-width: 250px;
@@ -227,358 +746,45 @@ header {
     box-shadow: 0 10px 25px rgba(212, 177, 146, 0.4);
 }
 
-/* ========== COLUNAS DO JOGO ========== */
-.game-grid-container {
-    display: grid;
-    grid-template-columns: 320px 600px 250px;
-    gap: 20px;
-    width: 100%;
-    min-height: 700px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
 .hidden {
     display: none !important;
-}
-
-/* Coluna esquerda: Questão */
-#question-panel {
-    background: rgba(15, 15, 25, 0.85);
-    border: 1px solid var(--accent);
-    border-radius: var(--border-radius);
-    padding: 25px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    display: flex;
-    flex-direction: column;
-    height: 680px;
-}
-
-#current-question {
-    font-size: 1.0em;
-    color: var(--primary);
-    line-height: 1.2;
-    font-weight: 300;
-    margin-bottom: 20px;
-    min-height: 60px;
-}
-
-.symbol {
-    width: 120px;
-    height: 120px;
-    background: rgba(26, 26, 26, 0.9);
-    border: 3px solid var(--primary);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3.0em;
-    margin: 30px auto;
-    font-family: 'Times New Roman', serif;
-    font-weight: bold;
-    color: var(--primary);
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
-    transition: var(--transition);
-    box-shadow: 0 0 30px rgba(212, 177, 146, 0.3);
-    user-select: none;
-}
-
-.question-controls {
-    margin-top: auto;
-}
-
-.help-section {
-    margin-bottom: 20px;
-}
-
-.help-section h4 {
-    font-size: 0.8em;
-    margin-bottom: 15px;
-    color: var(--primary);
-    font-weight: 300;
-}
-
-.help-buttons {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-}
-
-.help-btn {
-    height: 60px;
-    background: rgba(212, 177, 146, 0.1);
-    border: 1px solid var(--accent);
-    border-radius: 10px;
-    color: var(--primary);
-    cursor: pointer;
-    font-size: 1em;
-    transition: var(--transition);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-family: inherit;
-    backdrop-filter: blur(5px);
-    font-weight: 300;
-}
-
-.help-btn span {
-    font-size: 1.1em;
-    font-weight: 500;
-}
-
-.help-btn small {
-    font-size: 0.8em;
-    opacity: 0.8;
-    margin-top: 3px;
-}
-
-.help-btn:hover {
-    background: rgba(212, 177, 146, 0.2);
-    border-color: var(--primary);
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.help-btn.skip {
-    background: rgba(231, 76, 60, 0.1);
-    border-color: rgba(231, 76, 60, 0.3);
-    margin-top: 15px;
-    width: 100%;
-    height: 50px;
-}
-
-.help-btn.skip:hover {
-    background: rgba(231, 76, 60, 0.2);
-    border-color: #e74c3c;
-}
-
-/* ========== COLUNA CENTRAL: ÁRVORE DA VIDA ========== */
-.tree-of-life {
-    position: relative;
-    background: rgba(10, 10, 15, 0.7);
-    border: 1px solid rgba(212, 177, 146, 0.3);
-    border-radius: var(--border-radius);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-    height: 680px;
-    width: 600px;
-}
-
-.tree-of-life::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-        radial-gradient(circle at 20% 20%, 
-        rgba(139, 115, 85, 0.1) 0%,
-        transparent 50%),
-        radial-gradient(circle at 80% 80%, 
-        rgba(212, 177, 146, 0.1) 0%,
-        transparent 50%);
-    pointer-events: none;
-}
-
-/* Sefirot */
-.sefirah {
-    position: absolute;
-    width: 90px;
-    height: 90px;
-    border: 2px solid var(--accent);
-    border-radius: 50%;
-    cursor: pointer;
-    transition: var(--transition);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-size: 0.9em;
-    background: linear-gradient(145deg, 
-        rgba(30, 30, 50, 0.95) 0%,
-        rgba(20, 20, 40, 0.98) 100%);
-    padding: 10px;
-    user-select: none;
-    z-index: 10;
-    box-shadow: 
-        inset 0 2px 10px rgba(255, 255, 255, 0.05),
-        0 8px 20px rgba(0, 0, 0, 0.5);
-    line-height: 1.2;
-    font-family: inherit;
-    overflow: hidden;
-    transform: translate(-50%, -50%);
-}
-
-.sefirah:hover {
-    border-color: var(--primary);
-    transform: translate(-50%, -50%) scale(1.15);
-    box-shadow: 
-        inset 0 2px 20px rgba(212, 177, 146, 0.1),
-        0 0 30px rgba(212, 177, 146, 0.5);
-    background: rgba(25, 25, 40, 0.98);
-}
-
-/* Coluna direita: Status do jogo */
-.game-status {
-    background: rgba(15, 15, 25, 0.85);
-    border: 1px solid var(--accent);
-    border-radius: var(--border-radius);
-    padding: 25px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    display: flex;
-    flex-direction: column;
-    height: 680px;
-    justify-content: space-between;
-}
-
-.status-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    background: rgba(212, 177, 146, 0.05);
-    border-radius: 8px;
-    border: 1px solid rgba(212, 177, 146, 0.1);
-    margin-bottom: 15px;
-}
-
-.status-label {
-    font-weight: 300;
-    color: var(--primary);
-    font-size: 0.95em;
-}
-
-.status-value {
-    font-weight: 600;
-    font-size: 1.0em;
-    color: #fff;
-}
-
-#lives.status-value {
-    color: #e74c3c;
-    font-size: 1.2em;
-    letter-spacing: 3px;
-}
-
-.status-buttons {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-top: auto;
-}
-
-.status-buttons .btn {
-    width: 100%;
-    padding: 12px;
-    font-size: 0.9em;
-}
-
-.quick-controls {
-    background: rgba(15, 15, 25, 0.7);
-    border: 1px solid var(--accent);
-    border-radius: var(--border-radius);
-    padding: 25px;
-    margin-top: 40px;
-    backdrop-filter: blur(5px);
-}
-
-.controls-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.control-item {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 12px 20px;
-    background: rgba(212, 177, 146, 0.05);
-    border-radius: 8px;
-    border: 1px solid rgba(212, 177, 146, 0.1);
-}
-
-.control-item .key {
-    background: rgba(212, 177, 146, 0.15);
-    padding: 5px 12px;
-    border-radius: 6px;
-    font-weight: 600;
-    min-width: 60px;
-    text-align: center;
-    border: 1px solid var(--accent);
-    font-family: monospace;
 }
 
 /* ========== BOTÕES FLUTUANTES ========== */
 .floating-btn {
     position: fixed;
-    width: 50px;
-    height: 50px;
+    bottom: 80px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     background: rgba(212, 177, 146, 0.15);
     border: 2px solid var(--accent);
     color: var(--primary);
-    font-size: 1.2em;
+    font-size: 1.5em;
     cursor: pointer;
-    z-index: 999;
     transition: var(--transition);
-    backdrop-filter: blur(10px);
-    right: 30px;
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-#daily-challenge-btn {
-    bottom: 30px;
-}
-
-#achievements-btn {
-    bottom: 90px;
-}
-
-#audio-toggle-btn {
-    bottom: 150px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
 }
 
 .floating-btn:hover {
     background: rgba(212, 177, 146, 0.25);
     transform: scale(1.1);
-    box-shadow: 0 0 20px rgba(212, 177, 146, 0.4);
+    border-color: var(--primary);
+    box-shadow: 0 0 30px rgba(212, 177, 146, 0.3);
 }
 
-.help-floating-btn {
-    position: fixed;
-    bottom: 210px;
-    right: 30px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: rgba(212, 177, 146, 0.15);
-    border: 2px solid var(--accent);
-    color: var(--primary);
-    font-size: 1.2em;
-    font-weight: bold;
-    cursor: pointer;
-    z-index: 999;
-    transition: var(--transition);
-    backdrop-filter: blur(10px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+/* Posicionamento dos botões flutuantes */
+#daily-challenge-btn { bottom: 150px; }
+#achievements-btn { bottom: 220px; }
+#audio-toggle-btn { bottom: 290px; }
+#quick-help-btn { bottom: 360px; }
 
-.help-floating-btn:hover {
-    background: rgba(212, 177, 146, 0.25);
-    transform: scale(1.1);
-    box-shadow: 0 0 25px rgba(212, 177, 146, 0.4);
-}
-
+/* ========== ACHIEVEMENTS ========== */
 .achievement-notification {
     position: fixed;
     top: 100px;
@@ -822,6 +1028,7 @@ header {
     color: var(--primary);
 }
 
+/* ========== DAILY CHALLENGE ========== */
 .daily-modal-content {
     max-width: 500px;
 }
@@ -1041,6 +1248,7 @@ header {
     color: var(--primary);
 }
 
+/* ========== AUDIO ========== */
 .audio-settings {
     margin: 25px 0;
 }
@@ -1093,6 +1301,7 @@ header {
     flex-wrap: wrap;
 }
 
+/* ========== BOTÕES ========== */
 .btn {
     background: rgba(212, 177, 146, 0.1);
     color: var(--primary);
@@ -1139,6 +1348,7 @@ header {
     border-color: #e74c3c;
 }
 
+/* ========== MODAIS ========== */
 .modal {
     position: fixed;
     top: 0;
@@ -1273,9 +1483,10 @@ header {
     min-width: 100px;
 }
 
+/* ========== TOASTS ========== */
 #toast-container {
     position: fixed;
-    bottom: 30px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1001;
@@ -1323,4 +1534,131 @@ header {
     color: #3498db;
 }
 
-/* Responsividade removida para bugfixes.css */
+/* ========== RESPONSIVIDADE ========== */
+@media (max-width: 1200px) {
+    .game-grid-container {
+        grid-template-columns: 300px 1fr 220px;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 992px) {
+    .game-grid-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        gap: 15px;
+        height: auto;
+        max-height: none;
+        overflow-y: auto;
+    }
+    
+    #game-container {
+        height: auto;
+        min-height: calc(100vh - 150px);
+    }
+    
+    .game-section {
+        min-height: 300px;
+    }
+    
+    .tree-of-life {
+        min-height: 500px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+        padding-bottom: 40px;
+        margin-top: 70px;
+    }
+    
+    header {
+        height: 70px;
+        padding: 0 15px;
+    }
+    
+    #game-container {
+        height: auto;
+        min-height: calc(100vh - 140px);
+    }
+    
+    .floating-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2em;
+        right: 15px;
+        bottom: 70px;
+    }
+    
+    #daily-challenge-btn { bottom: 130px; }
+    #achievements-btn { bottom: 190px; }
+    #audio-toggle-btn { bottom: 250px; }
+    #quick-help-btn { bottom: 310px; }
+    
+    .game-grid-container {
+        gap: 10px;
+    }
+    
+    .sefirah {
+        width: 60px;
+        height: 60px;
+        font-size: 0.75em;
+    }
+    
+    #current-symbol {
+        width: 120px;
+        height: 120px;
+        font-size: 3em;
+    }
+}
+
+@media (max-width: 480px) {
+    #invisible-footer {
+        height: 40px;
+    }
+    
+    body {
+        padding-bottom: 40px;
+    }
+    
+    .game-section {
+        padding: 15px;
+    }
+    
+    .status-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .help-buttons {
+        grid-template-columns: 1fr;
+    }
+    
+    .skip-btn {
+        grid-column: 1;
+    }
+    
+    .sefirah {
+        width: 50px;
+        height: 50px;
+        font-size: 0.65em;
+    }
+    
+    #current-symbol {
+        width: 100px;
+        height: 100px;
+        font-size: 2.5em;
+    }
+    
+    .floating-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1em;
+        bottom: 60px;
+    }
+    
+    #daily-challenge-btn { bottom: 115px; }
+    #achievements-btn { bottom: 170px; }
+    #audio-toggle-btn { bottom: 225px; }
+    #quick-help-btn { bottom: 280px; }
+}

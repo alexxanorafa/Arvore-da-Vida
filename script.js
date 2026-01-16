@@ -90,7 +90,7 @@ class KabbalahGame {
         
         // Sistema de pontos
         this.visibleOptions = 10;
-        this.currentHelpUsed = false; // false ou 25, 50, 75
+        this.currentHelpUsed = false;
         
         // Sistemas externos
         this.achievementSystem = window.achievementSystem;
@@ -119,8 +119,15 @@ class KabbalahGame {
             errors: 0
         };
 
+        // Estado de layout e ajuda
+        this.currentLayout = 'desktop';
+        this.helpVisible = false;
+        
         this.elements = {};
         this.init();
+        
+        // Inicializar margens
+        setTimeout(() => this.ensureGameMargins(), 100);
     }
 
     init() {
@@ -128,72 +135,85 @@ class KabbalahGame {
         this.setupEventListeners();
         this.showWelcomeScreen();
         
-        // Inicializar sistema de modais se existir
-        if (!window.modalManager && document.getElementById('help-modal')) {
-            this.initModalManager();
-        }
+        // Inicializar sistema básico de modais
+        this.initModalSystem();
+        
+        this.setupResponsiveLayout();
+        this.initializeHelpSystem();
     }
 
     cacheElements() {
-        // Apenas elementos que existem no HTML
         this.elements = {
-            // Telas
             welcomeScreen: document.getElementById('welcome-screen'),
             gameArea: document.getElementById('game-area'),
-            
-            // Botões principais
             startBtn: document.getElementById('start-btn'),
             restartBtn: document.getElementById('restart-btn'),
             pauseBtn: document.getElementById('pause-btn'),
             optionsBtn: document.getElementById('options-btn'),
-            
-            // Help geral
-            globalHelpBtn: document.getElementById('global-help-btn'),
+            globalHelpBtn: document.getElementById('quick-help-btn'),
             helpModal: document.getElementById('help-modal'),
-            
-            // Help no jogo
             help25Btn: document.getElementById('help-25-btn'),
             help50Btn: document.getElementById('help-50-btn'),
             help75Btn: document.getElementById('help-75-btn'),
             skipBtn: document.getElementById('skip-btn'),
-            
-            // Questão
+            helpToggleBtn: document.getElementById('help-toggle-btn'),
+            helpButtons: document.querySelector('.help-buttons'),
             questionPanel: document.getElementById('question-panel'),
             currentQuestion: document.getElementById('current-question'),
             currentSymbol: document.getElementById('current-symbol'),
-            
-            // Status
             score: document.getElementById('score'),
             lives: document.getElementById('lives'),
             progress: document.getElementById('progress'),
             errorsCount: document.getElementById('errors-count'),
             streakCount: document.getElementById('streak-count'),
             timeCount: document.getElementById('time-count'),
-            
-            // Sefirot
             sefirot: document.querySelectorAll('.sefirah'),
-            
-            // Modal
             modal: document.getElementById('game-modal'),
             modalContent: document.querySelector('#game-modal .modal-content')
         };
     }
 
+    // MÉTODO ADICIONADO: Sistema simples de modais
+    initModalSystem() {
+        // Fechar modais ao clicar fora
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal || e.target.classList.contains('close-modal')) {
+                    modal.classList.add('hidden');
+                }
+            });
+        });
+        
+        // Fechar modais com ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.classList.add('hidden');
+                });
+            }
+        });
+    }
+
+    // MÉTODO ADICIONADO: Mostrar ajuda
+    showHelp() {
+        const helpModal = document.getElementById('help-modal');
+        if (helpModal) {
+            helpModal.classList.remove('hidden');
+        }
+    }
+
     setupEventListeners() {
-        // Botões principais
+        // Event listeners existentes
         this.elements.startBtn?.addEventListener('click', () => this.startGame());
         this.elements.restartBtn?.addEventListener('click', () => this.resetGame());
         this.elements.pauseBtn?.addEventListener('click', () => this.togglePause());
         this.elements.optionsBtn?.addEventListener('click', () => this.showOptions());
-
-        // Help geral
         this.elements.globalHelpBtn?.addEventListener('click', () => this.showHelp());
-
-        // Help no jogo
         this.elements.help25Btn?.addEventListener('click', () => this.useHelp(25));
         this.elements.help50Btn?.addEventListener('click', () => this.useHelp(50));
         this.elements.help75Btn?.addEventListener('click', () => this.useHelp(75));
         this.elements.skipBtn?.addEventListener('click', () => this.skipQuestion());
+        this.elements.helpToggleBtn?.addEventListener('click', () => this.toggleHelp());
 
         // Sefirot
         this.elements.sefirot.forEach(sefirah => {
@@ -234,89 +254,214 @@ class KabbalahGame {
         });
     }
 
-    initModalManager() {
-        // Sistema simples de gerenciamento de modais
-        window.modalManager = {
-            show: (modalId, content) => {
-                if (modalId === 'game-modal' && this.elements.modalContent) {
-                    this.elements.modalContent.innerHTML = content;
-                    this.elements.modal.classList.remove('hidden');
-                } else {
-                    const modal = document.getElementById(modalId);
-                    if (modal) {
-                        const contentEl = modal.querySelector('.modal-content');
-                        if (contentEl) contentEl.innerHTML = content;
-                        modal.classList.remove('hidden');
+    setupResponsiveLayout() {
+        this.checkAndUpdateLayout();
+        
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                this.checkAndUpdateLayout();
+                this.adjustGameElements();
+                this.preventScroll();
+            }, 250);
+        });
+        
+        this.preventScroll();
+    }
+    
+    checkAndUpdateLayout() {
+        const width = window.innerWidth;
+        
+        let newLayout;
+        if (width >= 1100) {
+            newLayout = 'desktop';
+        } else if (width >= 768) {
+            newLayout = 'tablet';
+        } else {
+            newLayout = 'mobile';
+        }
+        
+        if (newLayout !== this.currentLayout) {
+            this.currentLayout = newLayout;
+            this.applyLayout(newLayout);
+        }
+    }
+    
+    applyLayout(layout) {
+        const container = document.querySelector('.game-grid-container');
+        if (!container) return;
+        
+        switch(layout) {
+            case 'desktop':
+                container.style.gridTemplateColumns = '320px 1fr 250px';
+                container.style.gridTemplateRows = '1fr';
+                container.style.gap = '20px';
+                container.style.maxWidth = '1200px';
+                container.style.margin = '0 auto';
+                break;
+                
+            case 'tablet':
+                container.style.gridTemplateColumns = '300px 1fr';
+                container.style.gridTemplateRows = '1fr auto';
+                container.style.gap = '15px';
+                container.style.maxWidth = '900px';
+                
+                const tree = document.querySelector('.tree-of-life');
+                const status = document.querySelector('.game-status');
+                if (tree && status) {
+                    tree.style.gridColumn = '2';
+                    tree.style.gridRow = '1';
+                    status.style.gridColumn = '1 / span 2';
+                    status.style.gridRow = '2';
+                }
+                break;
+                
+            case 'mobile':
+                container.style.gridTemplateColumns = '1fr';
+                container.style.gridTemplateRows = 'auto auto auto';
+                container.style.gap = '10px';
+                container.style.maxWidth = '100%';
+                
+                const elements = ['#question-panel', '.tree-of-life', '.game-status'];
+                elements.forEach((selector, index) => {
+                    const el = document.querySelector(selector);
+                    if (el) {
+                        el.style.gridColumn = '1';
+                        el.style.gridRow = `${index + 1}`;
                     }
-                }
-            },
-            
-            hide: (modalId) => {
-                const modal = document.getElementById(modalId);
-                if (modal) modal.classList.add('hidden');
-            },
-            
-            hideAll: () => {
-                document.querySelectorAll('.modal').forEach(modal => {
-                    modal.classList.add('hidden');
                 });
-            }
-        };
+                break;
+        }
+    }
+    
+    preventScroll() {
+        const headerHeight = document.querySelector('header')?.offsetHeight || 80;
+        const footerHeight = document.getElementById('invisible-footer')?.offsetHeight || 50;
+        const availableHeight = window.innerHeight - headerHeight - footerHeight - 20;
         
-        // Fechar modais com ESC
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                window.modalManager.hideAll();
-            }
+        const gameContainer = document.getElementById('game-container');
+        const gridContainer = document.querySelector('.game-grid-container');
+        
+        if (gameContainer) {
+            gameContainer.style.height = `${availableHeight}px`;
+            gameContainer.style.overflow = 'hidden';
+        }
+        
+        if (gridContainer) {
+            gridContainer.style.height = `${availableHeight}px`;
+            gridContainer.style.overflow = 'hidden';
+        }
+    }
+    
+    adjustGameElements() {
+        const height = window.innerHeight;
+        
+        const sefirahElements = document.querySelectorAll('.sefirah');
+        let sefirahSize;
+        
+        if (height < 600) {
+            sefirahSize = 50;
+        } else if (height < 700) {
+            sefirahSize = 60;
+        } else if (height < 800) {
+            sefirahSize = 70;
+        } else {
+            sefirahSize = 80;
+        }
+        
+        sefirahElements.forEach(sefirah => {
+            sefirah.style.width = `${sefirahSize}px`;
+            sefirah.style.height = `${sefirahSize}px`;
+            sefirah.style.fontSize = `${Math.max(10, sefirahSize / 10)}px`;
         });
         
-        // Fechar modais ao clicar fora
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.add('hidden');
-                }
-            });
-        });
+        const symbol = document.getElementById('current-symbol');
+        if (symbol) {
+            if (height < 600) {
+                symbol.style.width = '60px';
+                symbol.style.height = '60px';
+                symbol.style.fontSize = '2em';
+            } else if (height < 700) {
+                symbol.style.width = '80px';
+                symbol.style.height = '80px';
+                symbol.style.fontSize = '2.5em';
+            } else {
+                symbol.style.width = '100px';
+                symbol.style.height = '100px';
+                symbol.style.fontSize = '3em';
+            }
+        }
+    }
+    
+    initializeHelpSystem() {
+        this.hideHelpButtons();
+    }
+    
+    hideHelpButtons() {
+        const helpButtons = this.elements.helpButtons;
+        if (helpButtons) {
+            helpButtons.style.display = 'none';
+        }
+    }
+    
+    toggleHelp() {
+        const helpButtons = this.elements.helpButtons;
+        const toggleBtn = this.elements.helpToggleBtn;
+        
+        if (!helpButtons || !toggleBtn) return;
+        
+        if (helpButtons.style.display === 'none' || !helpButtons.style.display) {
+            helpButtons.style.display = 'grid';
+            helpButtons.classList.add('visible');
+            toggleBtn.innerHTML = '🆘 Ocultar Ajudas';
+            toggleBtn.classList.add('active');
+            this.helpVisible = true;
+            
+            if (window.audioSystem) {
+                window.audioSystem.play('help');
+            }
+        } else {
+            helpButtons.style.display = 'none';
+            helpButtons.classList.remove('visible');
+            toggleBtn.innerHTML = '🆘 Mostrar Ajudas';
+            toggleBtn.classList.remove('active');
+            this.helpVisible = false;
+        }
     }
 
-    // ========== SISTEMA DE PONTOS CORRIGIDO ==========
     calculatePoints() {
-        // Valor base: 10 pontos
         let maxPoints = 10;
         
-        // Redução por ajuda usada
         if (this.currentHelpUsed) {
             switch(this.currentHelpUsed) {
-                case 25: maxPoints = 7.5; break;  // 25% de redução
-                case 50: maxPoints = 5.0; break;  // 50% de redução
-                case 75: maxPoints = 2.5; break;  // 75% de redução
+                case 25: maxPoints = 7.5; break;
+                case 50: maxPoints = 5.0; break;
+                case 75: maxPoints = 2.5; break;
             }
         }
         
-        // Penalidade por tentativas extras: -1 ponto por tentativa além da primeira
         const attemptPenalty = Math.max(0, this.currentAttempts - 1);
-        
-        // Calcular pontos finais (mínimo 0.5 pontos)
         let points = Math.max(0.5, maxPoints - attemptPenalty);
         
-        return Math.round(points * 10) / 10; // Arredondar para 1 casa decimal
+        return Math.round(points * 10) / 10;
     }
 
-    // ========== TELAS ==========
     showWelcomeScreen() {
         this.elements.welcomeScreen?.classList.remove('hidden');
         this.elements.gameArea?.classList.add('hidden');
-        this.elements.globalHelpBtn?.classList.remove('hidden');
     }
 
     showGameScreen() {
         this.elements.welcomeScreen?.classList.add('hidden');
         this.elements.gameArea?.classList.remove('hidden');
-        this.elements.globalHelpBtn?.classList.add('hidden');
+        
+        setTimeout(() => {
+            this.preventScroll();
+            this.adjustGameElements();
+        }, 100);
     }
 
-    // ========== JOGO PRINCIPAL ==========
     startGame() {
         this.state.isPlaying = true;
         this.state.isPaused = false;
@@ -333,9 +478,7 @@ class KabbalahGame {
         this.elapsedTime = 0;
         this.discoveredSefirot.clear();
         
-        // Iniciar timer
         this.startTimer();
-        
         this.resetVisualEffects();
         this.showGameScreen();
         this.shuffleQuestions();
@@ -344,7 +487,6 @@ class KabbalahGame {
         
         this.showToast('Jogo iniciado! Use as teclas 1-0 para respostas rápidas.', 'info');
         
-        // Tocar som
         if (this.audioSystem) {
             this.audioSystem.play('click');
         }
@@ -369,7 +511,6 @@ class KabbalahGame {
     }
 
     shuffleQuestions() {
-        // Embaralhar as 25 questões
         for (let i = this.questions.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [this.questions[i], this.questions[j]] = [this.questions[j], this.questions[i]];
@@ -405,7 +546,6 @@ class KabbalahGame {
         this.visibleOptions = count;
     }
 
-    // ========== SISTEMA DE ELIMINAÇÃO VISUAL ==========
     trackError(sefirahId) {
         const errors = this.errorCount.get(sefirahId) || 0;
         const newErrors = errors + 1;
@@ -473,7 +613,6 @@ class KabbalahGame {
         return names[id] || id;
     }
 
-    // ========== VERIFICAÇÃO DE RESPOSTA ==========
     checkAnswer(sefirahId) {
         if (!this.state.isPlaying || this.state.isPaused) return;
 
@@ -495,10 +634,8 @@ class KabbalahGame {
         const points = this.calculatePoints();
         this.state.score += points;
         
-        // Registrar Sefirah descoberta
         this.discoveredSefirot.add(sefirahId);
         
-        // Mostrar cálculo detalhado
         let pointsDetail = `+${points.toFixed(1)} pontos`;
         if (this.currentAttempts > 1) {
             pointsDetail += ` (${this.currentAttempts}ª tentativa)`;
@@ -507,20 +644,17 @@ class KabbalahGame {
             pointsDetail += ` (ajuda ${this.currentHelpUsed}%)`;
         }
         
-        // Atualizar streak
         this.currentStreak++;
         if (this.currentStreak > this.bestStreak) {
             this.bestStreak = this.currentStreak;
         }
         
-        // Verificar conquista de streak
         if (this.currentStreak >= 10 && this.achievementSystem) {
             this.achievementSystem.unlock('perfectionist');
         }
         
         this.updateUI();
         
-        // Tocar som correto
         if (this.audioSystem) {
             this.audioSystem.play('correct');
         }
@@ -541,15 +675,12 @@ class KabbalahGame {
     }
 
     handleWrongAnswer(sefirahId) {
-        // Penalidade por erro: 2 pontos
         const errorPenalty = 2;
         this.state.score = Math.max(0, this.state.score - errorPenalty);
         this.trackError(sefirahId);
         
-        // Resetar streak
         this.currentStreak = 0;
         
-        // Tocar som incorreto
         if (this.audioSystem) {
             this.audioSystem.play('incorrect');
         }
@@ -558,7 +689,6 @@ class KabbalahGame {
         this.updateUI();
     }
 
-    // ========== SISTEMA DE AJUDA CORRIGIDO ==========
     useHelp(percentage) {
         if (!this.state.isPlaying || this.state.isPaused || this.currentHelpUsed) {
             return;
@@ -570,11 +700,9 @@ class KabbalahGame {
         
         if (incorrectSefirot.length === 0) return;
         
-        // Registrar ajuda usada
         this.currentHelpUsed = percentage;
         this.totalHelpUsed++;
         
-        // Registrar no sistema de conquistas
         if (this.achievementSystem) {
             this.achievementSystem.recordHelpUsage();
         }
@@ -582,12 +710,10 @@ class KabbalahGame {
         const shuffled = [...incorrectSefirot].sort(() => Math.random() - 0.5);
         const hideCount = Math.max(1, Math.floor(incorrectSefirot.length * (percentage / 100)));
         
-        // Tocar som de ajuda
         if (this.audioSystem) {
             this.audioSystem.play('help');
         }
         
-        // Remover visualmente
         for (let i = 0; i < hideCount; i++) {
             setTimeout(() => {
                 if (shuffled[i]) {
@@ -601,12 +727,15 @@ class KabbalahGame {
         this.updateVisibleOptionsCount();
         const maxPoints = 10 * (1 - percentage/100);
         this.showToast(`Ajuda ${percentage}% usada. Questão vale no máximo ${maxPoints.toFixed(1)} pontos`, 'info');
+        
+        if (this.currentLayout !== 'mobile') {
+            this.toggleHelp();
+        }
     }
 
     skipQuestion() {
         if (!this.state.isPlaying || this.state.isPaused) return;
         
-        // Penalidade por pular: 5 pontos
         const skipPenalty = 5;
         this.state.score = Math.max(0, this.state.score - skipPenalty);
         this.updateUI();
@@ -658,16 +787,17 @@ class KabbalahGame {
                 </div>
                 <div class="actions">
                     <button class="btn primary" onclick="game.togglePause()">▶️ Continuar</button>
-                    <button class="btn" onclick="game.resetGame(); window.modalManager.hideAll();">🔄 Reiniciar</button>
+                    <button class="btn" onclick="game.resetGame(); this.closest('.modal').classList.add('hidden');">🔄 Reiniciar</button>
                     <button class="btn" onclick="game.endGame()">🏁 Terminar Jogo</button>
                 </div>
             `;
             this.showModal('pause', content);
         } else {
             this.startTimer();
-            if (window.modalManager) {
-                window.modalManager.hideAll();
-            }
+            // Fechar modal de pausa
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.classList.add('hidden');
+            });
         }
     }
 
@@ -693,12 +823,12 @@ class KabbalahGame {
         this.showWelcomeScreen();
         this.updateUI();
         
-        if (window.modalManager) {
-            window.modalManager.hideAll();
-        }
+        // Fechar todos os modais
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.classList.add('hidden');
+        });
     }
 
-    // ========== FIM DO JOGO ==========
     endGame() {
         this.state.isPlaying = false;
         this.stopTimer();
@@ -712,7 +842,6 @@ class KabbalahGame {
                      accuracy >= 70 ? '🥈 BOM' :
                      accuracy >= 60 ? '🥉 SATISFATÓRIO' : '📚 CONTINUE PRATICANDO';
         
-        // Atualizar estatísticas
         if (this.achievementSystem) {
             this.achievementSystem.updateStats({
                 score: this.state.score,
@@ -724,7 +853,6 @@ class KabbalahGame {
             });
         }
         
-        // Tocar som de vitória
         if (this.audioSystem && accuracy > 70) {
             this.audioSystem.play('victory');
         }
@@ -766,23 +894,13 @@ class KabbalahGame {
                 <button class="btn primary" onclick="game.startGame()">🔄 Jogar Novamente</button>
                 <button class="btn" onclick="game.showAchievements()">🏆 Conquistas</button>
                 <button class="btn" onclick="game.showOptions()">⚙️ Opções</button>
-                <button class="btn" onclick="game.resetGame(); window.modalManager.hideAll();">🏠 Menu Principal</button>
+                <button class="btn" onclick="game.resetGame(); this.closest('.modal').classList.add('hidden');">🏠 Menu Principal</button>
             </div>
         `;
         
         this.showModal('results', results);
     }
 
-    // ========== HELP GERAL ==========
-    showHelp() {
-        if (window.modalManager) {
-            window.modalManager.show('help-modal');
-        } else {
-            this.elements.helpModal?.classList.remove('hidden');
-        }
-    }
-
-    // ========== MODAIS ==========
     showModal(type, content) {
         if (this.elements.modalContent) {
             this.elements.modalContent.innerHTML = content;
@@ -809,7 +927,7 @@ class KabbalahGame {
                     <span class="option-text">Desafio Diário</span>
                 </button>
                 
-                <button class="btn option-btn" onclick="game.resetGame(); window.modalManager?.hideAll();">
+                <button class="btn option-btn" onclick="game.resetGame(); this.closest('.modal').classList.add('hidden');">
                     <span class="option-icon">🔄</span>
                     <span class="option-text">Reiniciar Jogo</span>
                 </button>
@@ -825,24 +943,21 @@ class KabbalahGame {
                 </button>
             </div>
             <div class="modal-actions">
-                <button class="btn" onclick="window.modalManager?.hideAll()">❌ Fechar</button>
+                <button class="btn close-modal">❌ Fechar</button>
             </div>
         `;
         this.showModal('options', content);
     }
 
-    // ========== TECLADO ==========
     handleKeyboard(e) {
         if (!this.state.isPlaying || this.state.isPaused) return;
 
-        // Prevenir comportamento padrão para teclas de controle
         if (e.key === ' ' || 
             (e.ctrlKey && ['1', '2', '3'].includes(e.key)) ||
             ['s', 'S', 'o', 'O', 'h', 'H', 'a', 'A', 'c', 'C'].includes(e.key)) {
             e.preventDefault();
         }
 
-        // Teclas 1-0 para Sefirot
         if (e.key >= '1' && e.key <= '9') {
             const index = parseInt(e.key) - 1;
             const sefirot = ['keter', 'chokhmah', 'binah', 'chesed', 'gevurah', 
@@ -854,7 +969,6 @@ class KabbalahGame {
             this.checkAnswer('malkuth');
         }
         
-        // Ajuda (Ctrl + número)
         else if (e.ctrlKey) {
             switch(e.key) {
                 case '1': this.useHelp(25); break;
@@ -863,7 +977,6 @@ class KabbalahGame {
             }
         }
         
-        // Controles
         else {
             switch(e.key.toLowerCase()) {
                 case ' ':
@@ -876,7 +989,7 @@ class KabbalahGame {
                     this.showOptions();
                     break;
                 case 'h':
-                    this.showHelp();
+                    this.toggleHelp();
                     break;
                 case 'a':
                     if (this.achievementSystem) {
@@ -889,21 +1002,20 @@ class KabbalahGame {
                     }
                     break;
                 case 'escape':
-                    if (window.modalManager) {
-                        window.modalManager.hideAll();
-                    }
+                    // Fechar todos os modais
+                    document.querySelectorAll('.modal').forEach(modal => {
+                        modal.classList.add('hidden');
+                    });
                     break;
             }
         }
     }
 
-    // ========== UI ==========
     updateUI() {
         if (this.elements.score) this.elements.score.textContent = this.state.score;
         if (this.elements.errorsCount) this.elements.errorsCount.textContent = this.state.errors;
         if (this.elements.streakCount) this.elements.streakCount.textContent = this.currentStreak;
         
-        // Vidas
         if (this.elements.lives) {
             let livesText = '';
             for (let i = 0; i < 3; i++) {
@@ -937,7 +1049,6 @@ class KabbalahGame {
         }, 3000);
     }
 
-    // ========== PROGRESSO ==========
     loadProgress() {
         try {
             const saved = localStorage.getItem('kabbalah_progress');
@@ -977,21 +1088,71 @@ class KabbalahGame {
     }
     
     startDailyChallenge() {
-        // Método para iniciar desafio diário
         this.showToast('Desafio diário iniciado!', 'info');
-        // Aqui você implementaria a lógica específica do desafio diário
+    }
+    
+    ensureGameMargins() {
+        // Garantir que o footer invisível existe
+        let footer = document.getElementById('invisible-footer');
+        if (!footer) {
+            footer = document.createElement('footer');
+            footer.id = 'invisible-footer';
+            document.body.appendChild(footer);
+        }
+        
+        // Ajustar alturas dinamicamente
+        this.adjustGameHeights();
+        
+        // Adicionar listener para resize
+        window.addEventListener('resize', () => {
+            setTimeout(() => this.adjustGameHeights(), 100);
+        });
+    }
+    
+    adjustGameHeights() {
+        const headerHeight = document.querySelector('header')?.offsetHeight || 80;
+        const footer = document.getElementById('invisible-footer');
+        const footerHeight = footer ? parseInt(window.getComputedStyle(footer).height) || 50 : 50;
+        const windowHeight = window.innerHeight;
+        
+        const availableHeight = windowHeight - headerHeight - footerHeight - 20;
+        
+        // Ajustar container principal
+        const gameContainer = document.getElementById('game-container');
+        if (gameContainer) {
+            gameContainer.style.height = `${availableHeight}px`;
+            gameContainer.style.minHeight = `${availableHeight}px`;
+        }
+        
+        // Ajustar área do jogo
+        const gameArea = document.getElementById('game-area');
+        if (gameArea) {
+            gameArea.style.height = `${availableHeight}px`;
+            gameArea.style.maxHeight = `${availableHeight}px`;
+        }
+        
+        // Ajustar grid container
+        const gridContainer = document.querySelector('.game-grid-container');
+        if (gridContainer) {
+            gridContainer.style.height = `${availableHeight}px`;
+            gridContainer.style.maxHeight = `${availableHeight}px`;
+        }
+        
+        // Ajustar seções individuais
+        const sections = ['#question-panel', '.tree-of-life', '.game-status'];
+        sections.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                element.style.maxHeight = `${availableHeight}px`;
+            }
+        });
     }
 }
 
-// ========== INICIALIZAÇÃO ==========
 document.addEventListener('DOMContentLoaded', () => {
-    // Menu de apps independente
     new AppsMenu();
-    
-    // Jogo principal
     window.game = new KabbalahGame();
     
-    // Inicializar áudio após interação
     document.addEventListener('click', () => {
         if (window.audioSystem && !window.audioSystem.initialized) {
             window.audioSystem.init();

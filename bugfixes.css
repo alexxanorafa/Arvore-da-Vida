@@ -1,5 +1,233 @@
 /* bugfixes.css - Correções finais de CSS */
 
+/* ========== MARGEM DO FOOTER INVISÍVEL ========== */
+#invisible-footer {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 50px !important;
+    z-index: -9999 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    background: transparent !important;
+}
+
+/* ========== AJUSTE DE ALTURA COM FOOTER ========== */
+body {
+    min-height: calc(100vh - 50px) !important;
+    position: relative !important;
+    padding-bottom: 50px !important;
+}
+
+#game-container {
+    min-height: calc(100vh - 180px) !important;
+    max-height: calc(100vh - 180px) !important;
+    margin-bottom: 20px !important;
+}
+
+/* ========== PREVENIR ELEMENTOS DE TOCAR A BORDA ========== */
+.game-grid-container {
+    position: relative;
+    padding-bottom: 15px !important;
+    margin-bottom: 10px !important;
+}
+
+.tree-of-life {
+    position: relative !important;
+    margin-bottom: 10px !important;
+    padding-bottom: 10px !important;
+}
+
+.game-status {
+    position: relative !important;
+    margin-bottom: 5px !important;
+}
+
+/* ========== MARGEM DE SEGURANÇA PARA BOTÕES FLUTUANTES ========== */
+.floating-btn {
+    position: fixed !important;
+    z-index: 1000 !important;
+    bottom: 80px !important;
+}
+
+/* Ajustar posição para não colidir com margem */
+@media (max-width: 768px) {
+    .floating-btn {
+        bottom: 70px !important;
+    }
+}
+
+/* ========== GARANTIR QUE CONTEÚDO NÃO ULTRAPASSE ========== */
+#game-area {
+    position: relative;
+    overflow: hidden;
+    max-height: 100%;
+}
+
+#question-panel,
+.tree-of-life,
+.game-status {
+    max-height: calc(100% - 15px) !important;
+    overflow: hidden !important;
+}
+
+/* ========== LINHA DE SEGURANÇA VISUAL (DEBUG) ========== */
+.debug-boundary {
+    position: fixed;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(255, 0, 0, 0.2);
+    z-index: 9998;
+    pointer-events: none;
+    display: none; /* Mantenha como none a menos que precise debug */
+}
+
+/* ========== RESPONSIVIDADE COM MARGEM ========== */
+@media (max-width: 768px) {
+    #invisible-footer {
+        height: 40px !important;
+    }
+    
+    body {
+        padding-bottom: 40px !important;
+    }
+    
+    #game-container {
+        min-height: calc(100vh - 170px) !important;
+        max-height: calc(100vh - 170px) !important;
+    }
+}
+
+@media (max-width: 480px) {
+    #invisible-footer {
+        height: 35px !important;
+    }
+    
+    body {
+        padding-bottom: 35px !important;
+    }
+    
+    #game-container {
+        min-height: calc(100vh - 165px) !important;
+        max-height: calc(100vh - 165px) !important;
+    }
+    
+    .game-grid-container {
+        padding-bottom: 10px !important;
+    }
+}
+
+/* ========== ANIMAÇÕES ========== */
+@keyframes correctPulse {
+    0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.7); }
+    70% { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 0 0 10px rgba(39, 174, 96, 0); }
+    100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(39, 174, 96, 0); }
+}
+
+@keyframes incorrectShake {
+    0%, 100% { transform: translate(-50%, -50%) translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translate(-50%, -50%) translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translate(-50%, -50%) translateX(5px); }
+}
+
+@keyframes fadeOutHelp {
+    from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    to { opacity: 0.3; transform: translate(-50%, -50%) scale(0.9); }
+}
+
+.sefirah.correct {
+    animation: correctPulse 0.6s ease !important;
+}
+
+.sefirah.incorrect {
+    animation: incorrectShake 0.5s ease !important;
+}
+
+.help-removed {
+    animation: fadeOutHelp 0.5s forwards !important;
+    pointer-events: none !important;
+    opacity: 0.3 !important;
+}
+
+/* ========== POSIÇÕES FIXAS DAS SEFIROT ========== */
+#keter { left: 50%; top: 5%; }
+#chokhmah { left: 20%; top: 20%; }
+#binah { left: 80%; top: 20%; }
+#chesed { left: 10%; top: 40%; }
+#gevurah { left: 90%; top: 40%; }
+#tiferet { left: 50%; top: 40%; }
+#netzach { left: 20%; top: 60%; }
+#hod { left: 80%; top: 60%; }
+#yesod { left: 50%; top: 65%; }
+#malkuth { left: 50%; top: 85%; }
+
+/* ========== ESTADOS ========== */
+.sefirah.eliminated {
+    background: repeating-linear-gradient(
+        45deg,
+        rgba(231, 76, 60, 0.1),
+        rgba(231, 76, 60, 0.1) 10px,
+        rgba(20, 20, 40, 0.1) 10px,
+        rgba(20, 20, 40, 0.1) 20px
+    ) !important;
+    border: 2px dashed #e74c3c !important;
+    pointer-events: none !important;
+}
+
+/* ========== TIPOGRAFIA ========== */
+.symbol, .daily-letter {
+    font-family: 'Times New Roman', serif !important;
+    font-weight: bold !important;
+}
+
+/* ========== ACESSIBILIDADE ========== */
+button:focus, .btn:focus, .sefirah:focus {
+    outline: 2px solid var(--primary) !important;
+    outline-offset: 2px !important;
+}
+
+/* ========== PERFORMANCE ========== */
+.sefirah, .symbol {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+}
+
+/* ========== PREVENIR ZOOM EM MOBILE ========== */
+@media (max-width: 768px) {
+    input, select, textarea {
+        font-size: 16px !important;
+    }
+}
+
+/* ========== GARANTIR QUE BOTÕES SEJAM CLICÁVEIS ========== */
+button, .btn, .sefirah {
+    touch-action: manipulation !important;
+}
+
+/* ========== SCROLLBARS ========== */
+::-webkit-scrollbar {
+    width: 6px !important;
+    height: 6px !important;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(212, 177, 146, 0.1) !important;
+    border-radius: 3px !important;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(212, 177, 146, 0.3) !important;
+    border-radius: 3px !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(212, 177, 146, 0.5) !important;
+}
+
 /* ========== LAYOUT ========== */
 .game-grid-container {
     display: grid;
@@ -10,6 +238,8 @@
     min-height: 700px;
     max-width: 1200px;
     margin: 0 auto;
+    overflow: hidden;
+    height: calc(100vh - 140px);
 }
 
 /* Correção para telas grandes */
@@ -114,38 +344,6 @@
     }
 }
 
-/* ========== ANIMAÇÕES ========== */
-@keyframes correctPulse {
-    0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.7); }
-    70% { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 0 0 10px rgba(39, 174, 96, 0); }
-    100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(39, 174, 96, 0); }
-}
-
-@keyframes incorrectShake {
-    0%, 100% { transform: translate(-50%, -50%) translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translate(-50%, -50%) translateX(-5px); }
-    20%, 40%, 60%, 80% { transform: translate(-50%, -50%) translateX(5px); }
-}
-
-@keyframes fadeOutHelp {
-    from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    to { opacity: 0.3; transform: translate(-50%, -50%) scale(0.9); }
-}
-
-.sefirah.correct {
-    animation: correctPulse 0.6s ease !important;
-}
-
-.sefirah.incorrect {
-    animation: incorrectShake 0.5s ease !important;
-}
-
-.help-removed {
-    animation: fadeOutHelp 0.5s forwards !important;
-    pointer-events: none !important;
-    opacity: 0.3 !important;
-}
-
 /* ========== BOTÕES FLUTUANTES ========== */
 .floating-btn, .help-floating-btn {
     z-index: 999 !important;
@@ -194,52 +392,10 @@
     transition: all 0.3s ease !important;
 }
 
-/* Posições fixas */
-#keter { left: 50%; top: 5%; }
-#chokhmah { left: 20%; top: 20%; }
-#binah { left: 80%; top: 20%; }
-#chesed { left: 10%; top: 40%; }
-#gevurah { left: 90%; top: 40%; }
-#tiferet { left: 50%; top: 40%; }
-#netzach { left: 20%; top: 60%; }
-#hod { left: 80%; top: 60%; }
-#yesod { left: 50%; top: 65%; }
-#malkuth { left: 50%; top: 85%; }
-
-/* ========== ESTADOS ========== */
-.sefirah.eliminated {
-    background: repeating-linear-gradient(
-        45deg,
-        rgba(231, 76, 60, 0.1),
-        rgba(231, 76, 60, 0.1) 10px,
-        rgba(20, 20, 40, 0.1) 10px,
-        rgba(20, 20, 40, 0.1) 20px
-    ) !important;
-    border: 2px dashed #e74c3c !important;
-    pointer-events: none !important;
-}
-
-/* ========== TIPOGRAFIA ========== */
-.symbol, .daily-letter {
-    font-family: 'Times New Roman', serif !important;
-    font-weight: bold !important;
-}
-
 /* ========== SCROLL ========== */
 body {
     overflow-x: hidden !important;
-}
-
-/* ========== ACESSIBILIDADE ========== */
-button:focus, .btn:focus, .sefirah:focus {
-    outline: 2px solid var(--primary) !important;
-    outline-offset: 2px !important;
-}
-
-/* ========== PERFORMANCE ========== */
-.sefirah, .symbol {
-    will-change: transform, opacity;
-    backface-visibility: hidden;
+    overflow-y: hidden !important;
 }
 
 /* ========== CORREÇÕES ESPECÍFICAS ========== */
@@ -264,4 +420,154 @@ button:focus, .btn:focus, .sefirah:focus {
 #game-area *, .sefirah, .symbol {
     user-select: none !important;
     -webkit-user-select: none !important;
+}
+
+/* ========== CORREÇÕES DE LAYOUT SEM SCROLL ========== */
+html, body {
+    height: 100% !important;
+    overflow: hidden !important;
+}
+
+#game-container {
+    height: calc(100vh - 100px) !important;
+    overflow: hidden !important;
+}
+
+/* Prevenir zoom em mobile */
+@media (max-width: 768px) {
+    input, select, textarea {
+        font-size: 16px !important;
+    }
+}
+
+/* Garantir que botões sejam clicáveis */
+button, .btn, .sefirah {
+    touch-action: manipulation !important;
+}
+
+/* Esconder scrollbars mas manter funcionalidade */
+::-webkit-scrollbar {
+    width: 6px !important;
+    height: 6px !important;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(212, 177, 146, 0.1) !important;
+    border-radius: 3px !important;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(212, 177, 146, 0.3) !important;
+    border-radius: 3px !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(212, 177, 146, 0.5) !important;
+}
+
+/* Correção para Firefox */
+@-moz-document url-prefix() {
+    .tree-of-life {
+        overflow: hidden !important;
+    }
+    
+    .tree-lines {
+        overflow: visible !important;
+    }
+}
+
+/* ========== GARANTIR QUE MODAIS NÃO QUEBREM ========== */
+@media (max-height: 500px) {
+    .modal-content {
+        max-height: 90vh !important;
+        padding: 15px !important;
+    }
+    
+    .achievement-notification {
+        top: 60px !important;
+        right: 10px !important;
+        width: 300px !important;
+    }
+}
+
+/* ========== PREVENIR OVERFLOW ========== */
+#question-panel,
+.game-status {
+    overflow: hidden !important;
+}
+
+/* ========== GARANTIR QUE IMAGENS NÃO QUEBREM ========== */
+img, svg {
+    max-width: 100% !important;
+    height: auto !important;
+}
+/* ========== MARGEM DE SEGURANÇA PARA SEFIROT ========== */
+.tree-of-life {
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.tree-inner-container {
+    position: relative !important;
+    overflow: visible !important;
+}
+
+/* Prevenir que Sefirot toquem as bordas */
+.sefirah {
+    min-width: 60px !important;
+    min-height: 60px !important;
+    box-sizing: content-box !important;
+}
+
+/* Margem mínima entre Sefirot */
+.sefirah:not(:hover) {
+    margin: 5px !important;
+}
+
+/* Animações suaves para não colidir */
+.sefirah {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Zona de segurança visual (opcional para debug) */
+.tree-of-life::before {
+    content: '';
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    right: 5%;
+    bottom: 5%;
+    border: 1px dashed rgba(212, 177, 146, 0.1);
+    border-radius: 10px;
+    pointer-events: none;
+    z-index: 1;
+    display: none; /* Ative apenas para testar margens */
+}
+
+/* Garantir que não há overlap em hover */
+.sefirah:hover {
+    z-index: 100 !important;
+}
+
+/* Responsividade com margem */
+@media (max-width: 768px) {
+    .sefirah {
+        min-width: 50px !important;
+        min-height: 50px !important;
+    }
+    
+    .sefirah:not(:hover) {
+        margin: 3px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .sefirah {
+        min-width: 45px !important;
+        min-height: 45px !important;
+    }
+    
+    .sefirah:not(:hover) {
+        margin: 2px !important;
+    }
 }

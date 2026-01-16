@@ -8,12 +8,10 @@ class BugFixes {
     async init() {
         console.log('🔧 Inicializando correções de bugs...');
         
-        // Esperar carregamento completo
         if (document.readyState === 'loading') {
             await new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve));
         }
         
-        // Aplicar correções
         this.fixLayout();
         this.fixAudioSystem();
         this.fixPointsSystem();
@@ -24,33 +22,30 @@ class BugFixes {
         this.fixAnimations();
         this.fixLocalStorage();
         this.fixResponsiveness();
+        this.preventGlobalScroll();
+        this.fixModalOverflow();
+        this.ensureFooterMargin();
+        this.preventContentOverflow();
         
         console.log('✅ Todas as correções aplicadas com sucesso!');
     }
 
     fixLayout() {
-        // Verificar e corrigir layout se necessário
         const gameArea = document.getElementById('game-area');
         if (!gameArea) return;
         
-        // Se já tem o container grid, não fazer nada
         if (gameArea.querySelector('.game-grid-container')) return;
         
-        // Criar container grid
         const questionPanel = document.getElementById('question-panel');
         const treeOfLife = document.querySelector('.tree-of-life');
         const gameStatus = document.querySelector('.game-status');
         
         if (!questionPanel || !treeOfLife || !gameStatus) return;
         
-        // Criar container
         const gridContainer = document.createElement('div');
         gridContainer.className = 'game-grid-container';
         
-        // Limpar game area
         gameArea.innerHTML = '';
-        
-        // Adicionar elementos
         gridContainer.appendChild(questionPanel);
         gridContainer.appendChild(treeOfLife);
         gridContainer.appendChild(gameStatus);
@@ -62,12 +57,10 @@ class BugFixes {
     fixAudioSystem() {
         if (!window.audioSystem) return;
         
-        // Garantir que o áudio seja inicializado na primeira interação
         const initAudio = () => {
             if (window.audioSystem && !window.audioSystem.initialized) {
                 window.audioSystem.init();
             }
-            // Remover listeners
             ['click', 'keydown', 'touchstart'].forEach(event => {
                 document.removeEventListener(event, initAudio);
             });
@@ -83,7 +76,6 @@ class BugFixes {
     fixPointsSystem() {
         if (!window.game) return;
         
-        // Monkey patch para garantir cálculo correto
         const originalCalculate = window.game.calculatePoints;
         if (originalCalculate) {
             window.game.calculatePoints = function() {
@@ -110,7 +102,6 @@ class BugFixes {
     fixAchievements() {
         if (!window.achievementSystem) return;
         
-        // Adicionar tracking de Sefirot se não existir
         if (window.game && !window.game.discoveredSefirot) {
             window.game.discoveredSefirot = new Set();
         }
@@ -119,14 +110,11 @@ class BugFixes {
     }
 
     fixDailyChallenge() {
-        // Nada a fazer - já corrigido no arquivo principal
         console.log('✅ Sistema de desafio diário verificado');
     }
 
     fixKeyboard() {
-        // Centralizar controle de teclado
         const handleGlobalKeys = (e) => {
-            // ESC fecha todos os modais
             if (e.key === 'Escape') {
                 document.querySelectorAll('.modal').forEach(modal => {
                     modal.classList.add('hidden');
@@ -138,9 +126,89 @@ class BugFixes {
         
         console.log('✅ Controles de teclado centralizados');
     }
+        ensureSefirotSpacing() {
+        const sefirot = document.querySelectorAll('.sefirah');
+        const container = document.querySelector('.tree-inner-container');
+        
+        if (!sefirot.length || !container) return;
+        
+        // Dimensões do container
+        const containerRect = container.getBoundingClientRect();
+        const containerWidth = containerRect.width;
+        const containerHeight = containerRect.height;
+        
+        // Tamanho médio das Sefirot
+        const sefirahSize = 80; // Tamanho base em px
+        
+        // Verificar e ajustar posições se necessário
+        sefirot.forEach(sefirah => {
+            const style = window.getComputedStyle(sefirah);
+            const left = parseFloat(style.left);
+            const top = parseFloat(style.top);
+            
+            // Converter percentagens para pixels
+            const leftPx = (left / 100) * containerWidth;
+            const topPx = (top / 100) * containerHeight;
+            
+            // Margem mínima das bordas (20px)
+            const minMargin = 20;
+            
+            // Verificar borda esquerda
+            if (leftPx < minMargin) {
+                const newLeft = (minMargin / containerWidth) * 100;
+                sefirah.style.left = `${newLeft}%`;
+            }
+            
+            // Verificar borda direita
+            if (leftPx > containerWidth - sefirahSize - minMargin) {
+                const newLeft = ((containerWidth - sefirahSize - minMargin) / containerWidth) * 100;
+                sefirah.style.left = `${newLeft}%`;
+            }
+            
+            // Verificar borda superior
+            if (topPx < minMargin) {
+                const newTop = (minMargin / containerHeight) * 100;
+                sefirah.style.top = `${newTop}%`;
+            }
+            
+            // Verificar borda inferior
+            if (topPx > containerHeight - sefirahSize - minMargin) {
+                const newTop = ((containerHeight - sefirahSize - minMargin) / containerHeight) * 100;
+                sefirah.style.top = `${newTop}%`;
+            }
+        });
+        
+        console.log('✅ Espaçamento das Sefirot garantido');
+    }
+
+    // Chame este método no init():
+    async init() {
+        console.log('🔧 Inicializando correções de bugs...');
+        
+        if (document.readyState === 'loading') {
+            await new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve));
+        }
+        
+        this.fixLayout();
+        this.fixAudioSystem();
+        this.fixPointsSystem();
+        this.fixAchievements();
+        this.fixDailyChallenge();
+        this.fixKeyboard();
+        this.fixModals();
+        this.fixAnimations();
+        this.fixLocalStorage();
+        this.fixResponsiveness();
+        this.preventGlobalScroll();
+        this.fixModalOverflow();
+        this.ensureFooterMargin();
+        this.preventContentOverflow();
+        this.ensureSefirotSpacing(); // ADICIONE ESTA LINHA
+        
+        console.log('✅ Todas as correções aplicadas com sucesso!');
+    }
 
     fixModals() {
-        // Sistema unificado de modais
         if (!window.modalManager) {
             window.modalManager = {
                 show: function(modalId, content) {
@@ -152,7 +220,6 @@ class BugFixes {
                         contentEl.innerHTML = content;
                     }
                     
-                    // Esconder outros modais
                     document.querySelectorAll('.modal').forEach(m => {
                         if (m.id !== modalId) m.classList.add('hidden');
                     });
@@ -177,7 +244,6 @@ class BugFixes {
     }
 
     fixAnimations() {
-        // Adicionar animações CSS se não existirem
         if (!document.getElementById('fix-animations')) {
             const style = document.createElement('style');
             style.id = 'fix-animations';
@@ -218,7 +284,6 @@ class BugFixes {
     }
 
     fixLocalStorage() {
-        // Adicionar tratamento de erro para localStorage
         const originalSetItem = localStorage.setItem;
         localStorage.setItem = function(key, value) {
             try {
@@ -226,7 +291,6 @@ class BugFixes {
             } catch (e) {
                 console.warn('LocalStorage cheio, limpando dados antigos...');
                 try {
-                    // Tentar limpar alguns itens antigos
                     const keysToRemove = [];
                     for (let i = 0; i < localStorage.length; i++) {
                         const itemKey = localStorage.key(i);
@@ -237,7 +301,6 @@ class BugFixes {
                     
                     keysToRemove.forEach(key => localStorage.removeItem(key));
                     
-                    // Tentar novamente
                     return originalSetItem.call(this, key, value);
                 } catch (e2) {
                     console.error('Não foi possível salvar no localStorage:', e2);
@@ -250,16 +313,19 @@ class BugFixes {
     }
 
     fixResponsiveness() {
-        // Ajustar layout em redimensionamento
         let resizeTimer;
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(() => {
                 this.adjustForScreenSize();
+                this.ensureFooterMargin();
+                this.preventContentOverflow();
             }, 250);
         });
         
         this.adjustForScreenSize();
+        this.ensureFooterMargin();
+        this.preventContentOverflow();
         
         console.log('✅ Responsividade otimizada');
     }
@@ -267,7 +333,6 @@ class BugFixes {
     adjustForScreenSize() {
         const width = window.innerWidth;
         
-        // Ajustar tamanho das Sefirot em mobile
         if (width <= 768) {
             document.querySelectorAll('.sefirah').forEach(sefirah => {
                 sefirah.style.width = '60px';
@@ -282,9 +347,116 @@ class BugFixes {
             });
         }
     }
+    
+    preventGlobalScroll() {
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+        
+        document.querySelectorAll('.modal-content').forEach(modal => {
+            modal.style.overflowY = 'auto';
+            modal.style.maxHeight = '80vh';
+        });
+        
+        const gameArea = document.getElementById('game-area');
+        if (gameArea) {
+            gameArea.style.overflow = 'hidden';
+        }
+        
+        console.log('✅ Scroll global prevenido');
+    }
+    
+    fixModalOverflow() {
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100%';
+            modal.style.height = '100%';
+            modal.style.overflow = 'hidden';
+            
+            const content = modal.querySelector('.modal-content');
+            if (content) {
+                content.style.margin = 'auto';
+                content.style.position = 'relative';
+                content.style.top = '50%';
+                content.style.transform = 'translateY(-50%)';
+            }
+        });
+        
+        console.log('✅ Overflow de modais corrigido');
+    }
+    
+    ensureFooterMargin() {
+        // Criar ou garantir que o footer invisível existe
+        let footer = document.getElementById('invisible-footer');
+        if (!footer) {
+            footer = document.createElement('footer');
+            footer.id = 'invisible-footer';
+            document.body.appendChild(footer);
+        }
+        
+        // Ajustar altura baseado no tamanho da tela
+        const height = window.innerHeight;
+        if (height < 600) {
+            footer.style.height = '40px';
+        } else if (height < 700) {
+            footer.style.height = '45px';
+        } else if (height < 800) {
+            footer.style.height = '50px';
+        } else {
+            footer.style.height = '50px';
+        }
+        
+        // Ajustar padding do body
+        const footerHeight = parseInt(footer.style.height) || 50;
+        document.body.style.paddingBottom = `${footerHeight}px`;
+        
+        // Ajustar altura do container do jogo
+        const headerHeight = document.querySelector('header')?.offsetHeight || 80;
+        const gameContainer = document.getElementById('game-container');
+        if (gameContainer) {
+            const availableHeight = height - headerHeight - footerHeight - 30;
+            gameContainer.style.height = `${availableHeight}px`;
+            gameContainer.style.minHeight = `${availableHeight}px`;
+        }
+        
+        console.log('✅ Margem do footer garantida');
+    }
+    
+    preventContentOverflow() {
+        // Garantir que elementos não ultrapassem os limites
+        const gameContainer = document.getElementById('game-container');
+        const gameArea = document.getElementById('game-area');
+        const gridContainer = document.querySelector('.game-grid-container');
+        
+        if (gameContainer) {
+            gameContainer.style.overflow = 'hidden';
+        }
+        
+        if (gameArea) {
+            gameArea.style.overflow = 'hidden';
+            gameArea.style.maxHeight = '100%';
+        }
+        
+        if (gridContainer) {
+            gridContainer.style.overflow = 'hidden';
+            gridContainer.style.maxHeight = '100%';
+        }
+        
+        // Elementos específicos
+        const sections = ['#question-panel', '.tree-of-life', '.game-status'];
+        sections.forEach(selector => {
+            const element = document.querySelector(selector);
+            if (element) {
+                element.style.overflow = 'hidden';
+                element.style.maxHeight = '100%';
+            }
+        });
+        
+        console.log('✅ Overflow do conteúdo prevenido');
+    }
 }
 
-// Inicializar quando o DOM estiver pronto
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => new BugFixes());
 } else {
